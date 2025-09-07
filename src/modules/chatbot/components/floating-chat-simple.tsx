@@ -357,7 +357,7 @@ function FloatingChatSimple() {
     } else if (messageLower.includes('envío') || messageLower.includes('despacho')) {
       return `${greeting}, hacemos envíos a todo Chile:\n\n• Santiago: 24-48 hrs\n• Regiones: 3-5 días\n• GRATIS sobre $150.000\n\n¿A qué comuna necesitas el envío?`;
     } else if (messageLower.includes('contacto') || messageLower.includes('whatsapp') || messageLower.includes('teléfono')) {
-      return `${greeting}, puedes contactarnos:\n\n📞 WhatsApp: +56 9 xxxx xxxx\n📧 Email: ventas@obraexpress.cl\n🕒 Lun-Vie 9:00-18:00\n\n¿Prefieres que te contacte un asesor? [ACTION:OPEN_WHATSAPP]`;
+      return `${greeting}, puedes contactarnos:\n\n📞 WhatsApp: +56 9 7528 4619\n📧 Email: contacto@obraexpress.cl\n🕒 Lun-Vie 9:00-18:00\n\n¿Prefieres que te contacte un asesor? [ACTION:OPEN_WHATSAPP]`;
     } else {
       return `Gracias por escribir, ${greeting}. Estoy aquí para ayudarte con policarbonatos y materiales de construcción. Puedo ayudarte con:\n\n• Productos y especificaciones\n• Precios y cotizaciones\n• Envíos y despachos\n• Asesoría técnica\n\n¿En qué puedo asistirte específicamente?`;
     }

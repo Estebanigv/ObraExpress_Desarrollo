@@ -7,6 +7,7 @@ import type { ProductAdmin, ProductVariant, ProductStats, ProductIssue, AdminUse
 import type { Order, OrderStatus, OrderSummary } from '@/types/order.types';
 import OrderDetailModal from '@/components/admin/OrderDetailModal';
 import { AdminErrorBoundary } from '@/components/ErrorBoundary';
+import { AuthSecurity, DEFAULT_ADMIN_CREDENTIALS } from '@/utils/auth-security';
 
 // Importar componentes de IA del Sprint 4
 import AIAssistant from '@/modules/admin/components/AIAssistant';
@@ -564,11 +565,45 @@ export default function AdminDashboard() {
     setLoading(true);
     setError('');
 
-    if (credentials.username === 'admin@obraexpress.cl' && credentials.password === 'ObraExpress2024!') {
-      localStorage.setItem('obraexpress_admin_auth', 'authenticated');
-      setIsAuthenticated(true);
-    } else {
-      setError('Credenciales incorrectas');
+    try {
+      // Sanitizar inputs
+      const sanitizedEmail = AuthSecurity.sanitizeInput(credentials.username);
+      const sanitizedPassword = AuthSecurity.sanitizeInput(credentials.password);
+      
+      // Validar formato de email
+      if (!AuthSecurity.validateEmail(sanitizedEmail)) {
+        setError('Formato de email inválido');
+        setLoading(false);
+        return;
+      }
+      
+      // Verificar rate limiting
+      const rateLimitCheck = AuthSecurity.checkRateLimit(sanitizedEmail, 3, 15);
+      if (!rateLimitCheck.allowed) {
+        setError(`Demasiados intentos. Intenta en ${Math.ceil((rateLimitCheck.resetTime - Date.now()) / 60000)} minutos`);
+        setLoading(false);
+        return;
+      }
+
+      // Verificar credenciales con hash
+      if (sanitizedEmail === DEFAULT_ADMIN_CREDENTIALS.email) {
+        const isValidPassword = await AuthSecurity.verifyPassword(sanitizedPassword, DEFAULT_ADMIN_CREDENTIALS.passwordHash);
+        
+        if (isValidPassword) {
+          AuthSecurity.clearFailedAttempts(sanitizedEmail);
+          localStorage.setItem('obraexpress_admin_auth', 'authenticated');
+          setIsAuthenticated(true);
+        } else {
+          AuthSecurity.recordFailedAttempt(sanitizedEmail);
+          setError('Credenciales incorrectas');
+        }
+      } else {
+        AuthSecurity.recordFailedAttempt(sanitizedEmail);
+        setError('Credenciales incorrectas');
+      }
+    } catch (error) {
+      console.error('Error en login admin:', error);
+      setError('Error del sistema. Intenta nuevamente.');
     }
     
     setLoading(false);
@@ -1431,7 +1466,7 @@ export default function AdminDashboard() {
 
           <div className="mt-6 text-center text-sm text-gray-500 bg-gray-50 p-3 rounded">
             <p><strong>Usuario:</strong> admin@obraexpress.cl</p>
-            <p><strong>Contraseña:</strong> ObraExpress2024!</p>
+            <p><strong>Contraseña:</strong> ObraExpress2025!</p>
           </div>
 
           <div className="mt-6 text-center">

@@ -574,11 +574,11 @@ function Navbar({ className }: { className?: string }) {
                 </svg>
               </span>
               <EmailSelector
-                email="info@obraexpress.cl"
+                email="contacto@obraexpress.cl"
                 subject="Consulta desde ObraExpress"
                 body="Hola, me gustaría hacer una consulta sobre sus servicios..."
                 className="text-gray-900 hover:text-gray-700 transition-colors duration-200 cursor-pointer p-1.5 hover:bg-gray-900/20 rounded-full"
-                title="Enviar email - info@obraexpress.cl"
+                title="Enviar email - contacto@obraexpress.cl"
               >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>

@@ -64,6 +64,33 @@ export class TransbankService {
     try {
       console.log('🏦 Creando transacción Transbank:', data);
 
+      // Validar monto antes de procesar
+      const amountValidation = TransbankService.validateAmount(data.amount);
+      if (!amountValidation.valid) {
+        throw new Error(amountValidation.error);
+      }
+
+      // Modo simulador para desarrollo
+      const isSimulating = process.env.NEXT_PUBLIC_TRANSBANK_SIMULATE === 'true';
+      
+      if (isSimulating) {
+        console.log('🎭 Modo simulador activado - No se creará transacción real');
+        
+        // Generar token y URL simulados
+        const simulatedToken = `SIMULATED_TOKEN_${data.buyOrder}_${Date.now()}`;
+        const simulatedUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/simulate-payment?token=${simulatedToken}`;
+        
+        return {
+          success: true,
+          token: simulatedToken,
+          url: simulatedUrl,
+          buyOrder: data.buyOrder,
+          amount: data.amount,
+          simulated: true
+        };
+      }
+
+      // Crear transacción real
       const response = await this.webpayPlusTransaction.create(
         data.buyOrder,
         data.sessionId,
@@ -78,7 +105,8 @@ export class TransbankService {
         token: response.token,
         url: response.url,
         buyOrder: data.buyOrder,
-        amount: data.amount
+        amount: data.amount,
+        simulated: false
       };
     } catch (error) {
       console.error('❌ Error creando transacción Transbank:', error);

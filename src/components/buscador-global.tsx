@@ -34,10 +34,115 @@ export const BuscadorGlobal: React.FC<BuscadorGlobalProps> = ({
   const searchRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Cargar productos desde la API - TEMPORALMENTE DESACTIVADO
+  // Cargar productos - usando datos de muestra mientras se configura Supabase
   useEffect(() => {
-    console.log('🚫 BuscadorGlobal: carga de productos temporalmente desactivada');
-    // TODO: Reactivar cuando se solucione el problema de Supabase
+    console.log('🔍 BuscadorGlobal: cargando datos de muestra');
+    
+    // Datos de muestra para desarrollo
+    const sampleProducts: SearchResult[] = [
+      {
+        id: 'PC-ALV-4MM-CRIS',
+        codigo: 'PC-ALV-4MM-CRIS',
+        nombre: 'Policarbonato Alveolar 4mm Cristal',
+        categoria: 'Policarbonato Alveolar',
+        espesor: '4mm',
+        color: 'Cristal',
+        precio: 8900,
+        groupId: 'policarbonato-alveolar',
+        imagen: '/assets/images/Productos/policarbonato_alveolar_4mm_cristal.webp'
+      },
+      {
+        id: 'PC-ALV-6MM-CRIS',
+        codigo: 'PC-ALV-6MM-CRIS',
+        nombre: 'Policarbonato Alveolar 6mm Cristal',
+        categoria: 'Policarbonato Alveolar',
+        espesor: '6mm',
+        color: 'Cristal',
+        precio: 12500,
+        groupId: 'policarbonato-alveolar',
+        imagen: '/assets/images/Productos/policarbonato_alveolar_6mm_cristal.webp'
+      },
+      {
+        id: 'PC-ALV-10MM-CRIS',
+        codigo: 'PC-ALV-10MM-CRIS',
+        nombre: 'Policarbonato Alveolar 10mm Cristal',
+        categoria: 'Policarbonato Alveolar',
+        espesor: '10mm',
+        color: 'Cristal',
+        precio: 18900,
+        groupId: 'policarbonato-alveolar',
+        imagen: '/assets/images/Productos/policarbonato_alveolar_10mm_cristal.webp'
+      },
+      {
+        id: 'PC-ALV-4MM-BRONCE',
+        codigo: 'PC-ALV-4MM-BRONCE',
+        nombre: 'Policarbonato Alveolar 4mm Bronce',
+        categoria: 'Policarbonato Alveolar',
+        espesor: '4mm',
+        color: 'Bronce',
+        precio: 9200,
+        groupId: 'policarbonato-alveolar',
+        imagen: '/assets/images/Productos/policarbonato_alveolar_4mm_bronce.webp'
+      },
+      {
+        id: 'PC-ALV-6MM-BRONCE',
+        codigo: 'PC-ALV-6MM-BRONCE',
+        nombre: 'Policarbonato Alveolar 6mm Bronce',
+        categoria: 'Policarbonato Alveolar',
+        espesor: '6mm',
+        color: 'Bronce',
+        precio: 12800,
+        groupId: 'policarbonato-alveolar',
+        imagen: '/assets/images/Productos/policarbonato_alveolar_6mm_bronce.webp'
+      },
+      {
+        id: 'PC-COMP-3MM-CRIS',
+        codigo: 'PC-COMP-3MM-CRIS',
+        nombre: 'Policarbonato Compacto 3mm Cristal',
+        categoria: 'Policarbonato Compacto',
+        espesor: '3mm',
+        color: 'Cristal',
+        precio: 15500,
+        groupId: 'policarbonato-compacto',
+        imagen: '/assets/images/Productos/policarbonato-compacto.jpg'
+      },
+      {
+        id: 'PC-COMP-5MM-CRIS',
+        codigo: 'PC-COMP-5MM-CRIS',
+        nombre: 'Policarbonato Compacto 5mm Cristal',
+        categoria: 'Policarbonato Compacto',
+        espesor: '5mm',
+        color: 'Cristal',
+        precio: 24900,
+        groupId: 'policarbonato-compacto',
+        imagen: '/assets/images/Productos/policarbonato-compacto.jpg'
+      },
+      {
+        id: 'PERF-U-ALU',
+        codigo: 'PERF-U-ALU',
+        nombre: 'Perfil en U Aluminio',
+        categoria: 'Perfiles Alveolar',
+        espesor: 'Variable',
+        color: 'Aluminio',
+        precio: 3500,
+        groupId: 'perfiles-alveolar',
+        imagen: '/images/policarbonato-compacto.jpg'
+      },
+      {
+        id: 'PERF-H-ALU',
+        codigo: 'PERF-H-ALU',
+        nombre: 'Perfil en H Aluminio',
+        categoria: 'Perfiles Alveolar',
+        espesor: 'Variable',
+        color: 'Aluminio',
+        precio: 4200,
+        groupId: 'perfiles-alveolar',
+        imagen: '/images/policarbonato-compacto.jpg'
+      }
+    ];
+    
+    setSearchIndex(sampleProducts);
+    console.log(`✅ Productos de muestra cargados: ${sampleProducts.length} productos`);
     return;
     
     /* CÓDIGO ORIGINAL COMENTADO PARA EVITAR CARGA INFINITA

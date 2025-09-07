@@ -6,6 +6,7 @@ import { safeLocalStorage } from '@/lib/client-utils';
 import { AuthStorage } from '@/lib/auth-storage';
 import { initializeAdminUser } from '@/lib/admin-setup';
 import { SupabaseAuth } from '@/lib/supabase-auth';
+import { AuthSecurity, DEFAULT_ADMIN_CREDENTIALS } from '@/utils/auth-security';
 
 export interface User {
   id: string;
@@ -79,8 +80,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     console.log('🔐 Intentando login con:', { email });
     
     try {
-      // Verificar credenciales de admin predeterminadas
-      if (email === 'admin@obraexpress.cl' && password === 'obraexpress2025$$') {
+      // Sanitizar inputs
+      email = AuthSecurity.sanitizeInput(email);
+      password = AuthSecurity.sanitizeInput(password);
+      
+      // Validar formato de email
+      if (!AuthSecurity.validateEmail(email)) {
+        console.log('❌ Formato de email inválido');
+        setIsLoading(false);
+        return false;
+      }
+      
+      // Verificar rate limiting
+      const rateLimitCheck = AuthSecurity.checkRateLimit(email, 5, 15);
+      if (!rateLimitCheck.allowed) {
+        console.log('🚫 Demasiados intentos de login. Intenta en un momento.');
+        setIsLoading(false);
+        return false;
+      }
+      
+      // Verificar credenciales de admin predeterminadas con hash
+      if (email === DEFAULT_ADMIN_CREDENTIALS.email) {
+        const isValidPassword = await AuthSecurity.verifyPassword(password, DEFAULT_ADMIN_CREDENTIALS.passwordHash);
+        
+        if (isValidPassword) {
         console.log('✅ Login exitoso con credenciales admin');
         const adminUser: User = {
           id: 'admin_001',
@@ -93,11 +116,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           porcentajeDescuento: 10,
           provider: 'email'
         };
-        
-        setUser(adminUser);
-        AuthStorage.saveSession(adminUser, rememberMe);
-        setIsLoading(false);
-        return true;
+          
+          // Limpiar intentos fallidos
+          AuthSecurity.clearFailedAttempts(email);
+          
+          setUser(adminUser);
+          AuthStorage.saveSession(adminUser, rememberMe);
+          setIsLoading(false);
+          return true;
+        }
       }
       
       // Buscar en usuarios registrados
@@ -106,14 +133,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       if (foundUser) {
         console.log('✅ Login exitoso:', foundUser.email);
+        
+        // Limpiar intentos fallidos
+        AuthSecurity.clearFailedAttempts(email);
+        
         setUser(foundUser);
         AuthStorage.saveSession(foundUser, rememberMe);
         setIsLoading(false);
         return true;
       }
       
+      // Registrar intento fallido
+      AuthSecurity.recordFailedAttempt(email);
+      
       console.log('❌ Login fallido - Usuario no encontrado o contraseña incorrecta');
-      console.log('💡 Intenta con: Email: admin@obraexpress.cl, Password: obraexpress2025$$');
+      console.log('💡 Intenta con: Email: admin@obraexpress.cl, Password: ObraExpress2025!');
       setIsLoading(false);
       return false;
     } catch (error) {

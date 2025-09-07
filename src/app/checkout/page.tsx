@@ -685,7 +685,7 @@ function CheckoutPageContent() {
                       onChange={handleInputChange}
                       required
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="+56 9 1234 5678"
+                      placeholder="+56 9 7528 4619"
                     />
                   </div>
                   <div>
