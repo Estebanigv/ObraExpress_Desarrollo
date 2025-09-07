@@ -286,3 +286,58 @@ button[title*="Instalar"] {
 .animate-messageSlide {
   animation: messageSlide 0.3s ease-out forwards;
 }
+
+/* ================================================ */
+/* CHECKOUT PAGES - HIDE ALL FLOATING ELEMENTS */
+/* ================================================ */
+
+/* Ocultar todos los elementos flotantes durante el proceso de checkout */
+body[data-checkout-process="true"] {
+  /* Ocultar elementos flotantes comunes */
+  [class*="float"]:not([class*="checkout"]):not([class*="payment"]):not([class*="transbank"]),
+  [class*="fixed"]:not([class*="checkout"]):not([class*="payment"]):not([class*="transbank"]),
+  [id*="float"]:not([id*="checkout"]):not([id*="payment"]):not([id*="transbank"]),
+  [id*="widget"]:not([id*="checkout"]):not([id*="payment"]):not([id*="transbank"]),
+  [class*="chat"]:not([class*="checkout"]):not([class*="payment"]):not([class*="transbank"]),
+  [id*="chat"]:not([id*="checkout"]):not([id*="payment"]):not([id*="transbank"]),
+  [class*="assistant"]:not([class*="checkout"]):not([class*="payment"]):not([class*="transbank"]),
+  [id*="assistant"]:not([id*="checkout"]):not([id*="payment"]):not([id*="transbank"]),
+  [class*="support"]:not([class*="checkout"]):not([class*="payment"]):not([class*="transbank"]),
+  [id*="support"]:not([id*="checkout"]):not([id*="payment"]):not([id*="transbank"]),
+  [data-widget]:not([data-checkout]):not([data-payment]):not([data-transbank]),
+  [data-chat]:not([data-checkout]):not([data-payment]):not([data-transbank]),
+  [data-float]:not([data-checkout]):not([data-payment]):not([data-transbank]) {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+  
+  /* Ocultar posibles widgets de terceros */
+  iframe[src*="chat"]:not([src*="checkout"]):not([src*="payment"]):not([src*="transbank"]),
+  iframe[src*="widget"]:not([src*="checkout"]):not([src*="payment"]):not([src*="transbank"]),
+  iframe[src*="assist"]:not([src*="checkout"]):not([src*="payment"]):not([src*="transbank"]),
+  iframe[src*="support"]:not([src*="checkout"]):not([src*="payment"]):not([src*="transbank"]) {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }
+  
+  /* Ocultar elementos con z-index alto (típicos de widgets flotantes) */
+  [style*="z-index: 999"]:not([class*="checkout"]):not([class*="payment"]):not([class*="transbank"]),
+  [style*="z-index: 1000"]:not([class*="checkout"]):not([class*="payment"]):not([class*="transbank"]),
+  [style*="z-index: 9999"]:not([class*="checkout"]):not([class*="payment"]):not([class*="transbank"]),
+  [style*="z-index: 99999"]:not([class*="checkout"]):not([class*="payment"]):not([class*="transbank"]) {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }
+  
+  /* Ocultar elementos con position fixed en esquinas (típico de widgets de chat) */
+  [style*="position: fixed"][style*="bottom:"][style*="right:"]:not([class*="checkout"]):not([class*="payment"]):not([class*="transbank"]),
+  [style*="position:fixed"][style*="bottom:"][style*="right:"]:not([class*="checkout"]):not([class*="payment"]):not([class*="transbank"]) {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }
+}

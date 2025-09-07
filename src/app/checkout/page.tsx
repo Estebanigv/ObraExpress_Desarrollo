@@ -536,12 +536,23 @@ function CheckoutPageContent() {
 
       console.log('💳 Iniciando proceso de pago con Transbank...', ordenData);
       
-      const transbankResponse = await TransbankService.crearTransaccion(ordenData);
+      // Guardar datos del cliente en localStorage para la página de éxito
+      localStorage.setItem('checkout_customer_data', JSON.stringify(formData));
+      
+      // Formatear datos para Transbank
+      const transbankData = {
+        buyOrder: `ObraExpress_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+        sessionId: `session_${Date.now()}`,
+        amount: Math.round(state.total), // Asegurar que sea entero
+        returnUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/transbank-return`
+      };
+      
+      const transbankResponse = await TransbankService.getInstance().createTransaction(transbankData);
       
       if (transbankResponse.success) {
-        console.log('✅ Transacción creada exitosamente:', transbankResponse.data);
-        // Redirigir a Webpay
-        window.location.href = transbankResponse.data.url;
+        console.log('✅ Transacción creada exitosamente:', transbankResponse);
+        // Redirigir a Webpay (simulado o real)
+        window.location.href = transbankResponse.url;
       } else {
         throw new Error(transbankResponse.error || 'Error al crear la transacción');
       }

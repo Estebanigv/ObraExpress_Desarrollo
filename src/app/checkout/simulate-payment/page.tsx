@@ -11,6 +11,16 @@ export default function SimulatePaymentPage() {
   
   const [paymentStatus, setPaymentStatus] = useState<'pending' | 'success' | 'failed'>('pending');
   const [simulatingPayment, setSimulatingPayment] = useState(true);
+  const [countdown, setCountdown] = useState(3);
+
+  useEffect(() => {
+    // Marcar el body para ocultar elementos flotantes durante checkout
+    document.body.setAttribute('data-checkout-process', 'true');
+    
+    return () => {
+      document.body.removeAttribute('data-checkout-process');
+    };
+  }, []);
 
   useEffect(() => {
     if (!token) {
@@ -31,16 +41,52 @@ export default function SimulatePaymentPage() {
       setPaymentStatus(isSuccess ? 'success' : 'failed');
       setSimulatingPayment(false);
 
-      // Si es exitoso, redirigir después de mostrar éxito por 2 segundos
+      // Log del resultado
       if (isSuccess) {
-        setTimeout(() => {
-          router.push(`/checkout/success?token=${token}`);
-        }, 2000);
+        console.log('✅ Pago aprobado, iniciando countdown');
+      } else {
+        console.log('❌ Pago rechazado, no redirigiendo');
       }
     };
 
     simulatePayment();
   }, [token, router]);
+
+  // Countdown para redirección
+  useEffect(() => {
+    if (paymentStatus === 'success' && !simulatingPayment) {
+      const timer = setInterval(() => {
+        setCountdown(prev => {
+          const newCount = prev - 1;
+          if (newCount <= 0) {
+            clearInterval(timer);
+            return 0;
+          }
+          return newCount;
+        });
+      }, 1000);
+
+      return () => clearInterval(timer);
+    }
+  }, [paymentStatus, simulatingPayment]);
+
+  // Separate useEffect for redirect to avoid setState during render
+  useEffect(() => {
+    if (paymentStatus === 'success' && !simulatingPayment && countdown <= 0) {
+      console.log('🔄 Redirigiendo por countdown a página de éxito');
+      const timeoutId = setTimeout(() => {
+        router.push(`/checkout/success?token=${token}`);
+      }, 100); // Small delay to avoid setState during render
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [paymentStatus, simulatingPayment, countdown, router, token]);
+
+  // Función para continuar manualmente
+  const handleContinue = () => {
+    console.log('🔄 Redirección manual a página de éxito');
+    router.push(`/checkout/success?token=${token}`);
+  };
 
   if (simulatingPayment) {
     return (
@@ -49,9 +95,20 @@ export default function SimulatePaymentPage() {
           {/* Logo simulado de Transbank/Webpay */}
           <div className="mb-6">
             <img
-              src="https://www.transbank.cl/public/img/Logo_Webpay3-01-01.png"
-              alt="Webpay"
+              src="/assets/images/transbank-logo.svg"
+              alt="Transbank Webpay"
               className="h-12 mx-auto"
+              onError={(e) => {
+                console.log('Error cargando logo Transbank, usando fallback');
+                e.currentTarget.style.display = 'none';
+                const parent = e.currentTarget.parentElement;
+                if (parent && !parent.querySelector('.logo-fallback')) {
+                  const fallback = document.createElement('div');
+                  fallback.className = 'logo-fallback bg-blue-600 text-white px-4 py-2 rounded-lg font-bold text-lg mx-auto inline-block';
+                  fallback.textContent = 'TRANSBANK Webpay';
+                  parent.appendChild(fallback);
+                }
+              }}
             />
           </div>
 
@@ -95,9 +152,20 @@ export default function SimulatePaymentPage() {
           {/* Logo simulado de Transbank/Webpay */}
           <div className="mb-6">
             <img
-              src="https://www.transbank.cl/public/img/Logo_Webpay3-01-01.png"
-              alt="Webpay"
+              src="/assets/images/transbank-logo.svg"
+              alt="Transbank Webpay"
               className="h-12 mx-auto"
+              onError={(e) => {
+                console.log('Error cargando logo Transbank, usando fallback');
+                e.currentTarget.style.display = 'none';
+                const parent = e.currentTarget.parentElement;
+                if (parent && !parent.querySelector('.logo-fallback')) {
+                  const fallback = document.createElement('div');
+                  fallback.className = 'logo-fallback bg-blue-600 text-white px-4 py-2 rounded-lg font-bold text-lg mx-auto inline-block';
+                  fallback.textContent = 'TRANSBANK Webpay';
+                  parent.appendChild(fallback);
+                }
+              }}
             />
           </div>
 
@@ -176,19 +244,31 @@ export default function SimulatePaymentPage() {
           Tu transacción ha sido procesada exitosamente.
         </p>
 
-        {/* Información de éxito */}
-        <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
-          <p className="text-sm text-green-700">
-            <strong>Transacción aprobada</strong>
+        {/* Información de éxito con countdown */}
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+          <p className="text-sm text-green-700 mb-2">
+            <strong>Transacción aprobada exitosamente</strong>
           </p>
-          <p className="text-xs text-green-600">
-            Serás redirigido automáticamente...
-          </p>
+          <div className="text-center">
+            <div className="text-2xl font-bold text-green-600 mb-2">{countdown}</div>
+            <p className="text-xs text-green-600">
+              Redirigiendo automáticamente en {countdown} segundo{countdown !== 1 ? 's' : ''}...
+            </p>
+          </div>
         </div>
 
-        <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
-          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-green-600"></div>
-          <span>Redirigiendo...</span>
+        <div className="space-y-3">
+          <button
+            onClick={handleContinue}
+            className="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 transition-colors font-medium"
+          >
+            Continuar Ahora
+          </button>
+          
+          <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
+            <div className="animate-pulse w-2 h-2 bg-green-500 rounded-full"></div>
+            <span>Procesamiento completado</span>
+          </div>
         </div>
       </div>
     </div>

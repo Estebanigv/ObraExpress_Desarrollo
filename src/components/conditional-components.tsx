@@ -29,6 +29,7 @@ export function ConditionalComponents({ hideForModal = false }: { hideForModal?:
                         pathname === '/mis-compras' ||
                         pathname === '/coordinador-despacho' || 
                         pathname === '/checkout' ||
+                        pathname.startsWith('/checkout/') || // Todas las páginas de checkout
                         pathname.startsWith('/admin') ||
                         pathname.startsWith('/auth') ||
                         pathname.includes('/callback') ||
