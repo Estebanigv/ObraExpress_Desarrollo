@@ -917,444 +917,144 @@ function CheckoutPageContent() {
 
             {/* Solución Completa para tu Pedido */}
             <AlveolarRecommendations showInCheckout={true} className="mb-8" />
-
-            {/* Productos Complementarios */}
-            <div className="bg-white rounded-lg shadow-sm p-8">
-              <div className="mb-8">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="flex items-center justify-center w-10 h-10 bg-blue-100 rounded-full">
-                    <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900">¿Necesitas completar tu instalación?</h3>
-                    <p className="text-sm text-gray-600">Productos complementarios que podrías necesitar</p>
-                  </div>
-                </div>
-                
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
-                  <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0">
-                      <svg className="w-5 h-5 text-blue-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <p className="text-sm text-blue-900 font-medium mb-1">💡 Recomendación profesional</p>
-                      <p className="text-sm text-blue-700">Para una instalación correcta del policarbonato alveolar, es esencial usar <strong>Perfil U</strong> en los bordes y <strong>Perfil Clip</strong> para las uniones entre láminas. Esto garantiza sellado hermético y mayor durabilidad.</p>
-                    </div>
-                  </div>
-                </div>
+            
+            {/* Sección de Productos Frecuentes */}
+            <div className="mb-8 bg-gradient-to-r from-blue-50 to-green-50 rounded-lg p-6 border border-blue-100 shadow-sm">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+                  <svg className="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  ¿Olvidaste algo? Agrega rápidamente
+                </h3>
+                <Link
+                  href="/productos"
+                  className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center"
+                >
+                  Ver todos los productos
+                  <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
               </div>
               
-              {loadingRecommendations ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {[...Array(6)].map((_, index) => (
-                    <div key={index} className="animate-pulse">
-                      <div className="bg-gray-200 aspect-square rounded-lg mb-3"></div>
-                      <div className="h-4 bg-gray-200 rounded mb-2"></div>
-                      <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-                  {productos.map((grupo) => {
-                    const varianteSeleccionada = complementarySelectedVariants[grupo.id] || grupo.variantes[0];
-                    const cantidad = complementaryProductQuantities[grupo.id] || 10;
-                    const selectedDispatchDate = complementaryDispatchDates[grupo.id] || '';
-                    const showCalendar = showCalendars[grupo.id] || false;
-
-                    return (
-                      <div key={grupo.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 h-full flex flex-col min-h-[650px]">
-                        {/* Header con imagen y etiqueta */}
-                        <div className="relative h-32 bg-gray-100">
-                          <Image
-                            src={grupo.imagen || grupo.variantes[0]?.imagen || grupo.variantes[0]?.ruta_imagen || 
-                              (grupo.nombre?.includes('Perfil U') ? "/assets/images/Productos/Perfiles/perfil-u-policarbonato.webp" :
-                               grupo.nombre?.includes('Perfil Clip') ? "/assets/images/Productos/Perfiles/perfil-clip-policarbonato.webp" :
-                               `/images/${grupo.categoria_completa?.toLowerCase().replace(/\s+/g, '-')}-sample.jpg`)
-                            }
-                            alt={grupo.nombre}
-                            width={300}
-                            height={128}
-                            className="w-full h-full object-cover"
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement;
-                              target.src = '/images/productos/producto-placeholder.jpg';
-                            }}
-                          />
-                          <div className="absolute top-2 right-2">
-                            <span className={`text-xs font-bold px-2 py-1 rounded-full shadow-md ${
-                              grupo.tag === 'Recomendado' 
-                                ? 'bg-green-500 text-white' 
-                                : 'bg-blue-500 text-white'
-                            }`}>
-                              {grupo.tag}
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Contenido */}
-                        <div className="p-4 flex flex-col flex-1">
-                          {/* Título y descripción */}
-                          <div className="mb-3">
-                            <h3 className="font-semibold text-gray-900 text-sm mb-1">{grupo.nombre}</h3>
-                            <p className="text-xs text-gray-600 line-clamp-2">{grupo.descripcion}</p>
-                            <p className="text-xs text-gray-500 mt-1">SKU: {varianteSeleccionada?.codigo || 'N/A'}</p>
-                          </div>
-
-                          {/* Configuración rápida */}
-                          <div className="space-y-3 mb-4">
-                            {/* Colores */}
-                            {[...new Set(grupo.variantes.map((v: any) => v.color).filter(Boolean))].length > 1 && (
-                              <div>
-                                <label className="block text-xs font-medium text-gray-700 mb-1">
-                                  Color: <span className="text-blue-600">{varianteSeleccionada?.color}</span>
-                                </label>
-                                <div className="flex gap-1 flex-wrap">
-                                  {[...new Set(grupo.variantes.map((v: any) => v.color).filter(Boolean))].map((color) => (
-                                    <button
-                                      key={color}
-                                      onClick={() => {
-                                        const nuevaVariante = grupo.variantes.find((v: any) => v.color === color) || grupo.variantes[0];
-                                        setComplementarySelectedVariants(prev => ({
-                                          ...prev,
-                                          [grupo.id]: nuevaVariante
-                                        }));
-                                      }}
-                                      className={`px-2 py-1 text-xs rounded border transition-all ${
-                                        varianteSeleccionada?.color === color
-                                          ? 'border-blue-400 bg-blue-50 text-blue-700 font-medium' 
-                                          : 'border-gray-200 bg-white hover:border-blue-300 text-gray-600'
-                                      }`}
-                                    >
-                                      {color}
-                                    </button>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-
-                            {/* Espesores */}
-                            {[...new Set(grupo.variantes.map((v: any) => v.espesor).filter(Boolean))].length > 1 && (
-                              <div>
-                                <label className="block text-xs font-medium text-gray-700 mb-1">
-                                  Espesor: <span className="text-blue-600">{varianteSeleccionada?.espesor}</span>
-                                </label>
-                                <div className="flex gap-1 flex-wrap">
-                                  {[...new Set(grupo.variantes.map((v: any) => v.espesor).filter(Boolean))].slice(0, 4).map((espesor) => (
-                                    <button
-                                      key={espesor}
-                                      onClick={() => {
-                                        const nuevaVariante = grupo.variantes.find((v: any) => v.espesor === espesor) || grupo.variantes[0];
-                                        setComplementarySelectedVariants(prev => ({
-                                          ...prev,
-                                          [grupo.id]: nuevaVariante
-                                        }));
-                                      }}
-                                      className={`px-2 py-1 text-xs rounded border transition-all ${
-                                        varianteSeleccionada?.espesor === espesor
-                                          ? 'border-blue-400 bg-blue-50 text-blue-700 font-medium' 
-                                          : 'border-gray-200 bg-white hover:border-blue-300 text-gray-600'
-                                      }`}
-                                    >
-                                      {espesor.replace(/mm$/i, '')}mm
-                                    </button>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-
-                            {/* Dimensiones - Ancho */}
-                            {[...new Set(grupo.variantes.map((v: any) => v.ancho).filter(Boolean))].length > 1 && (
-                              <div>
-                                <label className="block text-xs font-medium text-gray-700 mb-1">
-                                  Ancho: <span className="text-blue-600">{varianteSeleccionada?.ancho}mm</span>
-                                </label>
-                                <div className="flex gap-1 flex-wrap">
-                                  {[...new Set(grupo.variantes.map((v: any) => v.ancho).filter(Boolean))].slice(0, 3).map((ancho) => (
-                                    <button
-                                      key={ancho}
-                                      onClick={() => {
-                                        const nuevaVariante = grupo.variantes.find((v: any) => v.ancho === ancho) || grupo.variantes[0];
-                                        setComplementarySelectedVariants(prev => ({
-                                          ...prev,
-                                          [grupo.id]: nuevaVariante
-                                        }));
-                                      }}
-                                      className={`px-2 py-1 text-xs rounded border transition-all ${
-                                        varianteSeleccionada?.ancho === ancho
-                                          ? 'border-blue-400 bg-blue-50 text-blue-700 font-medium' 
-                                          : 'border-gray-200 bg-white hover:border-blue-300 text-gray-600'
-                                      }`}
-                                    >
-                                      {ancho}mm
-                                    </button>
-                                  ))}
-                                  {[...new Set(grupo.variantes.map((v: any) => v.ancho).filter(Boolean))].length > 3 && (
-                                    <span className="text-xs text-gray-500 px-2 py-1">+{[...new Set(grupo.variantes.map((v: any) => v.ancho).filter(Boolean))].length - 3} más</span>
-                                  )}
-                                </div>
-                              </div>
-                            )}
-
-                            {/* Dimensiones - Largo */}
-                            {[...new Set(grupo.variantes.map((v: any) => v.largo).filter(Boolean))].length > 1 && (
-                              <div>
-                                <label className="block text-xs font-medium text-gray-700 mb-1">
-                                  Largo: <span className="text-blue-600">{varianteSeleccionada?.largo}mts</span>
-                                </label>
-                                <div className="flex gap-1 flex-wrap">
-                                  {[...new Set(grupo.variantes.map((v: any) => v.largo).filter(Boolean))].slice(0, 3).map((largo) => (
-                                    <button
-                                      key={largo}
-                                      onClick={() => {
-                                        const nuevaVariante = grupo.variantes.find((v: any) => v.largo === largo) || grupo.variantes[0];
-                                        setComplementarySelectedVariants(prev => ({
-                                          ...prev,
-                                          [grupo.id]: nuevaVariante
-                                        }));
-                                      }}
-                                      className={`px-2 py-1 text-xs rounded border transition-all ${
-                                        varianteSeleccionada?.largo === largo
-                                          ? 'border-blue-400 bg-blue-50 text-blue-700 font-medium' 
-                                          : 'border-gray-200 bg-white hover:border-blue-300 text-gray-600'
-                                      }`}
-                                    >
-                                      {largo}mts
-                                    </button>
-                                  ))}
-                                  {[...new Set(grupo.variantes.map((v: any) => v.largo).filter(Boolean))].length > 3 && (
-                                    <span className="text-xs text-gray-500 px-2 py-1">+{[...new Set(grupo.variantes.map((v: any) => v.largo).filter(Boolean))].length - 3} más</span>
-                                  )}
-                                </div>
-                              </div>
-                            )}
-
-                            {/* Dimensiones generales (si existen y no hay ancho/largo específicos) */}
-                            {[...new Set(grupo.variantes.map((v: any) => v.dimensiones).filter(Boolean))].length > 1 && 
-                             [...new Set(grupo.variantes.map((v: any) => v.ancho).filter(Boolean))].length <= 1 && (
-                              <div>
-                                <label className="block text-xs font-medium text-gray-700 mb-1">
-                                  Dimensiones: <span className="text-blue-600">{varianteSeleccionada?.dimensiones}</span>
-                                </label>
-                                <div className="flex gap-1 flex-wrap">
-                                  {[...new Set(grupo.variantes.map((v: any) => v.dimensiones).filter(Boolean))].slice(0, 3).map((dimension) => (
-                                    <button
-                                      key={dimension}
-                                      onClick={() => {
-                                        const nuevaVariante = grupo.variantes.find((v: any) => v.dimensiones === dimension) || grupo.variantes[0];
-                                        setComplementarySelectedVariants(prev => ({
-                                          ...prev,
-                                          [grupo.id]: nuevaVariante
-                                        }));
-                                      }}
-                                      className={`px-2 py-1 text-xs rounded border transition-all ${
-                                        varianteSeleccionada?.dimensiones === dimension
-                                          ? 'border-blue-400 bg-blue-50 text-blue-700 font-medium' 
-                                          : 'border-gray-200 bg-white hover:border-blue-300 text-gray-600'
-                                      }`}
-                                    >
-                                      {dimension}
-                                    </button>
-                                  ))}
-                                  {[...new Set(grupo.variantes.map((v: any) => v.dimensiones).filter(Boolean))].length > 3 && (
-                                    <span className="text-xs text-gray-500 px-2 py-1">+{[...new Set(grupo.variantes.map((v: any) => v.dimensiones).filter(Boolean))].length - 3} más</span>
-                                  )}
-                                </div>
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Espaciado adicional para alineación */}
-                          <div className="flex-1 min-h-[30px]"></div>
-
-                          {/* Precio y Stock siguiendo el diseño del sitio principal */}
-                          <div className="mb-3">
-                            {/* Precio principal */}
-                            <div className="mb-1">
-                              <div className="text-lg font-bold text-gray-900">
-                                ${(varianteSeleccionada?.precio || grupo.precio_desde).toLocaleString('es-CL')}
-                                <span className="ml-2 bg-green-100 text-green-800 px-2 py-1 rounded-full font-medium text-xs">IVA incluido</span>
-                              </div>
-                            </div>
-                            <div className="flex items-center justify-between text-xs mb-2">
-                              <span className="text-green-600 font-medium">
-                                • Stock: {grupo.variantes.reduce((sum: number, v: any) => sum + (v.stock || 0), 0)}
-                              </span>
-                              <button
-                                onClick={() => setShowCalendars(prev => ({
-                                  ...prev,
-                                  [grupo.id]: !showCalendar
-                                }))}
-                                className={`text-sm font-medium transition-all cursor-pointer px-3 py-2 rounded-lg flex items-center ${
-                                  selectedDispatchDate 
-                                    ? 'text-emerald-700 bg-emerald-50 border-2 border-emerald-200 hover:bg-emerald-100 shadow-md font-bold' 
-                                    : 'text-blue-600 hover:text-blue-700 hover:bg-blue-50 border border-blue-200'
-                                }`}
-                              >
-                                <span>🚚 {selectedDispatchDate ? 'Elegir despacho' : 'Elegir despacho'}</span>
-                                {selectedDispatchDate && (
-                                  <div className="ml-2 flex items-center justify-center w-5 h-5 bg-emerald-600 rounded-full shadow-lg">
-                                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                    </svg>
-                                  </div>
-                                )}
-                              </button>
-                            </div>
-                          </div>
-
-                          {/* Cantidad siguiendo el diseño del sitio principal */}
-                          <div className="mb-4">
-                            <div className="flex items-center justify-between mb-2">
-                              <div className="flex items-center gap-2">
-                                <label className="text-sm font-medium text-gray-700">Cantidad:</label>
-                                <span className="text-xs text-amber-600 bg-amber-100 px-2 py-1 rounded-full">
-                                  (mín. 10)
-                                </span>
-                              </div>
-                            </div>
-                            <div className="flex items-center justify-center bg-gray-50 border border-gray-300 rounded-lg p-2">
-                              <button
-                                onClick={() => setComplementaryProductQuantities(prev => ({
-                                  ...prev,
-                                  [grupo.id]: Math.max(10, cantidad - 10)
-                                }))}
-                                className="flex items-center justify-center w-10 h-10 bg-white hover:bg-gray-100 rounded-lg transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                                disabled={cantidad <= 10}
-                              >
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4" />
-                                </svg>
-                              </button>
-                              <div className="flex-1 text-center mx-4">
-                                <div className="text-lg font-bold text-gray-900">
-                                  {cantidad}
-                                </div>
-                                <div className="text-xs text-gray-500">
-                                  unidades
-                                </div>
-                              </div>
-                              <button
-                                onClick={() => setComplementaryProductQuantities(prev => ({
-                                  ...prev,
-                                  [grupo.id]: cantidad + 10
-                                }))}
-                                className="flex items-center justify-center w-10 h-10 bg-white hover:bg-gray-100 rounded-lg transition-colors shadow-sm"
-                              >
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                </svg>
-                              </button>
-                            </div>
-                          </div>
-
-                          {/* Total y Botón siguiendo el diseño del sitio principal */}
-                          <div className="space-y-3">
-                            {/* Total */}
-                            <div className="text-right">
-                              <div className="text-sm text-gray-600">Total:</div>
-                              <div className="text-xl font-bold text-green-600">
-                                ${((varianteSeleccionada?.precio || grupo.precio_desde) * cantidad).toLocaleString('es-CL')}
-                              </div>
-                            </div>
-                            
-                            {/* Botones de compra - siguiendo el diseño de la página principal */}
-                            <div className="relative min-h-[80px] flex flex-col justify-end mt-auto">
-                              {!state.items.some(item => item.id === `${grupo.id}-${varianteSeleccionada?.codigo || 'default'}`) ? (
-                                <button
-                                  onClick={() => {
-                                    const cartItem = {
-                                      id: `${grupo.id}-${varianteSeleccionada?.codigo || 'default'}`,
-                                      tipo: 'producto' as const,
-                                      nombre: grupo.nombre,
-                                      descripcion: grupo.descripcion || `${grupo.categoria_completa} - ${varianteSeleccionada?.codigo}`,
-                                      imagen: grupo.imagen || varianteSeleccionada?.imagen,
-                                      especificaciones: varianteSeleccionada ? [
-                                        varianteSeleccionada.espesor && `Espesor: ${varianteSeleccionada.espesor}`,
-                                        varianteSeleccionada.color && `Color: ${varianteSeleccionada.color}`,
-                                        varianteSeleccionada.ancho && `Ancho: ${varianteSeleccionada.ancho}mm`,
-                                        varianteSeleccionada.largo && `Largo: ${varianteSeleccionada.largo}mts`
-                                      ].filter(Boolean) : [],
-                                      cantidad: cantidad,
-                                      precioUnitario: varianteSeleccionada?.precio || grupo.precio_desde,
-                                      total: (varianteSeleccionada?.precio || grupo.precio_desde) * cantidad
-                                    };
-                                    addItem(cartItem);
-                                  }}
-                                  className="w-full bg-gray-900 hover:bg-black text-white font-bold py-3 px-4 rounded-lg transition-colors mb-3 flex items-center justify-center"
-                                >
-                                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5 6m0 0h9M16 21a2 2 0 100-4 2 2 0 000 4zM9 21a2 2 0 100-4 2 2 0 000 4z" />
-                                  </svg>
-                                  Agregar al Carrito
-                                </button>
-                              ) : (
-                                <div className="grid grid-cols-2 gap-3 mb-3">
-                                  {/* Botón Agregar Más - Verde */}
-                                  <button
-                                    onClick={() => {
-                                      const cartItem = {
-                                        id: `${grupo.id}-${varianteSeleccionada?.codigo || 'default'}`,
-                                        tipo: 'producto' as const,
-                                        nombre: grupo.nombre,
-                                        descripcion: grupo.descripcion || `${grupo.categoria_completa} - ${varianteSeleccionada?.codigo}`,
-                                        imagen: grupo.imagen || varianteSeleccionada?.imagen,
-                                        especificaciones: varianteSeleccionada ? [
-                                          varianteSeleccionada.espesor && `Espesor: ${varianteSeleccionada.espesor}`,
-                                          varianteSeleccionada.color && `Color: ${varianteSeleccionada.color}`,
-                                          varianteSeleccionada.ancho && `Ancho: ${varianteSeleccionada.ancho}mm`,
-                                          varianteSeleccionada.largo && `Largo: ${varianteSeleccionada.largo}mts`
-                                        ].filter(Boolean) : [],
-                                        cantidad: cantidad,
-                                        precioUnitario: varianteSeleccionada?.precio || grupo.precio_desde,
-                                        total: (varianteSeleccionada?.precio || grupo.precio_desde) * cantidad
-                                      };
-                                      addItem(cartItem);
-                                    }}
-                                    className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
-                                  >
-                                    <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                    </svg>
-                                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5 6m0 0h9M16 21a2 2 0 100-4 2 2 0 000 4zM9 21a2 2 0 100-4 2 2 0 000 4z" />
-                                    </svg>
-                                    <span className="hidden sm:inline">Más</span>
-                                  </button>
-                                  
-                                  {/* Botón Quitar */}
-                                  <button
-                                    onClick={() => {
-                                      removeItem(`${grupo.id}-${varianteSeleccionada?.codigo || 'default'}`);
-                                    }}
-                                    className="bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-red-600 p-3 rounded-lg transition-all flex items-center justify-center group"
-                                    title="Quitar producto del carrito"
-                                  >
-                                    <svg className="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                    </svg>
-                                  </button>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-
-              {productos.length === 0 && !loadingRecommendations && (
-                <div className="text-center py-8 text-gray-500">
-                  <p>No hay productos complementarios disponibles en este momento.</p>
-                  <p className="text-xs mt-2">Los perfiles y accesorios aparecerán aquí cuando estén disponibles.</p>
-                </div>
-              )}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {/* Productos más comunes con imágenes */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    const producto = {
+                      codigo: 'PC-COMP-4MM',
+                      nombre: 'Policarbonato Compacto',
+                      categoria: 'Policarbonato Compacto',
+                      precio: 45000,
+                      descripcion: 'Policarbonato Compacto 4mm',
+                      imagen_url: '/images/policarbonato-compacto.jpg'
+                    };
+                    const variant = { espesor: '4mm', color: 'Cristal', precio: 45000 };
+                    handleAddToCart(producto, variant);
+                  }}
+                  className="flex flex-col items-center p-4 bg-white rounded-lg border-2 border-gray-200 hover:border-blue-400 hover:shadow-lg transition-all group"
+                >
+                  <div className="w-20 h-20 mb-2 rounded-lg overflow-hidden bg-gray-100">
+                    <img 
+                      src="/images/policarbonato-compacto.jpg" 
+                      alt="Policarbonato Compacto"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform"
+                    />
+                  </div>
+                  <span className="text-sm font-medium text-gray-900">PC Compacto</span>
+                  <span className="text-xs text-gray-500">4mm Cristal</span>
+                  <span className="text-base font-bold text-blue-600 mt-2">$45.000</span>
+                  <span className="text-xs text-green-600 font-medium mt-1">✓ Agregar</span>
+                </button>
+                
+                <button
+                  type="button"
+                  onClick={() => {
+                    const producto = {
+                      codigo: 'PC-ALV-6MM',
+                      nombre: 'Policarbonato Alveolar',
+                      categoria: 'Policarbonato Alveolar',
+                      precio: 25000,
+                      descripcion: 'Policarbonato Alveolar 6mm',
+                      imagen_url: '/images/policarbonato-alveolar.jpg'
+                    };
+                    const variant = { espesor: '6mm', color: 'Cristal', precio: 25000 };
+                    handleAddToCart(producto, variant);
+                  }}
+                  className="flex flex-col items-center p-4 bg-white rounded-lg border-2 border-gray-200 hover:border-blue-400 hover:shadow-lg transition-all group"
+                >
+                  <div className="w-20 h-20 mb-2 rounded-lg overflow-hidden bg-gray-100">
+                    <img 
+                      src="/images/policarbonato-alveolar.jpg" 
+                      alt="Policarbonato Alveolar"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform"
+                    />
+                  </div>
+                  <span className="text-sm font-medium text-gray-900">PC Alveolar</span>
+                  <span className="text-xs text-gray-500">6mm Cristal</span>
+                  <span className="text-base font-bold text-blue-600 mt-2">$25.000</span>
+                  <span className="text-xs text-green-600 font-medium mt-1">✓ Agregar</span>
+                </button>
+                
+                <button
+                  type="button"
+                  onClick={() => {
+                    const producto = {
+                      codigo: 'PC-ALV-10MM',
+                      nombre: 'Policarbonato Alveolar',
+                      categoria: 'Policarbonato Alveolar',
+                      precio: 35000,
+                      descripcion: 'Policarbonato Alveolar 10mm',
+                      imagen_url: '/images/policarbonato-alveolar.jpg'
+                    };
+                    const variant = { espesor: '10mm', color: 'Cristal', precio: 35000 };
+                    handleAddToCart(producto, variant);
+                  }}
+                  className="flex flex-col items-center p-4 bg-white rounded-lg border-2 border-gray-200 hover:border-blue-400 hover:shadow-lg transition-all group"
+                >
+                  <div className="w-20 h-20 mb-2 rounded-lg overflow-hidden bg-gray-100">
+                    <img 
+                      src="/images/policarbonato-alveolar.jpg" 
+                      alt="Policarbonato Alveolar"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform"
+                    />
+                  </div>
+                  <span className="text-sm font-medium text-gray-900">PC Alveolar</span>
+                  <span className="text-xs text-gray-500">10mm Cristal</span>
+                  <span className="text-base font-bold text-blue-600 mt-2">$35.000</span>
+                  <span className="text-xs text-green-600 font-medium mt-1">✓ Agregar</span>
+                </button>
+                
+                <button
+                  type="button"
+                  onClick={() => {
+                    const producto = {
+                      codigo: 'PERFIL-U',
+                      nombre: 'Perfil U',
+                      categoria: 'Perfiles',
+                      precio: 8500,
+                      descripcion: 'Perfil U para policarbonato',
+                      imagen_url: '/images/perfil-u.jpg'
+                    };
+                    handleAddToCart(producto);
+                  }}
+                  className="flex flex-col items-center p-4 bg-white rounded-lg border-2 border-gray-200 hover:border-blue-400 hover:shadow-lg transition-all group"
+                >
+                  <div className="w-20 h-20 mb-2 rounded-lg overflow-hidden bg-gray-100">
+                    <img 
+                      src="/images/perfil-u.jpg" 
+                      alt="Perfil U"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform"
+                    />
+                  </div>
+                  <span className="text-sm font-medium text-gray-900">Perfil U</span>
+                  <span className="text-xs text-gray-500">Para bordes</span>
+                  <span className="text-base font-bold text-blue-600 mt-2">$8.500</span>
+                  <span className="text-xs text-green-600 font-medium mt-1">✓ Agregar</span>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -1379,33 +1079,43 @@ function CheckoutPageContent() {
                 </button>
               </div>
               
-              {/* Resumen simple */}
-              <div className="space-y-3 mb-4">
-                {state.items.map((item) => (
-                  <div key={item.id} className="flex items-center space-x-3 bg-gray-50 rounded-lg p-3">
-                    {item.imagen && (
-                      <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
-                        <CartThumbnail
-                          src={item.imagen}
-                          alt={item.nombre}
-                          className="w-full h-full object-cover"
-                          productName={item.nombre}
-                        />
-                      </div>
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-medium text-gray-900 text-sm truncate">
-                        {getProductDisplayName(item)}
-                      </h4>
-                      <div className="flex items-center justify-between mt-1">
-                        <p className="text-xs text-gray-600">Cantidad: {item.cantidad}</p>
-                        <div className="text-xs text-gray-500">
-                          Min: {isPolicarbonatoCompacto(item) ? '1' : '10'} unid.
+              {/* Botón para agregar más productos */}
+              <div className="mb-4">
+                <Link
+                  href="/productos"
+                  className="flex items-center justify-center w-full px-4 py-2 bg-green-50 text-green-700 border border-green-300 rounded-lg hover:bg-green-100 transition-colors text-sm font-medium"
+                >
+                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  </svg>
+                  Agregar más productos
+                </Link>
+              </div>
+              
+              {/* Resumen simple - Solo visible cuando NO se muestran los detalles */}
+              {!showOrderDetails && (
+                <div className="space-y-2 mb-4">
+                  {state.items.map((item) => (
+                  <div key={item.id} className="flex items-center justify-between bg-gray-50 rounded-lg p-3">
+                    <div className="flex items-center space-x-3 flex-1">
+                      {item.imagen && (
+                        <div className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0">
+                          <CartThumbnail
+                            src={item.imagen}
+                            alt={item.nombre}
+                            className="w-full h-full object-cover"
+                            productName={item.nombre}
+                          />
                         </div>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-medium text-gray-900 text-sm">
+                          {getProductDisplayName(item)}
+                        </h4>
+                        <p className="text-xs text-gray-600">Cantidad: {item.cantidad} unidades</p>
                       </div>
-                      <p className="text-xs text-gray-500">Precio unit.: ${item.precioUnitario?.toLocaleString('es-CL') || (item.total / item.cantidad).toLocaleString('es-CL')}</p>
                     </div>
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-3">
                       <div className="text-right">
                         <p className="font-semibold text-black">${item.total.toLocaleString('es-CL')}</p>
                         <p className="text-xs text-gray-500">IVA incluido</p>
@@ -1462,8 +1172,24 @@ function CheckoutPageContent() {
                     </div>
                   </div>
                 ))}
-              </div>
+                </div>
+              )}
 
+              {/* Botón para agregar productos cuando se muestran detalles */}
+              {showOrderDetails && (
+                <div className="mb-4">
+                  <Link
+                    href="/productos"
+                    className="flex items-center justify-center w-full px-3 py-2 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors text-sm"
+                  >
+                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                    Agregar más productos al pedido
+                  </Link>
+                </div>
+              )}
+              
               {/* Items del carrito - Solo visible cuando showOrderDetails es true */}
               {showOrderDetails && (
                 <div className="space-y-4 mb-6">
@@ -1481,11 +1207,22 @@ function CheckoutPageContent() {
                       )}
                       <div className="flex-1 min-w-0">
                         <h4 className="font-medium text-gray-900 text-sm">{getProductDisplayName(item)}</h4>
-                        <div className="flex items-center justify-between mt-2">
+                        <div className="mt-1 space-y-1">
                           <p className="text-xs text-gray-600">Cantidad: {item.cantidad} unidades</p>
-                          <div className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                            Mín: {isPolicarbonatoCompacto(item) ? '1' : '10'} unid.
-                          </div>
+                          {item.espesor ? (
+                            <p className="text-xs text-gray-500">Espesor: {item.espesor}</p>
+                          ) : null}
+                          {item.color ? (
+                            <p className="text-xs text-gray-500">Color: {item.color}</p>
+                          ) : null}
+                          {(item.ancho && item.largo) ? (
+                            <p className="text-xs text-gray-500">Dimensiones: {item.ancho}mm x {item.largo}m</p>
+                          ) : (item.especificaciones && item.especificaciones.length > 0) ? (
+                            item.especificaciones.map((spec, idx) => (
+                              <p key={idx} className="text-xs text-gray-500">{spec}</p>
+                            ))
+                          ) : null}
+                          <p className="text-xs text-gray-500">Precio unitario: ${item.precioUnitario?.toLocaleString('es-CL') || (item.total / item.cantidad).toLocaleString('es-CL')}</p>
                         </div>
                         <div className="flex items-center justify-between mt-2">
                           <div className="flex items-center space-x-2">
@@ -1857,12 +1594,11 @@ function CheckoutPageContent() {
                 {/* Métodos de pago */}
                 <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
                   <div className="flex items-center justify-center mb-3">
-                    <Image
-                      src="/assets/images/Logotipo/logo_tbk.svg"
-                      alt="Transbank"
-                      width={100}
-                      height={40}
-                      className="h-10 w-auto"
+                    <img
+                      src="https://www.transbank.cl/public/img/Logo_Webpay3-01-01.png"
+                      alt="Transbank Webpay"
+                      className="h-12 w-auto"
+                      style={{ maxWidth: '150px' }}
                     />
                   </div>
                   <div className="text-center">
