@@ -139,11 +139,7 @@ export default function AlveolarRecommendations({
               )}
               <div className="flex items-start space-x-2">
                 <span className="text-blue-600 font-medium">{alveolarQuantity > 1 ? '3.' : '2.'}</span>
-                <span>Fijar con tornillos de los {Math.ceil(alveolarQuantity / 2)} kit{Math.ceil(alveolarQuantity / 2) > 1 ? 's' : ''} alveolar (incluye arandelas y cintas de sellado)</span>
-              </div>
-              <div className="flex items-start space-x-2">
-                <span className="text-blue-600 font-medium">{alveolarQuantity > 1 ? '4.' : '3.'}</span>
-                <span>Cada kit cubre área de instalación para 2 planchas de 1.05×2.90m</span>
+                <span>Fijar con tornillos autorroscantes (no incluidos en esta cotización)</span>
               </div>
             </div>
             <div className="mt-3 p-3 bg-yellow-100 rounded border-l-4 border-yellow-500">

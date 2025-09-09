@@ -40,15 +40,9 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   generateEtags: false,
   
-  // Configuración experimental para mejor compatibilidad
-  experimental: {
-    // Asegurar compatibilidad con Vercel
-    optimizePackageImports: ['lucide-react', 'framer-motion', '@heroicons/react', 'react-icons'],
-    // Optimizaciones adicionales
-    webVitalsAttribution: ['CLS', 'LCP', 'FID', 'FCP', 'TTFB'],
-    // PPR experimental para mejor SEO
-    ppr: false, // Disabled for stability
-  },
+  // SOLUCIÓN DEFINITIVA: Sin configuración experimental para evitar Jest worker
+  // Comentado completamente para usar configuración por defecto estable
+  // experimental: {},
 
   // Compilador SWC optimizado
   compiler: {
@@ -65,46 +59,13 @@ const nextConfig: NextConfig = {
     },
   },
   
-  // Optimizaciones de webpack
-  webpack: (config, { dev, isServer }) => {
-    // Production optimizations
-    if (!dev) {
-      config.optimization = {
-        ...config.optimization,
-        sideEffects: false,
-        moduleIds: 'deterministic',
-        runtimeChunk: 'single',
-        splitChunks: {
-          chunks: 'all',
-          cacheGroups: {
-            default: false,
-            vendors: false,
-            vendor: {
-              name: 'vendor',
-              chunks: 'all',
-              test: /node_modules/,
-              priority: 20
-            },
-            common: {
-              name: 'common',
-              minChunks: 2,
-              chunks: 'async',
-              priority: 10,
-              reuseExistingChunk: true,
-              enforce: true
-            },
-          },
-        },
-      };
-    }
-    
-    // Optimizaciones para desarrollo
+  // SOLUCIÓN MINIMALISTA: Solo configuraciones esenciales para Jest worker
+  webpack: (config, { dev }) => {
+    // SOLO las configuraciones absolutamente necesarias
     if (dev) {
-      config.watchOptions = {
-        ignored: /node_modules/,
-        aggregateTimeout: 300,
-        poll: 1000,
-      };
+      // Prevenir Jest worker error con configuración mínima
+      config.cache = false;
+      config.parallelism = 1;
     }
     
     return config;

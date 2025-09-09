@@ -67,6 +67,23 @@ function CheckoutPageContent() {
   const [calendarMonth, setCalendarMonth] = useState(new Date().getMonth());
   const [calendarYear, setCalendarYear] = useState(new Date().getFullYear());
 
+  // Estados para las variables de productos
+  const [compactoState, setCompactoState] = useState({
+    dimension: '2.1x3m',
+    thickness: '4mm',
+    color: 'Clear'
+  });
+  const [alveolarState, setAlveolarState] = useState({
+    dimension: '2.1x3m',
+    thickness: '6mm',
+    color: 'Clear'
+  });
+  const [onduladoState, setOnduladoState] = useState({
+    dimension: '0.81x2m',
+    thickness: '0.5mm',
+    color: 'Clear'
+  });
+
   // Geolocalización hook
   const { location, requestLocation, clearLocation, setManualLocation } = useGeolocation();
 
@@ -949,122 +966,471 @@ function CheckoutPageContent() {
                 </Link>
               </div>
               
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {/* Productos más comunes con imágenes */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    const producto = {
-                      codigo: 'PC-COMP-4MM',
-                      nombre: 'Policarbonato Compacto',
-                      categoria: 'Policarbonato Compacto',
-                      precio: 45000,
-                      descripcion: 'Policarbonato Compacto 4mm',
-                      imagen_url: '/images/policarbonato-compacto.jpg'
-                    };
-                    const variant = { espesor: '4mm', color: 'Cristal', precio: 45000 };
-                    handleAddToCart(producto, variant);
-                  }}
-                  className="flex flex-col items-center p-4 bg-white rounded-lg border-2 border-gray-200 hover:border-blue-400 hover:shadow-lg transition-all group"
-                >
-                  <div className="w-20 h-20 mb-2 rounded-lg overflow-hidden bg-gray-100">
-                    <img 
-                      src="/images/policarbonato-compacto.jpg" 
-                      alt="Policarbonato Compacto"
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform"
-                    />
-                  </div>
-                  <span className="text-sm font-medium text-gray-900">PC Compacto</span>
-                  <span className="text-xs text-gray-500">4mm Cristal</span>
-                  <span className="text-base font-bold text-blue-600 mt-2">$45.000</span>
-                  <span className="text-xs text-green-600 font-medium mt-1">✓ Agregar</span>
-                </button>
-                
-                <button
-                  type="button"
-                  onClick={() => {
-                    const producto = {
-                      codigo: 'PC-ALV-6MM',
-                      nombre: 'Policarbonato Alveolar',
-                      categoria: 'Policarbonato Alveolar',
-                      precio: 25000,
-                      descripcion: 'Policarbonato Alveolar 6mm',
-                      imagen_url: '/images/policarbonato-alveolar.jpg'
-                    };
-                    const variant = { espesor: '6mm', color: 'Cristal', precio: 25000 };
-                    handleAddToCart(producto, variant);
-                  }}
-                  className="flex flex-col items-center p-4 bg-white rounded-lg border-2 border-gray-200 hover:border-blue-400 hover:shadow-lg transition-all group"
-                >
-                  <div className="w-20 h-20 mb-2 rounded-lg overflow-hidden bg-gray-100">
-                    <img 
-                      src="/images/policarbonato-alveolar.jpg" 
-                      alt="Policarbonato Alveolar"
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform"
-                    />
-                  </div>
-                  <span className="text-sm font-medium text-gray-900">PC Alveolar</span>
-                  <span className="text-xs text-gray-500">6mm Cristal</span>
-                  <span className="text-base font-bold text-blue-600 mt-2">$25.000</span>
-                  <span className="text-xs text-green-600 font-medium mt-1">✓ Agregar</span>
-                </button>
-                
-                <button
-                  type="button"
-                  onClick={() => {
-                    const producto = {
-                      codigo: 'PC-ALV-10MM',
-                      nombre: 'Policarbonato Alveolar',
-                      categoria: 'Policarbonato Alveolar',
-                      precio: 35000,
-                      descripcion: 'Policarbonato Alveolar 10mm',
-                      imagen_url: '/images/policarbonato-alveolar.jpg'
-                    };
-                    const variant = { espesor: '10mm', color: 'Cristal', precio: 35000 };
-                    handleAddToCart(producto, variant);
-                  }}
-                  className="flex flex-col items-center p-4 bg-white rounded-lg border-2 border-gray-200 hover:border-blue-400 hover:shadow-lg transition-all group"
-                >
-                  <div className="w-20 h-20 mb-2 rounded-lg overflow-hidden bg-gray-100">
-                    <img 
-                      src="/images/policarbonato-alveolar.jpg" 
-                      alt="Policarbonato Alveolar"
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform"
-                    />
-                  </div>
-                  <span className="text-sm font-medium text-gray-900">PC Alveolar</span>
-                  <span className="text-xs text-gray-500">10mm Cristal</span>
-                  <span className="text-base font-bold text-blue-600 mt-2">$35.000</span>
-                  <span className="text-xs text-green-600 font-medium mt-1">✓ Agregar</span>
-                </button>
-                
-                <button
-                  type="button"
-                  onClick={() => {
-                    const producto = {
-                      codigo: 'PERFIL-U',
-                      nombre: 'Perfil U',
-                      categoria: 'Perfiles',
-                      precio: 8500,
-                      descripcion: 'Perfil U para policarbonato',
-                      imagen_url: '/images/perfil-u.jpg'
-                    };
-                    handleAddToCart(producto);
-                  }}
-                  className="flex flex-col items-center p-4 bg-white rounded-lg border-2 border-gray-200 hover:border-blue-400 hover:shadow-lg transition-all group"
-                >
-                  <div className="w-20 h-20 mb-2 rounded-lg overflow-hidden bg-gray-100">
-                    <img 
-                      src="/images/perfil-u.jpg" 
-                      alt="Perfil U"
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform"
-                    />
-                  </div>
-                  <span className="text-sm font-medium text-gray-900">Perfil U</span>
-                  <span className="text-xs text-gray-500">Para bordes</span>
-                  <span className="text-base font-bold text-blue-600 mt-2">$8.500</span>
-                  <span className="text-xs text-green-600 font-medium mt-1">✓ Agregar</span>
-                </button>
+              <div className="space-y-6">
+                {(() => {
+                  // Lógica de recomendaciones inteligentes usando los nombres exactos
+                  const hasOndulado = state.items.some(item => 
+                    item.nombre?.toLowerCase().includes('ondulado') || 
+                    item.categoria?.toLowerCase().includes('ondulado')
+                  );
+                  const hasAlveolar = state.items.some(item => 
+                    item.nombre?.toLowerCase().includes('alveolar') || 
+                    item.categoria?.toLowerCase().includes('alveolar')
+                  );
+                  const hasCompacto = state.items.some(item => 
+                    item.nombre?.toLowerCase().includes('compacto') || 
+                    item.categoria?.toLowerCase().includes('compacto')
+                  );
+                  
+                  const recommendations = [];
+                  
+                  // Solo agregar productos que NO están ya en el carrito
+                  if (!hasCompacto) recommendations.push('compacto');
+                  if (!hasAlveolar) recommendations.push('alveolar');
+                  if (!hasOndulado) recommendations.push('ondulado');
+                  
+                  return (
+                    <>
+                      {recommendations.length > 0 && (
+                        <div>
+                          <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                            <svg className="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                            Productos Recomendados
+                          </h4>
+                          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                            
+                            {/* Policarbonato Compacto */}
+                            {recommendations.includes('compacto') && (
+                              <div className="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow">
+                                <div className="flex items-start gap-3 mb-4">
+                                  <div className="w-16 h-16 rounded-lg overflow-hidden bg-gray-50 flex-shrink-0">
+                                    <img 
+                                      src="/assets/images/Productos/Policarbonato Compacto/policarbonato_compacto.webp" 
+                                      alt="Policarbonato Compacto"
+                                      className="w-full h-full object-cover"
+                                    />
+                                  </div>
+                                  <div className="flex-1">
+                                    <h5 className="font-bold text-gray-900 mb-1">Policarbonato Compacto</h5>
+                                    <p className="text-sm text-gray-600 mb-2">Máxima resistencia al impacto</p>
+                                    <div>
+                                      <p className="text-lg font-bold text-gray-900">${(() => {
+                                        const priceMap = { '2mm': 38000, '4mm': 45000, '6mm': 52000 };
+                                        const basePrice = priceMap[compactoState.thickness] || 45000;
+                                        const area = compactoState.dimension === '2.1x3m' ? 6.3 : 
+                                                  compactoState.dimension === '2.1x6m' ? 12.6 : 2.98;
+                                        return Math.round(basePrice * area / 1000) * 1000;
+                                      })().toLocaleString('es-CL')}</p>
+                                      <span className="text-xs bg-green-100 text-green-700 px-1 py-0.5 rounded text-xs">IVA incluido</span>
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                                {/* Variables clickeables */}
+                                <div className="space-y-3">
+                                  <div>
+                                    <label className="block text-xs font-medium text-gray-700 mb-1">Dimensiones:</label>
+                                    <div className="flex flex-wrap gap-1">
+                                      {['2.1x3m', '2.1x6m', '1.22x2.44m'].map((dim) => (
+                                        <button 
+                                          key={dim}
+                                          onClick={() => setCompactoState(prev => ({ ...prev, dimension: dim }))}
+                                          className={`px-2 py-1 text-xs rounded border transition-colors ${
+                                            compactoState.dimension === dim 
+                                              ? 'bg-blue-50 text-blue-700 border-blue-200' 
+                                              : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
+                                          }`}
+                                        >
+                                          {dim}
+                                        </button>
+                                      ))}
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <label className="block text-xs font-medium text-gray-700 mb-1">Espesor:</label>
+                                    <div className="flex flex-wrap gap-1">
+                                      {['2mm', '4mm', '6mm'].map((thickness) => (
+                                        <button 
+                                          key={thickness}
+                                          onClick={() => setCompactoState(prev => ({ ...prev, thickness }))}
+                                          className={`px-2 py-1 text-xs rounded border transition-colors ${
+                                            compactoState.thickness === thickness 
+                                              ? 'bg-blue-50 text-blue-700 border-blue-200' 
+                                              : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
+                                          }`}
+                                        >
+                                          {thickness}
+                                        </button>
+                                      ))}
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <label className="block text-xs font-medium text-gray-700 mb-1">Color:</label>
+                                    <div className="flex flex-wrap gap-1">
+                                      {['Clear', 'Bronce'].map((color) => (
+                                        <button 
+                                          key={color}
+                                          onClick={() => setCompactoState(prev => ({ ...prev, color }))}
+                                          className={`px-2 py-1 text-xs rounded border transition-colors ${
+                                            compactoState.color === color 
+                                              ? 'bg-blue-50 text-blue-700 border-blue-200' 
+                                              : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
+                                          }`}
+                                        >
+                                          {color}
+                                        </button>
+                                      ))}
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                                <button
+                                  onClick={() => {
+                                    const precio = (() => {
+                                      const priceMap = { '2mm': 38000, '4mm': 45000, '6mm': 52000 };
+                                      const basePrice = priceMap[compactoState.thickness] || 45000;
+                                      const area = compactoState.dimension === '2.1x3m' ? 6.3 : 
+                                                compactoState.dimension === '2.1x6m' ? 12.6 : 2.98;
+                                      return Math.round(basePrice * area / 1000) * 1000;
+                                    })();
+                                    const producto = {
+                                      codigo: `PC-COMP-${compactoState.thickness}-${compactoState.color}-${compactoState.dimension}`,
+                                      nombre: `Policarbonato Compacto ${compactoState.thickness} ${compactoState.color} ${compactoState.dimension}`,
+                                      categoria: 'Policarbonato Compacto',
+                                      precio,
+                                      descripcion: `Policarbonato Compacto ${compactoState.thickness} ${compactoState.color} ${compactoState.dimension}`,
+                                      imagen_url: '/assets/images/Productos/Policarbonato Compacto/policarbonato_compacto.webp'
+                                    };
+                                    handleAddToCart(producto);
+                                  }}
+                                  className="mt-3 w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors"
+                                >
+                                  Agregar ${(() => {
+                                    const priceMap = { '2mm': 38000, '4mm': 45000, '6mm': 52000 };
+                                    const basePrice = priceMap[compactoState.thickness] || 45000;
+                                    const area = compactoState.dimension === '2.1x3m' ? 6.3 : 
+                                              compactoState.dimension === '2.1x6m' ? 12.6 : 2.98;
+                                    return Math.round(basePrice * area / 1000) * 1000;
+                                  })().toLocaleString('es-CL')}
+                                </button>
+                              </div>
+                            )}
+                            
+                            {/* Policarbonato Alveolar */}
+                            {recommendations.includes('alveolar') && (
+                              <div className="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow">
+                                <div className="flex items-start gap-3 mb-4">
+                                  <div className="w-16 h-16 rounded-lg overflow-hidden bg-gray-50 flex-shrink-0">
+                                    <img 
+                                      src="/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp" 
+                                      alt="Policarbonato Alveolar"
+                                      className="w-full h-full object-cover"
+                                    />
+                                  </div>
+                                  <div className="flex-1">
+                                    <h5 className="font-bold text-gray-900 mb-1">Policarbonato Alveolar</h5>
+                                    <p className="text-sm text-gray-600 mb-2">Excelente aislamiento térmico</p>
+                                    <div>
+                                      <p className="text-lg font-bold text-gray-900">${(() => {
+                                        const priceMap = { '4mm': 18500, '6mm': 25000, '10mm': 35000 };
+                                        const basePrice = priceMap[alveolarState.thickness] || 25000;
+                                        const area = alveolarState.dimension === '2.1x3m' ? 6.3 : 
+                                                  alveolarState.dimension === '2.1x6m' ? 12.6 : 12.18;
+                                        return Math.round(basePrice * area / 1000) * 1000;
+                                      })().toLocaleString('es-CL')}</p>
+                                      <span className="text-xs bg-green-100 text-green-700 px-1 py-0.5 rounded text-xs">IVA incluido</span>
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                                {/* Variables clickeables */}
+                                <div className="space-y-3">
+                                  <div>
+                                    <label className="block text-xs font-medium text-gray-700 mb-1">Dimensiones:</label>
+                                    <div className="flex flex-wrap gap-1">
+                                      {['2.1x3m', '2.1x6m', '2.1x5.8m'].map((dim) => (
+                                        <button 
+                                          key={dim}
+                                          onClick={() => setAlveolarState(prev => ({ ...prev, dimension: dim }))}
+                                          className={`px-2 py-1 text-xs rounded border transition-colors ${
+                                            alveolarState.dimension === dim 
+                                              ? 'bg-blue-50 text-blue-700 border-blue-200' 
+                                              : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
+                                          }`}
+                                        >
+                                          {dim}
+                                        </button>
+                                      ))}
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <label className="block text-xs font-medium text-gray-700 mb-1">Espesor:</label>
+                                    <div className="flex flex-wrap gap-1">
+                                      {['4mm', '6mm', '10mm'].map((thickness) => (
+                                        <button 
+                                          key={thickness}
+                                          onClick={() => setAlveolarState(prev => ({ ...prev, thickness }))}
+                                          className={`px-2 py-1 text-xs rounded border transition-colors ${
+                                            alveolarState.thickness === thickness 
+                                              ? 'bg-blue-50 text-blue-700 border-blue-200' 
+                                              : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
+                                          }`}
+                                        >
+                                          {thickness}
+                                        </button>
+                                      ))}
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <label className="block text-xs font-medium text-gray-700 mb-1">Color:</label>
+                                    <div className="flex flex-wrap gap-1">
+                                      {['Clear', 'Bronce', 'Opal'].map((color) => (
+                                        <button 
+                                          key={color}
+                                          onClick={() => setAlveolarState(prev => ({ ...prev, color }))}
+                                          className={`px-2 py-1 text-xs rounded border transition-colors ${
+                                            alveolarState.color === color 
+                                              ? 'bg-blue-50 text-blue-700 border-blue-200' 
+                                              : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
+                                          }`}
+                                        >
+                                          {color}
+                                        </button>
+                                      ))}
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                                <button
+                                  onClick={() => {
+                                    const precio = (() => {
+                                      const priceMap = { '4mm': 18500, '6mm': 25000, '10mm': 35000 };
+                                      const basePrice = priceMap[alveolarState.thickness] || 25000;
+                                      const area = alveolarState.dimension === '2.1x3m' ? 6.3 : 
+                                                alveolarState.dimension === '2.1x6m' ? 12.6 : 12.18;
+                                      return Math.round(basePrice * area / 1000) * 1000;
+                                    })();
+                                    const producto = {
+                                      codigo: `PC-ALV-${alveolarState.thickness}-${alveolarState.color}-${alveolarState.dimension}`,
+                                      nombre: `Policarbonato Alveolar ${alveolarState.thickness} ${alveolarState.color} ${alveolarState.dimension}`,
+                                      categoria: 'Policarbonato Alveolar',
+                                      precio,
+                                      descripcion: `Policarbonato Alveolar ${alveolarState.thickness} ${alveolarState.color} ${alveolarState.dimension}`,
+                                      imagen_url: '/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp'
+                                    };
+                                    handleAddToCart(producto);
+                                  }}
+                                  className="mt-3 w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors"
+                                >
+                                  Agregar ${(() => {
+                                    const priceMap = { '4mm': 18500, '6mm': 25000, '10mm': 35000 };
+                                    const basePrice = priceMap[alveolarState.thickness] || 25000;
+                                    const area = alveolarState.dimension === '2.1x3m' ? 6.3 : 
+                                              alveolarState.dimension === '2.1x6m' ? 12.6 : 12.18;
+                                    return Math.round(basePrice * area / 1000) * 1000;
+                                  })().toLocaleString('es-CL')}
+                                </button>
+                              </div>
+                            )}
+                            
+                            {/* Policarbonato Ondulado */}
+                            {recommendations.includes('ondulado') && (
+                              <div className="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow">
+                                <div className="flex items-start gap-3 mb-4">
+                                  <div className="w-16 h-16 rounded-lg overflow-hidden bg-gray-50 flex-shrink-0">
+                                    <img 
+                                      src="/assets/images/Productos/Policarbonato Ondulado/ondulado_Clear.webp" 
+                                      alt="Policarbonato Ondulado"
+                                      className="w-full h-full object-cover"
+                                    />
+                                  </div>
+                                  <div className="flex-1">
+                                    <h5 className="font-bold text-gray-900 mb-1">Policarbonato Ondulado</h5>
+                                    <p className="text-sm text-gray-600 mb-2">Ideal para techados ligeros</p>
+                                    <div>
+                                      <p className="text-lg font-bold text-gray-900">${(() => {
+                                        const priceMap = {
+                                          '0.5mm': { '0.81x2m': 6520, '0.81x2.5m': 11191, '0.81x3m': 13429 },
+                                          '0.8mm': { '0.81x2m': 7820, '0.81x2.5m': 12500, '0.81x3m': 15200 }
+                                        };
+                                        return priceMap[onduladoState.thickness]?.[onduladoState.dimension] || 6520;
+                                      })().toLocaleString('es-CL')}</p>
+                                      <span className="text-xs bg-green-100 text-green-700 px-1 py-0.5 rounded text-xs">IVA incluido</span>
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                                {/* Variables clickeables */}
+                                <div className="space-y-3">
+                                  <div>
+                                    <label className="block text-xs font-medium text-gray-700 mb-1">Dimensiones:</label>
+                                    <div className="flex flex-wrap gap-1">
+                                      {['0.81x2m', '0.81x2.5m', '0.81x3m'].map((dim) => (
+                                        <button 
+                                          key={dim}
+                                          onClick={() => setOnduladoState(prev => ({ ...prev, dimension: dim }))}
+                                          className={`px-2 py-1 text-xs rounded border transition-colors ${
+                                            onduladoState.dimension === dim 
+                                              ? 'bg-blue-50 text-blue-700 border-blue-200' 
+                                              : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
+                                          }`}
+                                        >
+                                          {dim}
+                                        </button>
+                                      ))}
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <label className="block text-xs font-medium text-gray-700 mb-1">Espesor:</label>
+                                    <div className="flex flex-wrap gap-1">
+                                      {['0.5mm', '0.8mm'].map((thickness) => (
+                                        <button 
+                                          key={thickness}
+                                          onClick={() => setOnduladoState(prev => ({ ...prev, thickness }))}
+                                          className={`px-2 py-1 text-xs rounded border transition-colors ${
+                                            onduladoState.thickness === thickness 
+                                              ? 'bg-blue-50 text-blue-700 border-blue-200' 
+                                              : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
+                                          }`}
+                                        >
+                                          {thickness}
+                                        </button>
+                                      ))}
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <label className="block text-xs font-medium text-gray-700 mb-1">Color:</label>
+                                    <div className="flex flex-wrap gap-1">
+                                      {['Clear', 'Bronce', 'Opal'].map((color) => (
+                                        <button 
+                                          key={color}
+                                          onClick={() => setOnduladoState(prev => ({ ...prev, color }))}
+                                          className={`px-2 py-1 text-xs rounded border transition-colors ${
+                                            onduladoState.color === color 
+                                              ? 'bg-blue-50 text-blue-700 border-blue-200' 
+                                              : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
+                                          }`}
+                                        >
+                                          {color}
+                                        </button>
+                                      ))}
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                                <button
+                                  onClick={() => {
+                                    const precio = (() => {
+                                      const priceMap = {
+                                        '0.5mm': { '0.81x2m': 6520, '0.81x2.5m': 11191, '0.81x3m': 13429 },
+                                        '0.8mm': { '0.81x2m': 7820, '0.81x2.5m': 12500, '0.81x3m': 15200 }
+                                      };
+                                      return priceMap[onduladoState.thickness]?.[onduladoState.dimension] || 6520;
+                                    })();
+                                    const producto = {
+                                      codigo: `PC-OND-${onduladoState.thickness}-${onduladoState.color}-${onduladoState.dimension}`,
+                                      nombre: `Policarbonato Ondulado ${onduladoState.thickness} ${onduladoState.color} ${onduladoState.dimension}`,
+                                      categoria: 'Policarbonato Ondulado',
+                                      precio,
+                                      descripcion: `Policarbonato Ondulado ${onduladoState.thickness} ${onduladoState.color} ${onduladoState.dimension}`,
+                                      imagen_url: '/assets/images/Productos/Policarbonato Ondulado/ondulado_Clear.webp'
+                                    };
+                                    handleAddToCart(producto);
+                                  }}
+                                  className="mt-3 w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors"
+                                >
+                                  Agregar ${(() => {
+                                    const priceMap = {
+                                      '0.5mm': { '0.81x2m': 6520, '0.81x2.5m': 11191, '0.81x3m': 13429 },
+                                      '0.8mm': { '0.81x2m': 7820, '0.81x2.5m': 12500, '0.81x3m': 15200 }
+                                    };
+                                    return priceMap[onduladoState.thickness]?.[onduladoState.dimension] || 6520;
+                                  })().toLocaleString('es-CL')}
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* Perfiles - Solo si hay policarbonato alveolar en el carrito */}
+                      {hasAlveolar && (
+                        <div>
+                          <h4 className="text-sm font-semibold text-gray-700 mb-3">Perfiles Necesarios</h4>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-lg transition-all">
+                              <div className="flex items-center gap-4 mb-3">
+                                <div className="w-16 h-16 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
+                                  <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                                  </svg>
+                                </div>
+                                <div className="flex-1">
+                                  <h5 className="font-semibold text-gray-900">Perfil U</h5>
+                                  <p className="text-xs text-gray-600">Para terminar bordes del policarbonato alveolar</p>
+                                </div>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <span className="text-lg font-bold text-green-600">$8.500</span>
+                                <button
+                                  onClick={() => {
+                                    const producto = {
+                                      codigo: 'PERFIL-U',
+                                      nombre: 'Perfil U',
+                                      categoria: 'Perfiles',
+                                      precio: 8500,
+                                      descripcion: 'Perfil U para policarbonato alveolar',
+                                      imagen_url: '/images/perfil-u-placeholder.svg'
+                                    };
+                                    handleAddToCart(producto);
+                                  }}
+                                  className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                                >
+                                  Agregar
+                                </button>
+                              </div>
+                            </div>
+                            
+                            <div className="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-lg transition-all">
+                              <div className="flex items-center gap-4 mb-3">
+                                <div className="w-16 h-16 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
+                                  <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                                  </svg>
+                                </div>
+                                <div className="flex-1">
+                                  <h5 className="font-semibold text-gray-900">Perfil Clip</h5>
+                                  <p className="text-xs text-gray-600">Para unir láminas de policarbonato alveolar</p>
+                                </div>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <span className="text-lg font-bold text-green-600">$12.500</span>
+                                <button
+                                  onClick={() => {
+                                    const producto = {
+                                      codigo: 'PERFIL-CLIP',
+                                      nombre: 'Perfil Clip',
+                                      categoria: 'Perfiles',
+                                      precio: 12500,
+                                      descripcion: 'Perfil clip para unión de policarbonato alveolar',
+                                      imagen_url: '/images/perfil-h-placeholder.svg'
+                                    };
+                                    handleAddToCart(producto);
+                                  }}
+                                  className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                                >
+                                  Agregar
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  );
+                })()}
               </div>
             </div>
           </div>
@@ -1109,21 +1475,37 @@ function CheckoutPageContent() {
                   {state.items.map((item) => (
                   <div key={item.id} className="flex items-center justify-between bg-gray-50 rounded-lg p-3">
                     <div className="flex items-center space-x-3 flex-1">
-                      {item.imagen && (
-                        <div className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0">
-                          <CartThumbnail
-                            src={item.imagen}
-                            alt={item.nombre}
-                            className="w-full h-full object-cover"
-                            productName={item.nombre}
-                          />
-                        </div>
-                      )}
+                      <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100">
+                        <CartThumbnail
+                          src={item.imagen || '/images/placeholder.svg'}
+                          alt={item.nombre}
+                          className="w-full h-full object-cover"
+                          productName={item.nombre}
+                        />
+                      </div>
                       <div className="flex-1 min-w-0">
                         <h4 className="font-medium text-gray-900 text-sm">
                           {getProductDisplayName(item)}
                         </h4>
-                        <p className="text-xs text-gray-600">Cantidad: {item.cantidad} unidades</p>
+                        <div className="text-xs text-gray-600 mt-1 space-y-1">
+                          <p className="font-medium">Cantidad: {item.cantidad} unidades</p>
+                          {/* Mostrar especificaciones que ya vienen en el item */}
+                          {item.especificaciones && item.especificaciones.length > 0 && (
+                            <div className="space-y-0.5">
+                              {item.especificaciones.slice(0, 4).map((spec, idx) => (
+                                <p key={idx} className="text-gray-500">{spec}</p>
+                              ))}
+                            </div>
+                          )}
+                          {/* Fallback para variables básicas */}
+                          {!item.especificaciones && (
+                            <>
+                              {item.color && <p>Color: {item.color}</p>}
+                              {item.espesor && <p>Espesor: {item.espesor}</p>}
+                              {item.ancho && item.largo && <p>Dimensiones: {item.ancho}x{item.largo}</p>}
+                            </>
+                          )}
+                        </div>
                       </div>
                     </div>
                     <div className="flex items-center space-x-3">
@@ -1191,7 +1573,7 @@ function CheckoutPageContent() {
                 <div className="mb-4">
                   <Link
                     href="/productos"
-                    className="flex items-center justify-center w-full px-3 py-2 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors text-sm"
+                    className="flex items-center justify-center w-full px-3 py-2 bg-green-50 text-green-700 border border-green-300 rounded-lg hover:bg-green-100 transition-colors text-sm font-medium"
                   >
                     <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -1206,16 +1588,14 @@ function CheckoutPageContent() {
                 <div className="space-y-4 mb-6">
                   {state.items.map((item) => (
                     <div key={item.id} className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
-                      {item.imagen && (
-                        <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
-                          <CartThumbnail
-                            src={item.imagen}
-                            alt={item.nombre}
-                            className="w-full h-full object-cover"
-                            productName={item.nombre}
-                          />
-                        </div>
-                      )}
+                      <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100">
+                        <CartThumbnail
+                          src={item.imagen || '/images/placeholder.svg'}
+                          alt={item.nombre}
+                          className="w-full h-full object-cover"
+                          productName={item.nombre}
+                        />
+                      </div>
                       <div className="flex-1 min-w-0">
                         <h4 className="font-medium text-gray-900 text-sm">{getProductDisplayName(item)}</h4>
                         <div className="mt-1 space-y-1">
@@ -1606,7 +1986,7 @@ function CheckoutPageContent() {
                 <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
                   <div className="flex items-center justify-center mb-3">
                     <img
-                      src="https://www.transbank.cl/public/img/Logo_Webpay3-01-01.png"
+                      src="/assets/images/Iconos/webpay png.png"
                       alt="Transbank Webpay"
                       className="h-12 w-auto"
                       style={{ maxWidth: '150px' }}

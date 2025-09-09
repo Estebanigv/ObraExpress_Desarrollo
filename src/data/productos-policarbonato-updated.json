@@ -774,8 +774,7 @@
         "stock_disponible": "Sin stock",
         "colores_disponibles": 3,
         "dimensiones_disponibles": 4,
-        "total_variantes": 24,
-        "imagen": "/assets/images/Productos/Policarbonato Ondulado/policarbonato-ondulado.webp"
+        "total_variantes": 24
       },
       {
         "id": "policarbonato-alveolar",
@@ -811,7 +810,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_clear.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -841,7 +840,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_clear.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -871,7 +870,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_clear.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -901,7 +900,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_clear.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -931,7 +930,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_clear.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -961,7 +960,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/policarbonato_alveolar_4mm_bronce.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -991,7 +990,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/policarbonato_alveolar_4mm_bronce.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -1021,7 +1020,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/policarbonato_alveolar_4mm_bronce.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -1051,7 +1050,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/policarbonato_alveolar_4mm_bronce.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -1081,7 +1080,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/policarbonato_alveolar_4mm_bronce.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -1261,7 +1260,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_clear.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -1291,7 +1290,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_clear.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -1321,7 +1320,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_clear.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -1351,7 +1350,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_clear.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -1381,7 +1380,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_clear.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -1411,7 +1410,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/policarbonato_alveolar_6mm_bronce.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -1441,7 +1440,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/policarbonato_alveolar_6mm_bronce.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -1471,7 +1470,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/policarbonato_alveolar_6mm_bronce.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -1501,7 +1500,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/policarbonato_alveolar_6mm_bronce.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -1531,7 +1530,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/policarbonato_alveolar_6mm_bronce.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -1711,7 +1710,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_clear.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -1741,7 +1740,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_clear.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -1771,7 +1770,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_clear.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -1801,7 +1800,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_clear.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -1831,7 +1830,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_clear.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -1861,7 +1860,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_bronce.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -1891,7 +1890,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_bronce.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -1921,7 +1920,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_bronce.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -1951,7 +1950,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_bronce.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -1981,7 +1980,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_bronce.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -2161,7 +2160,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_clear.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -2191,7 +2190,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_clear.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -2221,7 +2220,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_clear.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -2251,7 +2250,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_clear.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -2281,7 +2280,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_clear.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -2311,7 +2310,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_bronce.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -2341,7 +2340,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_bronce.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -2371,7 +2370,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_bronce.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -2401,7 +2400,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_bronce.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -2431,7 +2430,7 @@
             "tiene_sku_valido": true,
             "tiene_stock_minimo": true,
             "tiene_imagen": true,
-            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_bronce.webp",
+            "ruta_imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
             "motivo_no_disponible": null
           },
           {
@@ -2629,8 +2628,7 @@
         "stock_disponible": "Sin stock",
         "colores_disponibles": 3,
         "dimensiones_disponibles": 5,
-        "total_variantes": 60,
-        "imagen": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp"
+        "total_variantes": 60
       },
       {
         "id": "policarbonato-compacto",
@@ -2776,8 +2774,7 @@
         "stock_disponible": "Sin stock",
         "colores_disponibles": 1,
         "dimensiones_disponibles": 1,
-        "total_variantes": 3,
-        "imagen": "/assets/images/Productos/Policarbonato Compacto/policarbonato_compacto.webp"
+        "total_variantes": 3
       }
     ],
     "Accesorios": [
@@ -2959,7 +2956,7 @@
           "aplicacion": "Presionar firmemente",
           "sellado": "Aplicar silicona neutra si es necesario"
         },
-        "imagen": "/assets/images/Productos/Perfiles/Perfil_U.webp",
+        "imagen": "/images/perfil-u.jpg",
         "precio_desde": 3500,
         "stock_total": 100,
         "variantes_count": 5,
@@ -3051,7 +3048,7 @@
           "colocacion_tapa": "Presionar hasta escuchar click",
           "sellado_adicional": "No requerido"
         },
-        "imagen": "/assets/images/Productos/Perfiles/perfil-clip-policarbonato.webp",
+        "imagen": "/images/perfil-h.jpg",
         "precio_desde": 8900,
         "stock_total": 80,
         "variantes_count": 5,

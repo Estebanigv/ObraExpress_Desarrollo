@@ -52,7 +52,7 @@ const extractProductosDestacados = (productosData: any) => {
       {
         categoria: "Policarbonato Ondulado", 
         codigo_variante: "111001102", // Bronce 0,81x2 - $8,952
-        imagen: "/assets/images/Productos/Policarnato Ondulado/policarbonato_ondulado_opal_perspectiva.webp",
+        imagen: "/assets/images/Productos/Policarbonato Ondulado/ondulado_Bronce.webp",
         etiqueta: "Más Económico"
       },
       {
@@ -110,7 +110,7 @@ const extractProductosDestacados = (productosData: any) => {
               ...grupoEncontrado,
               id: grupoEncontrado.id || economico.categoria.toLowerCase().replace(/ /g, '-'),
               nombre: economico.categoria,
-              imagen: economico.imagen,
+              imagen: varianteEconomica.imagen || varianteEconomica.ruta_imagen || economico.imagen,
               
               // TODAS las variantes para selectores dinámicos
               variantes: todasVariantes,
@@ -180,7 +180,7 @@ const extractProductosDestacados = (productosData: any) => {
         {
           categoria: "Policarbonato Ondulado", 
           codigo_variante: "111001101",
-          imagen: "/assets/images/Productos/Policarnato Ondulado/policarbonato_ondulado_opal_perspectiva.webp"
+          imagen: "/assets/images/Productos/Policarbonato Ondulado/ondulado_Clear.webp"
         },
         {
           categoria: "Policarbonato Alveolar",

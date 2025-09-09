@@ -96,16 +96,16 @@ export function calculateAlveolarRecommendationsAdvanced(alveolarProducts: Alveo
     });
   }
 
-  // 3. Kit Alveolar 1 1/2: 1 kit por cada 2 planchas
-  const kitAlveolarQuantity = Math.ceil(totalQuantity / 2);
-  recommendations.push({
-    productId: 'kit-alveolar-1-5',
-    productName: 'Kit Alveolar 1 1/2" (incluye tornillos y cintas)',
-    quantity: kitAlveolarQuantity,
-    description: `${kitAlveolarQuantity} kits alveolares completos con fijaciones`,
-    reason: `Cada kit cubre fijación de 2 planchas alveolares`,
-    specifications: `Incluye: tornillos autorroscantes + arandelas + cintas de sellado`
-  });
+  // 3. Kit Alveolar 1 1/2: OCULTO POR AHORA (no disponible)
+  // const kitAlveolarQuantity = Math.ceil(totalQuantity / 2);
+  // recommendations.push({
+  //   productId: 'kit-alveolar-1-5',
+  //   productName: 'Kit Alveolar 1 1/2" (incluye tornillos y cintas)',
+  //   quantity: kitAlveolarQuantity,
+  //   description: `${kitAlveolarQuantity} kits alveolares completos con fijaciones`,
+  //   reason: `Cada kit cubre fijación de 2 planchas alveolares`,
+  //   specifications: `Incluye: tornillos autorroscantes + arandelas + cintas de sellado`
+  // });
 
   // Calcular totales para la nota de instalación
   const totalPerfilUQuantity = Array.from(perfilUGroups.values()).reduce((sum, group) => sum + group.quantity, 0);
@@ -118,13 +118,11 @@ export function calculateAlveolarRecommendationsAdvanced(alveolarProducts: Alveo
     ✅ Para ${totalQuantity} plancha${totalQuantity > 1 ? 's' : ''} de policarbonato alveolar necesitas:
     • ${totalPerfilUQuantity} Perfiles U (sellado en extremos)
     • ${totalPerfilClipQuantity > 0 ? totalPerfilClipQuantity + ' Perfiles Clip Plano (unión entre planchas)' : 'Sin perfiles clip (plancha única)'}
-    • ${kitAlveolarQuantity} Kit${kitAlveolarQuantity > 1 ? 's' : ''} Alveolar con tornillos y cintas
     
     🔧 INSTALACIÓN:
     1. Instalar perfiles U en extremos superior e inferior
     2. ${totalPerfilClipQuantity > 0 ? 'Unir planchas con perfiles clip plano' : 'Plancha única sin uniones'}
-    3. Fijar con tornillos del kit (incluye arandelas y cintas de sellado)
-    4. Cada kit cubre área de instalación para 2 planchas
+    3. Fijar con tornillos autorroscantes (no incluidos en esta cotización)
     
     ⚠️ IMPORTANTE: Los perfiles garantizan sellado hermético y durabilidad de 10+ años
   `;

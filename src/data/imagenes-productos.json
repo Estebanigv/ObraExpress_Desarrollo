@@ -1,0 +1,45 @@
+{
+  "policarbonato-ondulado": {
+    "imagen_principal": "/assets/images/Productos/Policarbonato Ondulado/policarbonato-ondulado.webp",
+    "imagen_detalle": "/assets/images/Productos/Policarbonato Ondulado/Policarbonato ondulado detalle.webp",
+    "imagen_lejana": "/assets/images/Productos/Policarbonato Ondulado/ondulad lejos.webp",
+    "imagenes_por_color": {
+      "Clear": "/assets/images/Productos/Policarbonato Ondulado/ondulado_Clear.webp",
+      "Bronce": "/assets/images/Productos/Policarbonato Ondulado/ondulado_Bronce.webp",
+      "Opal": "/assets/images/Productos/Policarbonato Ondulado/ondulado_Opal.webp"
+    }
+  },
+  "policarbonato-alveolar": {
+    "imagen_principal": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
+    "imagenes_por_color": {
+      "Clear": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_clear.webp",
+      "Bronce": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_bronce.webp",
+      "Cristal": "/assets/images/Productos/Policarbonato Alveolar/policarbonato Alveolar Clear.webp"
+    },
+    "imagenes_por_espesor": {
+      "4mm_cristal": "/assets/images/Productos/policarbonato_alveolar_4mm_cristal.webp",
+      "6mm_cristal": "/assets/images/Productos/policarbonato_alveolar_6mm_cristal.webp",
+      "10mm_cristal": "/assets/images/Productos/policarbonato_alveolar_10mm_cristal.webp",
+      "4mm_bronce": "/assets/images/Productos/policarbonato_alveolar_4mm_bronce.webp",
+      "6mm_bronce": "/assets/images/Productos/policarbonato_alveolar_6mm_bronce.webp"
+    }
+  },
+  "policarbonato-compacto": {
+    "imagen_principal": "/assets/images/Productos/Policarbonato Compacto/policarbonato_compacto.webp",
+    "imagenes_por_color": {
+      "Clear": "/assets/images/Productos/Policarbonato Compacto/policarbonato_compacto Clear.webp",
+      "Solid": "/assets/images/Productos/Policarbonato Compacto/policarbonato_compacto Solid.webp"
+    }
+  },
+  "perfil-u": {
+    "imagen_principal": "/assets/images/Productos/Perfiles/Perfil_U.webp",
+    "imagen_alternativa": "/assets/images/Productos/Perfiles/perfil-u-policarbonato.webp"
+  },
+  "perfil-h": {
+    "imagen_principal": "/assets/images/Productos/Perfiles/perfil-clip-policarbonato.webp",
+    "imagen_alternativa": "/assets/images/Productos/Perfiles/Perfil_Clip.webp"
+  },
+  "rollo": {
+    "imagen_principal": "/assets/images/Productos/Rollo/rollo_policarbonato_cristal.webp"
+  }
+}

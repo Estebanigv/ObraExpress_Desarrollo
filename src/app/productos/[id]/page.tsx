@@ -5,6 +5,9 @@ import { useParams, useRouter } from 'next/navigation';
 import { NavbarSimple } from '@/components/navbar-simple';
 import { ProductImage } from '@/components/optimized-image';
 import { useCart } from '@/contexts/CartContext';
+import ProductConfiguratorSimple from '@/modules/products/components/product-configurator-simple';
+import proyectosData from '@/data/proyectos-realizados.json';
+import imagenesProductos from '@/data/imagenes-productos.json';
 
 interface ProductVariant {
   codigo: string;
@@ -26,134 +29,109 @@ interface ProductGroup {
   id: string;
   nombre: string;
   descripcion: string;
+  descripcion_completa?: string;
   categoria: string;
+  tipo: string;
   variantes: ProductVariant[];
   colores: string[];
   precio_desde: number;
   stock_total: number;
   variantes_count: number;
   imagen: string;
+  caracteristicas?: string[];
+  usos_principales?: string[];
+  especificaciones_tecnicas?: any;
+  ventajas_competitivas?: string[];
+  instalacion_recomendada?: any;
+}
+
+interface Proyecto {
+  id: string;
+  titulo: string;
+  descripcion: string;
+  imagen_principal: string;
+  imagen_hover?: string;
+  imagen_secundaria?: string;
+  caracteristicas: string[];
+  tipo: string;
+  material_usado: string;
 }
 
 export default function ProductDetailPage() {
   const params = useParams();
   const router = useRouter();
   const { addItem } = useCart();
-  const [productos, setProductos] = useState<ProductGroup[]>([]);
-  const [loading, setLoading] = useState(true);
   
-  // Estados para la configuración del producto
-  const [selectedEspesor, setSelectedEspesor] = useState<string>('');
+  const [hoveredProject, setHoveredProject] = useState<string | null>(null);
+  const [selectedTab, setSelectedTab] = useState<'descripcion' | 'especificaciones' | 'instalacion'>('descripcion');
   const [selectedColor, setSelectedColor] = useState<string>('');
-  const [selectedDimensiones, setSelectedDimensiones] = useState<string>('');
-  const [cantidad, setCantidad] = useState<number>(10);
-  // Removido selectedDeliveryOption ya que solo hay entregas los jueves
+  const [selectedImage, setSelectedImage] = useState<string>('');
   
   const productId = params.id as string;
   
-  // Cargar datos de productos
-  useEffect(() => {
-    const loadProductData = async () => {
-      try {
-        const response = await fetch('/api/productos-publico');
-        if (response.ok) {
-          const result = await response.json();
-          if (result.success) {
-            const productosArray: ProductGroup[] = [];
-            Object.values(result.data.productos_por_categoria || {}).forEach((categoria: any) => {
-              productosArray.push(...categoria);
-            });
-            setProductos(productosArray);
-          }
-        }
-      } catch (error) {
-        console.error('Error cargando datos:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadProductData();
-  }, []);
+  // Cargar datos
+  const productosData = require('@/data/productos-policarbonato.json');
+  const productos: ProductGroup[] = productosData.productos_por_categoria?.Policarbonato || [];
+  const productosAccesorios: ProductGroup[] = productosData.productos_por_categoria?.Accesorios || [];
+  const todosProductos = [...productos, ...productosAccesorios];
   
-  // Encontrar el producto por ID
-  const productoData = productos.find(p => p.id === productId);
+  const producto = todosProductos.find(p => p.id === productId);
+  const proyectos = proyectosData[productId as keyof typeof proyectosData]?.proyectos || [];
+  const imagenesDelProducto = imagenesProductos[productId as keyof typeof imagenesProductos] || {};
   
-  const producto = productoData ? {
-    ...productoData,
-    imagen: (() => {
-      if (productoData.nombre.includes('Ondulado')) {
-        return "/assets/images/Productos/Policarnato Ondulado/policarbonato_ondulado_opal_perspectiva.webp";
-      } else if (productoData.nombre.includes('Alveolar')) {
-        return "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp";
-      } else if (productoData.nombre.includes('Compacto')) {
-        return "/assets/images/Productos/Policarbonato Compacto/policarbonato_compacto.webp";
-      }
-      return '';
-    })()
-  } : null;
+  // Calcular stock real sumando todas las variantes
+  const stockReal = useMemo(() => {
+    if (!producto?.variantes) return 0;
+    return producto.variantes.reduce((total, variante) => {
+      return total + (variante.stock || 0);
+    }, 0);
+  }, [producto?.variantes]);
 
   // Opciones disponibles
   const opciones = useMemo(() => {
-    if (!producto) return { espesores: [], colores: [], dimensiones: [] };
+    if (!producto || !producto.variantes) return { espesores: [], colores: [], dimensiones: [] };
+    
+    const espesores = new Set<string>();
+    const colores = new Set<string>();
+    const dimensiones = new Set<string>();
+    
+    producto.variantes.forEach(v => {
+      if (v.espesor) espesores.add(v.espesor);
+      if (v.color) colores.add(v.color);
+      if (v.dimensiones) dimensiones.add(v.dimensiones);
+    });
+    
     return {
-      espesores: [...new Set(producto.variantes.map(v => v.espesor))].sort(),
-      colores: [...new Set(producto.variantes.map(v => v.color))].sort(),
-      dimensiones: [...new Set(producto.variantes.map(v => v.dimensiones))].sort(),
+      espesores: Array.from(espesores).sort(),
+      colores: Array.from(colores).sort(),
+      dimensiones: Array.from(dimensiones).sort(),
     };
-  }, [producto]);
+  }, [producto?.variantes]);
 
-  // Variante seleccionada
-  const selectedVariant = useMemo(() => {
-    if (!producto || !selectedEspesor || !selectedColor || !selectedDimensiones) return null;
-    return producto.variantes.find(v => 
-      v.espesor === selectedEspesor && 
-      v.color === selectedColor && 
-      v.dimensiones === selectedDimensiones
-    ) || null;
-  }, [producto, selectedEspesor, selectedColor, selectedDimensiones]);
-
-  // Calcular fecha de entrega (solo jueves)
-  const deliveryInfo = useMemo(() => {
-    const today = new Date();
-    let deliveryDate = new Date(today);
-    
-    // Encontrar el próximo jueves (día 4 de la semana, siendo 0 domingo)
-    const todayWeekday = today.getDay(); // 0 = domingo, 1 = lunes, ... 6 = sábado
-    let daysUntilThursday = 4 - todayWeekday; // 4 = jueves
-    
-    // Si es jueves y ya pasaron las horas de despacho (ejemplo: después de las 14:00)
-    // o si ya es viernes, sábado, domingo, lunes, martes o miércoles
-    if (daysUntilThursday <= 0 || (todayWeekday === 4 && today.getHours() >= 14)) {
-      daysUntilThursday += 7; // Próximo jueves
+  // Efecto para establecer el color inicial y la imagen
+  useEffect(() => {
+    if (opciones.colores.length > 0 && !selectedColor) {
+      setSelectedColor(opciones.colores[0]);
     }
-    
-    deliveryDate.setDate(today.getDate() + daysUntilThursday);
-    
-    const deliveryText = 'Entrega jueves';
-    const deliveryPrice = 0; // Envío gratuito solo los jueves
+  }, [opciones.colores]);
 
-    return {
-      date: deliveryDate.toLocaleDateString('es-CL', {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long'
-      }).replace('jueves', 'Jueves'),
-      text: deliveryText,
-      price: deliveryPrice,
-      isFree: true
-    };
-  }, []); // Sin dependencias ya que siempre será jueves
-
-  if (loading) {
-    return (
-      <main className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Cargando producto...</p>
-        </div>
-      </main>
-    );
-  }
+  // Efecto para actualizar la imagen según el color seleccionado
+  useEffect(() => {
+    if (imagenesDelProducto && selectedColor) {
+      const imagenPorColor = imagenesDelProducto.imagenes_por_color?.[selectedColor];
+      if (imagenPorColor) {
+        setSelectedImage(imagenPorColor);
+      } else if (imagenesDelProducto.imagen_principal) {
+        setSelectedImage(imagenesDelProducto.imagen_principal);
+      } else if (producto?.imagen) {
+        setSelectedImage(producto.imagen);
+      }
+    } else if (imagenesDelProducto?.imagen_principal) {
+      setSelectedImage(imagenesDelProducto.imagen_principal);
+    } else if (producto?.imagen) {
+      setSelectedImage(producto.imagen);
+    }
+  }, [selectedColor, imagenesDelProducto, producto]);
 
   if (!producto) {
     return (
@@ -176,23 +154,6 @@ export default function ProductDetailPage() {
     );
   }
 
-  const handleAddToCart = () => {
-    if (selectedVariant) {
-      addItem({
-        id: selectedVariant.codigo,
-        name: selectedVariant.nombre,
-        price: selectedVariant.precio_con_iva,
-        quantity: cantidad,
-        image: producto.imagen,
-        variant: {
-          espesor: selectedVariant.espesor,
-          color: selectedVariant.color,
-          dimensiones: selectedVariant.dimensiones
-        }
-      });
-    }
-  };
-
   return (
     <main className="min-h-screen bg-white">
       <NavbarSimple />
@@ -200,425 +161,569 @@ export default function ProductDetailPage() {
       <div className="pt-44 pb-16">
         <div className="container mx-auto px-6 max-w-7xl">
           
-          {/* Breadcrumbs */}
+          {/* Breadcrumbs mejorado */}
           <div className="mb-8">
             <nav className="flex items-center text-sm text-gray-500">
-              <span>Categorías</span>
+              <button onClick={() => router.push('/')} className="hover:text-amber-600 transition-colors">
+                Inicio
+              </button>
               <span className="mx-2">/</span>
-              <span>Construcción</span>
+              <button onClick={() => router.push('/productos')} className="hover:text-amber-600 transition-colors">
+                Productos
+              </button>
               <span className="mx-2">/</span>
-              <span className="text-gray-900">{producto.nombre}</span>
+              <span className="text-gray-900 font-medium">{producto.nombre}</span>
             </nav>
           </div>
 
           {/* Layout Principal */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             
-            {/* Imagen del Producto */}
+            {/* Columna Izquierda: Imagen y Proyectos */}
             <div className="">
               <div className="relative">
-                {/* Imagen principal */}
-                <div className="aspect-[4/3] bg-gray-100 rounded-2xl overflow-hidden mb-4">
+                {/* Imagen principal con badge */}
+                <div className="aspect-[4/3] bg-gray-100 rounded-2xl overflow-hidden mb-4 relative">
                   <ProductImage
-                    src={producto.imagen}
-                    alt={producto.nombre}
+                    src={selectedImage || producto.imagen || '/images/placeholder.svg'}
+                    alt={`${producto.nombre} - ${selectedColor || 'Vista general'}`}
                     className="w-full h-full object-cover"
                   />
-                </div>
-                
-                {/* Miniaturas */}
-                <div className="flex space-x-2">
-                  {[1, 2, 3].map((i) => (
-                    <div key={i} className={`w-20 h-16 bg-gray-200 rounded-lg overflow-hidden cursor-pointer border-2 ${
-                      i === 1 ? 'border-blue-500' : 'border-transparent'
+                  {stockReal > 0 && (
+                    <div className={`absolute top-4 left-4 text-white px-3 py-1 rounded-full text-sm font-medium ${
+                      stockReal > 10 ? 'bg-green-500' : 'bg-yellow-500'
                     }`}>
-                      <ProductImage
-                        src={producto.imagen}
-                        alt={`Vista ${i}`}
-                        className="w-full h-full object-cover"
-                      />
+                      {stockReal > 10 ? 'En Stock' : 'Pocas unidades'}
                     </div>
-                  ))}
+                  )}
                 </div>
                 
-                {/* Proyectos Realizados */}
-                <div className="mt-8">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Proyectos Realizados</h3>
-                  <p className="text-gray-600 text-sm mb-4">Instalaciones profesionales con Policarbonato Alveolar</p>
-                  <div className="space-y-4">
-                    <div 
-                      className="aspect-video bg-gray-200 rounded-xl overflow-hidden cursor-pointer group"
-                      onMouseEnter={(e) => {
-                        const img = e.currentTarget.querySelector('img') as HTMLImageElement;
-                        if (img) img.src = '/assets/images/Trabajos/Cubierta de terraza policarbonato alveolar_111.webp';
-                      }}
-                      onMouseLeave={(e) => {
-                        const img = e.currentTarget.querySelector('img') as HTMLImageElement;
-                        if (img) img.src = '/assets/images/Trabajos/Cubierta de terraza policarbonato alveolar_1.webp';
-                      }}
-                    >
-                      <img 
-                        src="/assets/images/Trabajos/Cubierta de terraza policarbonato alveolar_1.webp" 
-                        alt="Cubierta de terraza con policarbonato alveolar"
-                        className="w-full h-full object-cover transition-all duration-300 group-hover:scale-105"
-                      />
+                {/* Miniaturas de colores disponibles */}
+                {opciones.colores.length > 1 && imagenesDelProducto.imagenes_por_color && (
+                  <div className="mb-6">
+                    <p className="text-sm font-medium text-gray-700 mb-3">Colores disponibles:</p>
+                    <div className="flex gap-3 overflow-x-auto pb-2">
+                      {opciones.colores.map((color) => {
+                        const imagenColor = imagenesDelProducto.imagenes_por_color?.[color];
+                        if (!imagenColor) return null;
+                        
+                        return (
+                          <div 
+                            key={color}
+                            onClick={() => setSelectedColor(color)}
+                            className={`w-20 h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0 cursor-pointer transition-all transform hover:scale-105 ${
+                              selectedColor === color 
+                                ? 'ring-3 ring-amber-500 shadow-lg' 
+                                : 'hover:ring-2 hover:ring-amber-300'
+                            }`}
+                          >
+                            <ProductImage
+                              src={imagenColor}
+                              alt={`${producto.nombre} - ${color}`}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        );
+                      })}
                     </div>
-                    <div 
-                      className="aspect-video bg-gray-200 rounded-xl overflow-hidden cursor-pointer group"
-                      onMouseEnter={(e) => {
-                        const img = e.currentTarget.querySelector('img') as HTMLImageElement;
-                        if (img) img.src = '/assets/images/Trabajos/piscina cubierta con policarbonato alveolar_11.webp';
-                      }}
-                      onMouseLeave={(e) => {
-                        const img = e.currentTarget.querySelector('img') as HTMLImageElement;
-                        if (img) img.src = '/assets/images/Trabajos/piscina cubierta con policarbonato alveolar_1.webp';
-                      }}
-                    >
-                      <img 
-                        src="/assets/images/Trabajos/piscina cubierta con policarbonato alveolar_1.webp" 
-                        alt="Piscina cubierta con policarbonato alveolar"
-                        className="w-full h-full object-cover transition-all duration-300 group-hover:scale-105"
-                      />
+                    {selectedColor && (
+                      <p className="text-xs text-gray-500 mt-2">
+                        Color seleccionado: <span className="font-medium text-gray-700">{selectedColor}</span>
+                      </p>
+                    )}
+                  </div>
+                )}
+                
+                
+                {/* Proyectos Realizados Mejorado */}
+                {proyectos.length > 0 && (
+                  <div className="mt-8">
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <h3 className="text-lg font-bold text-gray-900">Casos de Éxito</h3>
+                        <p className="text-gray-500 text-sm mt-1">
+                          Proyectos reales con {producto.nombre}
+                        </p>
+                      </div>
+                      <span className="text-xs text-gray-400 font-medium uppercase tracking-wider">
+                        {proyectos.length} PROYECTOS
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-1 gap-4">
+                      {proyectos.map((proyecto) => (
+                        <div 
+                          key={proyecto.id}
+                          className="group relative bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-amber-200 transition-all duration-500 hover:shadow-2xl cursor-pointer"
+                          onMouseEnter={() => setHoveredProject(proyecto.id)}
+                          onMouseLeave={() => setHoveredProject(null)}
+                        >
+                          <div className="aspect-[16/10] relative overflow-hidden bg-gradient-to-br from-gray-100 to-gray-50">
+                            {/* Contenedor para el efecto zoom */}
+                            <div className="w-full h-full relative transition-transform duration-1000 ease-out group-hover:scale-105">
+                              {/* Imagen base - siempre visible */}
+                              <ProductImage
+                                src={proyecto.imagen_principal}
+                                alt={proyecto.titulo}
+                                className="w-full h-full object-cover absolute inset-0"
+                              />
+                              {/* Imagen hover - aparece con crossfade suave */}
+                              {proyecto.imagen_hover && (
+                                <div className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                                  hoveredProject === proyecto.id ? 'opacity-100' : 'opacity-0'
+                                }`}>
+                                  <ProductImage
+                                    src={proyecto.imagen_hover}
+                                    alt={`${proyecto.titulo} - vista alternativa`}
+                                    className="w-full h-full object-cover"
+                                  />
+                                </div>
+                              )}
+                              {/* Overlay sutil para mejorar legibilidad del texto */}
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent pointer-events-none" />
+                            </div>
+                            
+                            {/* Badge de tipo de proyecto */}
+                            <div className="absolute top-4 left-4 z-10">
+                              <span className="bg-white/95 backdrop-blur-sm text-gray-700 px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg">
+                                {proyecto.tipo}
+                              </span>
+                            </div>
+                            
+                            {/* Overlay con información rápida */}
+                            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent h-32 transition-opacity duration-300 opacity-0 group-hover:opacity-100">
+                              <div className="absolute bottom-4 left-4 right-4">
+                                <p className="text-white text-sm font-medium line-clamp-2">
+                                  {proyecto.descripcion}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="p-5">
+                            <div className="mb-3">
+                              <h4 className="font-bold text-gray-900 text-lg mb-1 group-hover:text-amber-600 transition-colors">
+                                {proyecto.titulo}
+                              </h4>
+                              <p className="text-xs text-gray-500 font-medium">
+                                {proyecto.material_usado}
+                              </p>
+                            </div>
+                            
+                            {/* Características principales */}
+                            <div className="space-y-2">
+                              {proyecto.caracteristicas.slice(0, 3).map((caract, idx) => (
+                                <div key={idx} className="flex items-center gap-2">
+                                  <div className="w-1.5 h-1.5 bg-amber-500 rounded-full flex-shrink-0"></div>
+                                  <span className="text-sm text-gray-600">{caract}</span>
+                                </div>
+                              ))}
+                            </div>
+                            
+                            {/* Indicador visual de interactividad */}
+                            <div className="mt-4 pt-3 border-t border-gray-100">
+                              <p className="text-xs text-gray-400 group-hover:text-amber-600 transition-colors flex items-center gap-1">
+                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                </svg>
+                                Pasa el cursor para ver más detalles
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
 
-            {/* Configurador del Producto */}
+            {/* Columna Derecha: Información y Configurador */}
             <div className="">
               <div className="">
                 
-                {/* Nuevo Producto Badge */}
-                <div className="mb-4">
+                {/* Badges */}
+                <div className="flex gap-2 mb-4">
                   <span className="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full">
                     Nuevo Producto
                   </span>
+                  {producto.ventajas_competitivas && producto.ventajas_competitivas.length > 0 && (
+                    <span className="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
+                      Premium
+                    </span>
+                  )}
                 </div>
                 
                 {/* Título y Rating */}
                 <div className="mb-6">
                   <h1 className="text-3xl font-bold text-gray-900 mb-3">{producto.nombre}</h1>
                   
-                  {/* Descripción detallada */}
+                  {/* Descripción completa */}
                   <div className="mb-4">
                     <p className="text-gray-700 text-base leading-relaxed">
-                      {producto.descripcion || `${producto.tipo} de alta calidad con garantía extendida y protección UV incluida.`}
+                      {producto.descripcion_completa || producto.descripcion}
                     </p>
                   </div>
                   
-                  {selectedVariant && (
-                    <div className="text-sm text-gray-600 mb-3 bg-gray-50 p-2 rounded-lg">
-                      <strong>SKU:</strong> {selectedVariant.codigo}
-                      {selectedVariant.descripcion && selectedVariant.descripcion !== selectedVariant.nombre && (
-                        <div className="mt-1 text-xs text-gray-500">{selectedVariant.descripcion}</div>
-                      )}
-                    </div>
-                  )}
-                  
-                  {/* Rating */}
-                  <div className="flex items-center space-x-2 mb-2">
+                  {/* Rating y Reviews */}
+                  <div className="flex items-center space-x-4 mb-2">
                     <div className="flex items-center">
                       {[1, 2, 3, 4, 5].map((star) => (
-                        <svg key={star} className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                        <svg key={star} className="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
                           <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
                         </svg>
                       ))}
                     </div>
-                    <span className="text-sm font-medium">(4.8)</span>
-                    <span className="text-sm text-gray-500">Basado en {producto.variantes_count || 0} variantes</span>
+                    <span className="text-sm font-medium text-gray-900">(4.8)</span>
+                    <span className="text-sm text-gray-500">{producto.variantes_count || 0} variantes disponibles</span>
                   </div>
                   
-                  {/* Stock info mejorado */}
+                  {/* Stock y disponibilidad */}
                   <div className="flex items-center space-x-4 text-sm">
                     <div className={`flex items-center ${
-                      producto.stock_total > 10 ? 'text-green-600' : 
-                      producto.stock_total > 0 ? 'text-yellow-600' : 'text-red-600'
+                      stockReal > 10 ? 'text-green-600' : 
+                      stockReal > 0 ? 'text-yellow-600' : 'text-red-600'
                     }`}>
                       <div className={`w-2 h-2 rounded-full mr-2 ${
-                        producto.stock_total > 10 ? 'bg-green-500' : 
-                        producto.stock_total > 0 ? 'bg-yellow-500' : 'bg-red-500'
+                        stockReal > 10 ? 'bg-green-500' : 
+                        stockReal > 0 ? 'bg-yellow-500' : 'bg-red-500'
                       }`}></div>
-                      {producto.stock_disponible || (producto.stock_total > 10 ? 'Disponible' : 'Stock limitado')}
+                      {stockReal > 10 ? 'Disponible' : 
+                       stockReal > 0 ? `Stock limitado (${stockReal})` : 'Sin stock'}
                     </div>
                     <div className="text-gray-600">
-                      {producto.colores_disponibles || opciones.colores.length} colores • {producto.dimensiones_disponibles || opciones.dimensiones.length} tamaños
+                      {opciones.colores.length} colores • {opciones.dimensiones.length} tamaños
                     </div>
                   </div>
-                  
-                  {/* Usos principales */}
-                  {producto.usos_principales && producto.usos_principales.length > 0 && (
-                    <div className="mt-4">
-                      <p className="text-sm font-medium text-gray-700 mb-2">Aplicaciones principales:</p>
-                      <div className="flex flex-wrap gap-2">
-                        {producto.usos_principales.map((uso, index) => (
-                          <span key={index} className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-50 text-blue-700 border border-blue-200">
-                            {uso}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
                 </div>
-                
-                {/* Precio */}
+
+                {/* Tabs de información */}
+                <div className="border-b mb-6">
+                  <div className="flex gap-0">
+                    <button
+                      onClick={() => setSelectedTab('descripcion')}
+                      className={`px-6 py-4 font-semibold text-sm uppercase tracking-wide transition-all duration-300 border-b-3 ${
+                        selectedTab === 'descripcion' 
+                          ? 'border-amber-500 text-amber-600 bg-amber-50' 
+                          : 'border-transparent text-gray-500 hover:text-amber-600 hover:border-amber-300 hover:bg-amber-25'
+                      }`}
+                    >
+                      Descripción
+                    </button>
+                    <button
+                      onClick={() => setSelectedTab('especificaciones')}
+                      className={`px-6 py-4 font-semibold text-sm uppercase tracking-wide transition-all duration-300 border-b-3 ${
+                        selectedTab === 'especificaciones' 
+                          ? 'border-amber-500 text-amber-600 bg-amber-50' 
+                          : 'border-transparent text-gray-500 hover:text-amber-600 hover:border-amber-300 hover:bg-amber-25'
+                      }`}
+                    >
+                      Especificaciones
+                    </button>
+                    <button
+                      onClick={() => setSelectedTab('instalacion')}
+                      className={`px-6 py-4 font-semibold text-sm uppercase tracking-wide transition-all duration-300 border-b-3 ${
+                        selectedTab === 'instalacion' 
+                          ? 'border-amber-500 text-amber-600 bg-amber-50' 
+                          : 'border-transparent text-gray-500 hover:text-amber-600 hover:border-amber-300 hover:bg-amber-25'
+                      }`}
+                    >
+                      Instalación
+                    </button>
+                  </div>
+                </div>
+
+                {/* Contenido de tabs */}
                 <div className="mb-8">
-                  {selectedVariant ? (
-                    <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-2xl border border-green-200">
-                      <div className="flex items-baseline space-x-3 mb-2">
-                        <span className="text-4xl font-bold text-green-900">
-                          ${selectedVariant.precio_con_iva.toLocaleString()}
-                        </span>
-                        <div className="flex flex-col">
-                          <span className="text-sm text-green-700 font-medium">IVA incluido</span>
-                          {selectedVariant.precio_neto && (
-                            <span className="text-xs text-green-600">
-                              Neto: ${selectedVariant.precio_neto.toLocaleString()}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                      <div className="flex items-center text-sm text-green-700">
-                        <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                        </svg>
-                        Precio competitivo • {selectedVariant.garantia || '10 años de garantía'}
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="bg-gray-50 p-4 rounded-2xl border-2 border-dashed border-gray-300">
-                      <div className="text-center">
-                        <div className="text-2xl text-gray-500 mb-2">Selecciona opciones</div>
-                        <div className="text-sm text-gray-400">
-                          Desde ${producto.precio_desde?.toLocaleString() || 0} hasta ${producto.precio_maximo?.toLocaleString() || 0}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-                
-                {/* Colores disponibles */}
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Colores disponibles</h3>
-                  <div className="flex space-x-6">
-                    {opciones.colores.map((color) => {
-                      const colorMap: { [key: string]: string } = {
-                        'Transparente': 'bg-blue-100 border-blue-300',
-                        'Bronce': 'bg-amber-600 border-amber-700', 
-                        'Opal': 'bg-gray-300 border-gray-400',
-                        'Cristal': 'bg-blue-50 border-blue-200'
-                      };
-                      
-                      return (
-                        <div key={color} className="flex flex-col items-center">
-                          <button
-                            onClick={() => setSelectedColor(color)}
-                            className={`w-12 h-12 rounded-full border-2 relative mb-2 ${
-                              colorMap[color] || 'bg-gray-200 border-gray-300'
-                            } ${
-                              selectedColor === color ? 'ring-2 ring-blue-500 ring-offset-2' : ''
-                            }`}
-                            title={color}
-                          >
-                            {selectedColor === color && (
-                              <div className="absolute inset-0 flex items-center justify-center">
-                                <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                  {selectedTab === 'descripcion' && (
+                    <div className="space-y-4">
+                      {/* Características principales */}
+                      {producto.caracteristicas && producto.caracteristicas.length > 0 && (
+                        <div>
+                          <h3 className="text-lg font-semibold text-gray-900 mb-3">Características principales</h3>
+                          <div className="grid grid-cols-2 gap-3">
+                            {producto.caracteristicas.map((caracteristica, index) => (
+                              <div key={index} className="flex items-start space-x-2 p-3 bg-gray-50 rounded-lg">
+                                <svg className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                 </svg>
+                                <span className="text-sm text-gray-700">{caracteristica}</span>
                               </div>
-                            )}
-                          </button>
-                          <span className="text-xs text-gray-600 text-center">{color}</span>
+                            ))}
+                          </div>
                         </div>
-                      );
-                    })}
-                  </div>
-                </div>
+                      )}
 
-                {/* Tamaños disponibles */}
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Tamaños disponibles</h3>
-                  <div className="grid grid-cols-2 gap-3">
-                    {opciones.dimensiones.slice(0, 4).map((dimension) => (
-                      <button
-                        key={dimension}
-                        onClick={() => setSelectedDimensiones(dimension)}
-                        className={`p-3 text-center border rounded-lg font-medium transition-all ${
-                          selectedDimensiones === dimension
-                            ? 'bg-black text-white border-black'
-                            : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
-                        }`}
-                      >
-                        {dimension}
-                      </button>
-                    ))}
-                  </div>
-                  
-                  {opciones.dimensiones.length > 4 && (
-                    <div className="mt-3">
-                      <button
-                        onClick={() => setSelectedDimensiones(opciones.dimensiones[4])}
-                        className={`w-full p-3 text-center border rounded-lg font-medium transition-all ${
-                          selectedDimensiones === opciones.dimensiones[4]
-                            ? 'bg-black text-white border-black'
-                            : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
-                        }`}
-                      >
-                        {opciones.dimensiones[4]}
-                      </button>
+                      {/* Usos principales */}
+                      {producto.usos_principales && producto.usos_principales.length > 0 && (
+                        <div>
+                          <h3 className="text-lg font-semibold text-gray-900 mb-3">Aplicaciones principales</h3>
+                          <div className="flex flex-wrap gap-2">
+                            {producto.usos_principales.map((uso, index) => (
+                              <span key={index} className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                                {uso}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Ventajas competitivas */}
+                      {producto.ventajas_competitivas && producto.ventajas_competitivas.length > 0 && (
+                        <div>
+                          <h3 className="text-lg font-semibold text-gray-900 mb-3">Ventajas competitivas</h3>
+                          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                            <ul className="space-y-2">
+                              {producto.ventajas_competitivas.map((ventaja, index) => (
+                                <li key={index} className="flex items-start gap-2">
+                                  <span className="text-amber-600 font-bold">•</span>
+                                  <span className="text-sm text-gray-700">{ventaja}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {selectedTab === 'especificaciones' && (
+                    <div className="space-y-4">
+                      {producto.especificaciones_tecnicas && (
+                        <div className="bg-gray-50 rounded-lg p-4">
+                          <table className="w-full">
+                            <tbody>
+                              {Object.entries(producto.especificaciones_tecnicas).map(([key, value]) => (
+                                <tr key={key} className="border-b border-gray-200 last:border-0">
+                                  <td className="py-3 text-sm font-medium text-gray-700 capitalize">
+                                    {key.replace(/_/g, ' ')}
+                                  </td>
+                                  <td className="py-3 text-sm text-gray-900 text-right">
+                                    {typeof value === 'object' ? JSON.stringify(value) : value}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {selectedTab === 'instalacion' && (
+                    <div className="space-y-4">
+                      {producto.instalacion_recomendada && (
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                          <h4 className="font-semibold text-blue-900 mb-3">Recomendaciones de instalación</h4>
+                          <div className="space-y-2">
+                            {Object.entries(producto.instalacion_recomendada).map(([key, value]) => (
+                              <div key={key} className="flex items-start gap-2">
+                                <span className="text-blue-600 font-bold">→</span>
+                                <div>
+                                  <span className="font-medium text-gray-700 capitalize">{key.replace(/_/g, ' ')}:</span>
+                                  <span className="text-gray-600 ml-2">{value}</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
-
-                {/* Espesores disponibles */}
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Espesores disponibles</h3>
-                  <div className="flex space-x-3">
-                    {opciones.espesores.map((espesor) => (
-                      <button
-                        key={espesor}
-                        onClick={() => setSelectedEspesor(espesor)}
-                        className={`px-4 py-2 border rounded-lg font-medium transition-all ${
-                          selectedEspesor === espesor
-                            ? 'bg-black text-white border-black'
-                            : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
-                        }`}
-                      >
-                        {espesor}
-                      </button>
-                    ))}
-                  </div>
-                  <div className="mt-2 text-sm text-gray-600">
-                    {selectedEspesor && `Espesor seleccionado: ${selectedEspesor}`}
-                  </div>
-                  
-                  {/* Más espesores */}
-                  <div className="mt-3">
-                    <button className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:border-gray-400 font-medium">
-                      10mm
-                    </button>
-                  </div>
+                
+                {/* Configurador de producto */}
+                <div className="mb-8">
+                  <ProductConfiguratorSimple 
+                    productGroup={{
+                      ...producto,
+                      espesores: opciones.espesores,
+                      dimensiones: opciones.dimensiones,
+                      colores: opciones.colores,
+                      variantes: producto.variantes || []
+                    }}
+                    className="border-0 shadow-none bg-transparent"
+                  />
                 </div>
 
-                {/* Fecha de entrega */}
-                <div className="mb-8">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Fecha de entrega</h3>
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center">
-                        <div className="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
-                        <div>
-                          <div className="font-semibold text-green-900">Próxima entrega:</div>
-                          <div className="text-green-700">{deliveryInfo.date}</div>
-                          <div className="text-sm text-green-600 mt-1">
-                            Horario: 9:00 - 18:00 hrs
-                          </div>
-                        </div>
+                {/* Información adicional profesional */}
+                <div className="mt-8 bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-6 border border-gray-200">
+                  <div className="grid grid-cols-3 gap-6">
+                    <div className="text-center">
+                      <div className="w-12 h-12 mx-auto mb-3 bg-blue-600 rounded-lg flex items-center justify-center">
+                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
                       </div>
-                      <button className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
-                        Cambiar fecha
-                      </button>
+                      <div className="text-sm font-semibold text-gray-900 mb-1">Garantía Extendida</div>
+                      <div className="text-xs text-gray-600">10 años contra defectos</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="w-12 h-12 mx-auto mb-3 bg-green-600 rounded-lg flex items-center justify-center">
+                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                      </div>
+                      <div className="text-sm font-semibold text-gray-900 mb-1">Protección UV</div>
+                      <div className="text-xs text-gray-600">Filtro 99% rayos nocivos</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="w-12 h-12 mx-auto mb-3 bg-amber-600 rounded-lg flex items-center justify-center">
+                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                        </svg>
+                      </div>
+                      <div className="text-sm font-semibold text-gray-900 mb-1">Logística Express</div>
+                      <div className="text-xs text-gray-600">Entrega 24-48 horas</div>
                     </div>
                   </div>
-                </div>
-                
-                {/* Pedido mínimo */}
-                <div className="mb-8">
-                  <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 flex items-center">
-                    <svg className="w-5 h-5 text-orange-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                    </svg>
-                    <span className="text-sm font-medium text-orange-800">
-                      Pedido mínimo: 10 unidades
-                    </span>
-                  </div>
-                </div>
-                
-                {/* Selector de Cantidad y Botón de Compra */}
-                <div className="flex items-center space-x-4 mb-8">
-                  {/* Selector de Cantidad */}
-                  <div className="flex items-center border border-gray-300 rounded-lg">
-                    <button
-                      onClick={() => setCantidad(Math.max(10, cantidad - 1))}
-                      className="w-10 h-10 flex items-center justify-center hover:bg-gray-50 transition-colors rounded-l-lg"
-                    >
-                      <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                      </svg>
-                    </button>
-                    <div className="w-16 h-10 flex items-center justify-center border-l border-r border-gray-300">
-                      <span className="text-lg font-semibold text-gray-900">{cantidad}</span>
-                    </div>
-                    <button
-                      onClick={() => setCantidad(cantidad + 1)}
-                      className="w-10 h-10 flex items-center justify-center hover:bg-gray-50 transition-colors rounded-r-lg"
-                    >
-                      <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                      </svg>
-                    </button>
-                  </div>
-
-                  {/* Botón de Compra */}
-                  <button
-                    onClick={handleAddToCart}
-                    disabled={!selectedVariant}
-                    className={`flex-1 h-10 px-6 rounded-lg font-semibold text-sm transition-all duration-300 flex items-center justify-center space-x-2 ${
-                      selectedVariant
-                        ? 'bg-black text-white hover:bg-gray-900'
-                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    }`}
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l1.5-6M17 21a2 2 0 100-4 2 2 0 000 4zM9 21a2 2 0 100-4 2 2 0 000 4z" />
-                    </svg>
-                    <span>
-                      {selectedVariant 
-                        ? `Agregar al carrito de compra - $${((selectedVariant?.precio_con_iva || 0) * cantidad).toLocaleString()}`
-                        : 'Completa tu selección'
-                      }
-                    </span>
-                  </button>
                 </div>
 
-                {/* Características del producto */}
-                {producto.caracteristicas && producto.caracteristicas.length > 0 && (
-                  <div className="mt-8">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Características principales</h3>
-                    <div className="grid grid-cols-2 gap-3">
-                      {producto.caracteristicas.map((caracteristica, index) => (
-                        <div key={index} className="flex items-center space-x-2 p-3 bg-gray-50 rounded-lg">
-                          <svg className="w-4 h-4 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                          </svg>
-                          <span className="text-sm text-gray-700">{caracteristica}</span>
-                        </div>
-                      ))}
+                {/* Soporte técnico profesional */}
+                <div className="mt-6 bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-amber-600 rounded-lg flex items-center justify-center">
+                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-gray-900">Soporte Técnico Especializado</p>
+                        <p className="text-xs text-gray-600">Asesoramiento profesional para tu proyecto</p>
+                      </div>
                     </div>
-                  </div>
-                )}
-                
-                {/* Información adicional mejorada */}
-                <div className="mt-8 grid grid-cols-3 gap-4">
-                  <div className="text-center p-4 bg-blue-50 rounded-xl">
-                    <div className="text-blue-600 text-2xl mb-2">✓</div>
-                    <div className="text-sm font-semibold text-blue-900">Garantía</div>
-                    <div className="text-sm text-blue-700">{selectedVariant?.garantia || producto.caracteristicas?.find(c => c.includes('años')) || '10 años'}</div>
-                  </div>
-                  <div className="text-center p-4 bg-green-50 rounded-xl">
-                    <div className="text-green-600 text-2xl mb-2">☀️</div>
-                    <div className="text-sm font-semibold text-green-900">Protección UV</div>
-                    <div className="text-sm text-green-700">
-                      {selectedVariant?.uv_protection ? 'Incluida' : 'Disponible'}
-                    </div>
-                  </div>
-                  <div className="text-center p-4 bg-amber-50 rounded-xl">
-                    <div className="text-amber-600 text-2xl mb-2">📋</div>
-                    <div className="text-sm font-semibold text-amber-900">Variantes</div>
-                    <div className="text-sm text-amber-700">{producto.total_variantes || producto.variantes_count} disponibles</div>
+                    <button className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 flex items-center gap-2">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                      </svg>
+                      Contactar Ahora
+                    </button>
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Sección de productos relacionados */}
+        <div className="mt-16 bg-gray-50 py-16">
+          <div className="container mx-auto px-6 max-w-7xl">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">Productos Relacionados</h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Completa tu proyecto con nuestra línea completa de policarbonato y accesorios profesionales
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {/* Policarbonato Alveolar */}
+              <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 group">
+                <div className="aspect-[4/3] bg-gray-100 overflow-hidden relative">
+                  <ProductImage
+                    src="/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp"
+                    alt="Policarbonato Alveolar"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute top-4 left-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                    Más Popular
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Policarbonato Alveolar</h3>
+                  <p className="text-gray-600 text-sm mb-4">
+                    Máximo aislamiento térmico con estructura de cámaras de aire. Ideal para cubiertas.
+                  </p>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="text-sm text-gray-500">
+                      <span className="font-medium">Desde:</span>
+                    </div>
+                    <div className="text-lg font-bold text-gray-900">$8.500</div>
+                  </div>
+                  <button 
+                    onClick={() => router.push('/productos/policarbonato-alveolar')}
+                    className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-medium py-3 rounded-xl transition-all duration-200"
+                  >
+                    Ver Producto
+                  </button>
+                </div>
+              </div>
+
+              {/* Policarbonato Compacto */}
+              <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 group">
+                <div className="aspect-[4/3] bg-gray-100 overflow-hidden relative">
+                  <ProductImage
+                    src="/assets/images/Productos/Policarbonato Compacto/policarbonato_compacto.webp"
+                    alt="Policarbonato Compacto"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute top-4 left-4 bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                    Premium
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Policarbonato Compacto</h3>
+                  <p className="text-gray-600 text-sm mb-4">
+                    Máxima resistencia al impacto. Perfecto para aplicaciones de alta exigencia.
+                  </p>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="text-sm text-gray-500">
+                      <span className="font-medium">Desde:</span>
+                    </div>
+                    <div className="text-lg font-bold text-gray-900">$12.900</div>
+                  </div>
+                  <button 
+                    onClick={() => router.push('/productos/policarbonato-compacto')}
+                    className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-medium py-3 rounded-xl transition-all duration-200"
+                  >
+                    Ver Producto
+                  </button>
+                </div>
+              </div>
+
+              {/* Perfiles Alveolares */}
+              <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 group">
+                <div className="aspect-[4/3] bg-gray-100 overflow-hidden relative">
+                  <ProductImage
+                    src="/assets/images/Productos/Perfiles/Gemini_Generated_Image_ytwkjzytwkjzytwk.webp"
+                    alt="Perfiles Alveolares"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute top-4 left-4 bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                    Esencial
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Perfiles Alveolares</h3>
+                  <p className="text-gray-600 text-sm mb-4">
+                    Perfiles de unión y sellado especializados para instalación profesional de policarbonato alveolar.
+                  </p>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="text-sm text-gray-500">
+                      <span className="font-medium">Desde:</span>
+                    </div>
+                    <div className="text-lg font-bold text-gray-900">$850</div>
+                  </div>
+                  <button 
+                    onClick={() => router.push('/productos')}
+                    className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-medium py-3 rounded-xl transition-all duration-200"
+                  >
+                    Ver Producto
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            {/* CTA para ver todos los productos */}
+            <div className="text-center mt-12">
+              <button 
+                onClick={() => router.push('/productos')}
+                className="bg-white hover:bg-gray-50 text-gray-900 font-semibold py-4 px-8 rounded-xl border-2 border-gray-200 hover:border-amber-300 transition-all duration-200 inline-flex items-center gap-2"
+              >
+                Ver Todos los Productos
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </button>
             </div>
           </div>
         </div>

@@ -286,7 +286,22 @@ function ProductConfiguratorSimple({ productGroup, className = '' }: ProductConf
         } else if (productGroup.categoria?.includes('Perfil') || nombreCompleto.includes('Perfil')) {
           imagenParaCarrito = '/assets/images/Productos/Perfiles/perfil-u-policarbonato.webp';
         } else if (nombreCompleto.includes('Ondulado')) {
-          imagenParaCarrito = '/assets/images/Productos/Policarnato Ondulado/Policarbonato ondulado detalle.webp';
+          // Usar imagen específica por color para Policarbonato Ondulado
+          const colorActual = selectedColor; // Usar siempre selectedColor para consistencia
+          console.log('🛒 Color para carrito:', colorActual);
+          switch (colorActual) {
+            case 'Clear':
+              imagenParaCarrito = '/assets/images/Productos/Policarbonato Ondulado/ondulado_Clear.webp';
+              break;
+            case 'Bronce':
+              imagenParaCarrito = '/assets/images/Productos/Policarbonato Ondulado/ondulado_Bronce.webp';
+              break;
+            case 'Opal':
+              imagenParaCarrito = '/assets/images/Productos/Policarbonato Ondulado/ondulado_Opal.webp';
+              break;
+            default:
+              imagenParaCarrito = '/assets/images/Productos/Policarbonato Ondulado/ondulado_Clear.webp';
+          }
         } else if (nombreCompleto.includes('Alveolar')) {
           imagenParaCarrito = '/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp';
         } else if (nombreCompleto.includes('Compacto')) {
@@ -466,52 +481,60 @@ function ProductConfiguratorSimple({ productGroup, className = '' }: ProductConf
           className="bg-gray-100 rounded-xl h-48 mb-3 overflow-hidden product-image img-mobile cursor-pointer hover:scale-105 transition-transform duration-200"
           onClick={() => router.push(`/productos/${productGroup.id}`)}
         >
-          {/* Función para obtener la imagen correcta - Separación Policarbonato vs Perfiles */}
+          {/* Función para obtener la imagen correcta - Con soporte para cambio dinámico por color */}
           {(() => {
-            let imagenFinal: string | null = selectedVariant.imagen || productGroup.imagen;
-            
-            // Si hay imagen, verificar si es una ruta problemática conocida
-            if (imagenFinal && (
-              imagenFinal.includes('ondulado.webp') ||
-              imagenFinal.includes('/Policarnato Ondulado/') ||
-              (!imagenFinal.includes('policarbonato_') && !imagenFinal.includes('perfil_'))
-            )) {
-              // Ruta problemática detectada, usar fallback
-              imagenFinal = null;
-            }
-            
-            // Si no hay imagen válida, asignar imagen por defecto según el tipo
-            if (!imagenFinal) {
-              // PERFILES - Nueva categoría con imágenes distintas
-              if (productGroup.categoria === 'Perfiles Alveolar' || 
-                  productGroup.nombre?.includes('Perfil')) {
-                if (productGroup.nombre?.includes('Perfil U') || selectedVariant.nombre?.includes('Perfil U')) {
-                  imagenFinal = "/assets/images/Productos/Perfiles/perfil-u-policarbonato.webp";
-                } else if (productGroup.nombre?.includes('Perfil H') || selectedVariant.nombre?.includes('Perfil H')) {
-                  imagenFinal = "/assets/images/Productos/Perfiles/perfil-u-policarbonato.webp";
-                } else if (productGroup.nombre?.includes('Perfil Clip') || selectedVariant.nombre?.includes('Perfil Clip')) {
-                  imagenFinal = "/assets/images/productos/perfiles/perfil-clip-policarbonato.webp";
-                } else if (productGroup.nombre?.includes('Perfil Alveolar') || selectedVariant.nombre?.includes('Perfil Alveolar')) {
-                  imagenFinal = "/assets/images/productos/perfiles/perfil-alveolar-policarbonato.webp";
-                } else {
-                  // Imagen genérica de perfiles
-                  imagenFinal = "/assets/images/productos/perfiles/perfiles-policarbonato-generic.webp";
-                }
-              } 
-              // POLICARBONATOS - Mantener imágenes existentes
-              else if (productGroup.categoria === 'Policarbonato' || productGroup.nombre) {
-                if (productGroup.nombre?.includes('Ondulado')) {
-                  imagenFinal = "/assets/images/Productos/Policarnato Ondulado/policarbonato_ondulado_opal_perspectiva.webp";
-                } else if (productGroup.nombre?.includes('Alveolar')) {
-                  imagenFinal = "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp";
-                } else if (productGroup.nombre?.includes('Compacto')) {
-                  imagenFinal = "/assets/images/Productos/Policarbonato Compacto/policarbonato_compacto.webp";
-                } else {
-                  // Imagen genérica de policarbonato
-                  imagenFinal = "/assets/images/productos/policarbonato/policarbonato-generic.webp";
+            const getImagePath = () => {
+              // POLICARBONATO ONDULADO - Usar imágenes dinámicas específicas por color seleccionado
+              if (productGroup.nombre?.includes('Ondulado')) {
+                const currentColor = selectedColor;
+                console.log('🎨 Color seleccionado para imagen:', currentColor, 'Producto:', productGroup.nombre);
+                switch (currentColor) {
+                  case 'Clear':
+                    return "/assets/images/Productos/Policarbonato Ondulado/ondulado_Clear.webp";
+                  case 'Bronce':
+                    return "/assets/images/Productos/Policarbonato Ondulado/ondulado_Bronce.webp";
+                  case 'Opal':
+                    return "/assets/images/Productos/Policarbonato Ondulado/ondulado_Opal.webp";
+                  default:
+                    return "/assets/images/Productos/Policarbonato Ondulado/ondulado_Clear.webp";
                 }
               }
-            }
+              
+              // Otros productos - usar imagen de variante o fallback
+              let imagenFinal = selectedVariant.imagen || selectedVariant.ruta_imagen;
+              
+              if (!imagenFinal || imagenFinal.includes('policarbonato-ondulado.webp') || 
+                  imagenFinal.trim() === '' || imagenFinal === 'undefined') {
+                
+                if (productGroup.categoria === 'Perfiles Alveolar' || productGroup.nombre?.includes('Perfil')) {
+                  if (productGroup.nombre?.includes('Perfil U') || selectedVariant.nombre?.includes('Perfil U')) {
+                    return "/assets/images/Productos/Perfiles/perfil-u-policarbonato.webp";
+                  } else if (productGroup.nombre?.includes('Perfil H') || selectedVariant.nombre?.includes('Perfil H')) {
+                    return "/assets/images/Productos/Perfiles/perfil-u-policarbonato.webp";
+                  } else if (productGroup.nombre?.includes('Perfil Clip') || selectedVariant.nombre?.includes('Perfil Clip')) {
+                    return "/assets/images/productos/perfiles/perfil-clip-policarbonato.webp";
+                  } else if (productGroup.nombre?.includes('Perfil Alveolar') || selectedVariant.nombre?.includes('Perfil Alveolar')) {
+                    return "/assets/images/productos/perfiles/perfil-alveolar-policarbonato.webp";
+                  } else {
+                    return "/assets/images/productos/perfiles/perfiles-policarbonato-generic.webp";
+                  }
+                } else if (productGroup.categoria === 'Policarbonato' || productGroup.nombre) {
+                  if (productGroup.nombre?.includes('Alveolar')) {
+                    return "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp";
+                  } else if (productGroup.nombre?.includes('Compacto')) {
+                    return "/assets/images/Productos/Policarbonato Compacto/policarbonato_compacto.webp";
+                  } else {
+                    return "/assets/images/productos/policarbonato/policarbonato-generic.webp";
+                  }
+                } else {
+                  return productGroup.imagen;
+                }
+              }
+              
+              return imagenFinal;
+            };
+
+            const imagenFinal = getImagePath();
             
             return imagenFinal ? (
               <img
@@ -519,7 +542,6 @@ function ProductConfiguratorSimple({ productGroup, className = '' }: ProductConf
                 alt={`${productGroup.nombre} - ${productGroup.descripcion}`}
                 className="w-full h-full object-cover"
                 onError={(e) => {
-                  // Si la imagen falla, mostrar placeholder
                   e.currentTarget.style.display = 'none';
                   const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
                   if (nextElement) {

@@ -7,10 +7,10 @@ import path from 'path';
 function getDefaultImage(tipo: string, color?: string): string {
   const imageMap: Record<string, Record<string, string>> = {
     'Ondulado': {
-      'Clear': '/assets/images/Productos/Policarnato Ondulado/policarbonato_ondulado_opal_perspectiva.webp',
-      'Bronce': '/assets/images/Productos/Policarnato Ondulado/policarbonato_ondulado_opal_perspectiva.webp',
-      'Opal': '/assets/images/Productos/Policarnato Ondulado/policarbonato_ondulado_opal_perspectiva.webp',
-      'default': '/assets/images/Productos/Policarnato Ondulado/policarbonato_ondulado_opal_perspectiva.webp'
+      'Clear': '/assets/images/Productos/Policarbonato Ondulado/ondulado_Clear.webp',
+      'Bronce': '/assets/images/Productos/Policarbonato Ondulado/ondulado_Bronce.webp',
+      'Opal': '/assets/images/Productos/Policarbonato Ondulado/ondulado_Opal.webp',
+      'default': '/assets/images/Productos/Policarbonato Ondulado/ondulado_Clear.webp'
     },
     'Alveolar': {
       'Clear': '/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_clear.webp',

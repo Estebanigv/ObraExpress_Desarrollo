@@ -1,0 +1,25 @@
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#f0f0f0"/>
+  <g transform="translate(200, 150)">
+    <!-- Perfil H vista frontal -->
+    <rect x="-80" y="-40" width="160" height="80" fill="none" stroke="#333" stroke-width="3"/>
+    
+    <!-- Lado izquierdo -->
+    <rect x="-70" y="-30" width="10" height="60" fill="#666"/>
+    <rect x="-60" y="-30" width="40" height="10" fill="#666"/>
+    <rect x="-60" y="20" width="40" height="10" fill="#666"/>
+    
+    <!-- Centro -->
+    <rect x="-20" y="-30" width="40" height="60" fill="#999"/>
+    
+    <!-- Lado derecho -->
+    <rect x="20" y="-30" width="40" height="10" fill="#666"/>
+    <rect x="20" y="20" width="40" height="10" fill="#666"/>
+    <rect x="60" y="-30" width="10" height="60" fill="#666"/>
+    
+    <!-- Texto -->
+    <text x="0" y="60" text-anchor="middle" font-family="Arial" font-size="16" fill="#333">
+      Perfil H
+    </text>
+  </g>
+</svg>
