@@ -35,86 +35,67 @@ export default function ObraExpressLoader({
   }, [showPercentage, duration]);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="text-center">
-        {/* Logo container con animación */}
-        <div className="relative mb-6">
-          {/* Círculo de progreso de fondo */}
-          <div className="relative w-32 h-32 mx-auto">
-            {showPercentage && (
-              <svg 
-                className="w-32 h-32 transform -rotate-90" 
-                viewBox="0 0 128 128"
-              >
-                {/* Círculo de fondo */}
-                <circle
-                  cx="64"
-                  cy="64"
-                  r="56"
-                  fill="none"
-                  stroke="#e5e7eb"
-                  strokeWidth="8"
-                />
-                {/* Círculo de progreso */}
-                <circle
-                  cx="64"
-                  cy="64"
-                  r="56"
-                  fill="none"
-                  stroke="#eab308"
-                  strokeWidth="8"
-                  strokeLinecap="round"
-                  strokeDasharray={`${2 * Math.PI * 56}`}
-                  strokeDashoffset={`${2 * Math.PI * 56 * (1 - progress / 100)}`}
-                  className="transition-all duration-300 ease-out"
-                />
-              </svg>
-            )}
-            
-            {/* Logo en el centro */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-16 h-16 relative">
-                <Image
-                  src="/assets/images/Logotipo/Gemini_Generated_Image_pl5okapl5okapl5o.webp"
-                  alt="ObraExpress Logo"
-                  width={64}
-                  height={64}
-                  className="w-full h-full object-contain animate-pulse"
-                  priority
-                />
-              </div>
-            </div>
+    <div className="fixed inset-0 z-[99999] overflow-hidden pointer-events-auto">
+      {/* Fondo simple con blur - con z-index alto */}
+      <div className="absolute inset-0 bg-white/98 backdrop-blur-md z-[99998]" />
+      
+      {/* Contenedor centrado - Solo logo y círculo */}
+      <div className="relative h-full flex items-center justify-center z-[99999]">
+        <div className="relative">
+          {/* Logo con fondo circular */}
+          <div className="relative w-32 h-32 rounded-full overflow-hidden bg-white shadow-xl z-10">
+            <Image
+              src="/assets/images/Logotipo/Untitled Project.png"
+              alt="ObraExpress"
+              width={128}
+              height={128}
+              className="w-full h-full object-contain p-4"
+              priority
+            />
           </div>
-        </div>
-
-        {/* Porcentaje */}
-        {showPercentage && (
-          <div className="mb-4">
-            <div className="text-3xl font-bold text-yellow-600 mb-1">
-              {Math.round(progress)}%
-            </div>
-            <div className="w-48 bg-gray-200 rounded-full h-2 mx-auto">
-              <div 
-                className="bg-yellow-500 h-2 rounded-full transition-all duration-300 ease-out"
-                style={{ width: `${progress}%` }}
-              ></div>
-            </div>
+          
+          {/* Círculo de carga alrededor del logo */}
+          <div className="absolute inset-0 -m-3">
+            <svg
+              className="w-38 h-38 animate-spin-slow"
+              viewBox="0 0 100 100"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              {/* Círculo de fondo gris muy sutil */}
+              <circle
+                cx="50"
+                cy="50"
+                r="48"
+                stroke="#f3f4f6"
+                strokeWidth="1"
+                fill="none"
+                opacity="0.5"
+              />
+              {/* Círculo de progreso amarillo fino */}
+              <circle
+                cx="50"
+                cy="50"
+                r="48"
+                stroke="url(#gradient-loader-pro)"
+                strokeWidth="1.5"
+                fill="none"
+                strokeLinecap="round"
+                strokeDasharray="301.59"
+                className="animate-loader-draw"
+                style={{
+                  transformOrigin: 'center',
+                  transform: 'rotate(-90deg)',
+                }}
+              />
+              <defs>
+                <linearGradient id="gradient-loader-pro" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#f59e0b" stopOpacity="0" />
+                  <stop offset="50%" stopColor="#f59e0b" stopOpacity="1" />
+                  <stop offset="100%" stopColor="#ea580c" stopOpacity="1" />
+                </linearGradient>
+              </defs>
+            </svg>
           </div>
-        )}
-
-        {/* Mensaje */}
-        <p className="text-gray-600 text-lg font-medium mb-2">
-          {message}
-        </p>
-        
-        {/* Submensaje con animación de puntos */}
-        <div className="text-gray-500 text-sm">
-          <span className="inline-flex">
-            ObraExpress Chile
-            <span className="ml-1 animate-bounce">.</span>
-            <span className="animate-bounce" style={{ animationDelay: '0.2s' }}>.</span>
-            <span className="animate-bounce" style={{ animationDelay: '0.4s' }}>.</span>
-          </span>
         </div>
       </div>
     </div>

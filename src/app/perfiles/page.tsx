@@ -4,19 +4,19 @@ import React, { Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import { NavbarSimple } from '@/components/navbar-simple';
 
-// Componente client-side independiente
-const ProductosClientSideComponent = dynamic(
-  () => import('@/components/ProductosClientSide'),
+// Componente client-side independiente para perfiles
+const PerfilesClientSideComponent = dynamic(
+  () => import('@/components/PerfilesClientSide'),
   { 
     ssr: false
   }
 );
 
-export default function ProductosPage() {
+export default function PerfilesPage() {
   return (
     <div>
       <NavbarSimple />
-      <ProductosClientSideComponent />
+      <PerfilesClientSideComponent />
     </div>
   );
 }

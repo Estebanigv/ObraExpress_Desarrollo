@@ -28,7 +28,7 @@ export const CATEGORIES_VISIBILITY: CategoryVisibility[] = [
   {
     name: 'Accesorios',
     displayName: 'Accesorios',
-    visible: false,
+    visible: true,
     description: 'Accesorios generales para instalación'
   },
   {

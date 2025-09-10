@@ -942,9 +942,13 @@ function ProductConfiguratorSimple({ productGroup, className = '' }: ProductConf
               {/* Botón Agregar Más - Verde para acción positiva */}
               <button
                 onClick={handleAddToCart}
-                className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center btn-mobile btn-touch touch-target"
+                className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-200 flex items-center justify-center btn-mobile btn-touch touch-target group hover:scale-105"
+                title="Agregar al carrito"
               >
-                + Más
+                <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span className="ml-2">Más</span>
               </button>
               
               {/* Botón Quitar - Solo icono de basurero */}
@@ -952,10 +956,12 @@ function ProductConfiguratorSimple({ productGroup, className = '' }: ProductConf
                 onClick={() => {
                   removeItem(selectedVariant.codigo);
                 }}
-                className="bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-red-600 p-3 rounded-lg transition-all flex items-center justify-center btn-mobile btn-touch touch-target group"
+                className="bg-gray-100 hover:bg-red-50 text-gray-500 hover:text-red-600 p-3 rounded-lg transition-all duration-200 flex items-center justify-center btn-mobile btn-touch touch-target group hover:scale-105"
                 title="Quitar producto del carrito"
               >
-                Quitar
+                <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
               </button>
             </div>
           )}
@@ -971,10 +977,12 @@ function ProductConfiguratorSimple({ productGroup, className = '' }: ProductConf
           </button>
           <button
             onClick={handleShowSpecs}
-            className="bg-amber-600 hover:bg-amber-700 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center min-w-[50px] btn-touch touch-target"
+            className="bg-amber-600 hover:bg-amber-700 text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 flex items-center justify-center min-w-[50px] btn-touch touch-target hover:scale-105"
             title="Especificaciones técnicas"
           >
-            Specs
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
           </button>
         </div>
       </div>

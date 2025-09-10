@@ -1,5 +1,42 @@
 // Utilidades para calcular fechas de despacho por tipo de producto
 
+// Feriados de Chile (formato MM-DD)
+const CHILEAN_HOLIDAYS: { [key: string]: string } = {
+  '01-01': 'Año Nuevo',
+  '03-29': 'Viernes Santo',
+  '03-30': 'Sábado Santo',
+  '05-01': 'Día del Trabajo',
+  '05-21': 'Día de las Glorias Navales',
+  '06-20': 'Día Nacional de los Pueblos Indígenas',
+  '06-29': 'San Pedro y San Pablo',
+  '07-16': 'Día de la Virgen del Carmen',
+  '08-15': 'Asunción de la Virgen',
+  '09-18': 'Primera Junta Nacional de Gobierno',
+  '09-19': 'Día de las Glorias del Ejército',
+  '09-20': 'Feriado adicional Fiestas Patrias',
+  '10-12': 'Encuentro de Dos Mundos',
+  '10-31': 'Día de las Iglesias Evangélicas',
+  '11-01': 'Día de Todos los Santos',
+  '12-08': 'Inmaculada Concepción',
+  '12-25': 'Navidad'
+};
+
+// Función para verificar si una fecha es feriado en Chile
+export function isChileanHoliday(date: Date): boolean {
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const key = `${month}-${day}`;
+  return key in CHILEAN_HOLIDAYS;
+}
+
+// Función para obtener el nombre del feriado
+export function getHolidayName(date: Date): string | null {
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const key = `${month}-${day}`;
+  return CHILEAN_HOLIDAYS[key] || null;
+}
+
 // Definir tipos de productos y sus reglas de despacho
 export interface ProductDispatchRule {
   category: string;
@@ -87,29 +124,66 @@ export function getNextDispatchDate(productType: string = 'policarbonato'): Date
   
   // Para policarbonato específicamente, aplicar regla especial
   if (productType.toLowerCase().includes('policarbonato')) {
+    // NUEVA REGLA: Si es MIÉRCOLES, el jueves más próximo queda bloqueado
+    if (currentDay === 3) { // Es miércoles
+      // El jueves de esta semana (mañana) está bloqueado
+      // Buscar el jueves de la próxima semana
+      for (let i = 8; i <= 21; i++) { // Empezar desde 8 días (jueves próxima semana)
+        const checkDate = new Date(today);
+        checkDate.setDate(today.getDate() + i);
+        const checkDay = checkDate.getDay();
+        
+        if (checkDay === 4 && !isChileanHoliday(checkDate)) { // Jueves y no es feriado
+          daysToAdd = i;
+          found = true;
+          break;
+        }
+      }
+    }
     // Si es jueves y ya pasó la hora límite, ir al jueves siguiente
-    if (currentDay === 4 && rule.cutoffHour && currentHour >= rule.cutoffHour) {
-      daysToAdd = 7; // Jueves de la próxima semana
-      const nextDispatchDate = new Date(today);
-      nextDispatchDate.setDate(today.getDate() + daysToAdd);
-      return nextDispatchDate;
+    else if (currentDay === 4 && rule.cutoffHour && currentHour >= rule.cutoffHour) {
+      // Buscar el próximo jueves disponible que no sea feriado
+      for (let i = 7; i <= 21; i += 7) {
+        const checkDate = new Date(today);
+        checkDate.setDate(today.getDate() + i);
+        
+        if (!isChileanHoliday(checkDate)) {
+          daysToAdd = i;
+          found = true;
+          break;
+        }
+      }
     }
-    
-    // Si es jueves y aún no pasa la hora límite, despacho hoy
-    if (currentDay === 4 && rule.cutoffHour && currentHour < rule.cutoffHour) {
-      return today;
+    // Si es jueves y aún no pasa la hora límite, verificar si no es feriado
+    else if (currentDay === 4 && rule.cutoffHour && currentHour < rule.cutoffHour) {
+      if (!isChileanHoliday(today)) {
+        return today;
+      } else {
+        // Si hoy es feriado, buscar el próximo jueves disponible
+        for (let i = 7; i <= 21; i += 7) {
+          const checkDate = new Date(today);
+          checkDate.setDate(today.getDate() + i);
+          
+          if (!isChileanHoliday(checkDate)) {
+            daysToAdd = i;
+            found = true;
+            break;
+          }
+        }
+      }
     }
-    
     // Para cualquier otro día, buscar el próximo jueves disponible
-    for (let i = 1; i <= 14; i++) {
-      const checkDate = new Date(today);
-      checkDate.setDate(today.getDate() + i);
-      const checkDay = checkDate.getDay();
-      
-      if (checkDay === 4) { // Jueves
-        daysToAdd = i;
-        found = true;
-        break;
+    else {
+      for (let i = 1; i <= 21; i++) {
+        const checkDate = new Date(today);
+        checkDate.setDate(today.getDate() + i);
+        const checkDay = checkDate.getDay();
+        
+        if (checkDay === 4 && !isChileanHoliday(checkDate)) { // Jueves y no es feriado
+          daysToAdd = i;
+          found = true;
+          break;
+        }
       }
     }
   } else {
@@ -117,17 +191,18 @@ export function getNextDispatchDate(productType: string = 'policarbonato'): Date
     // Primero verificar si hoy es día disponible y aún no ha pasado la hora límite
     if (rule.availableDays.includes(currentDay) && 
         rule.cutoffHour && 
-        currentHour < rule.cutoffHour) {
+        currentHour < rule.cutoffHour &&
+        !isChileanHoliday(today)) {
       return today; // Despacho hoy mismo
     }
     
-    // Buscar el próximo día disponible
-    for (let i = 1; i <= 14; i++) { // Buscar hasta 2 semanas adelante
+    // Buscar el próximo día disponible que no sea feriado
+    for (let i = 1; i <= 21; i++) { // Buscar hasta 3 semanas adelante
       const checkDate = new Date(today);
       checkDate.setDate(today.getDate() + i);
       const checkDay = checkDate.getDay();
       
-      if (rule.availableDays.includes(checkDay)) {
+      if (rule.availableDays.includes(checkDay) && !isChileanHoliday(checkDate)) {
         daysToAdd = i;
         found = true;
         break;
