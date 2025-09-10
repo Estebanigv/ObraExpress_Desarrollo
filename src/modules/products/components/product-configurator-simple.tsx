@@ -303,7 +303,22 @@ function ProductConfiguratorSimple({ productGroup, className = '' }: ProductConf
               imagenParaCarrito = '/assets/images/Productos/Policarbonato Ondulado/ondulado_Clear.webp';
           }
         } else if (nombreCompleto.includes('Alveolar')) {
-          imagenParaCarrito = '/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp';
+          // Usar imagen específica por color para Policarbonato Alveolar
+          const colorActual = selectedColor; // Usar siempre selectedColor para consistencia
+          console.log('🛒 Color para carrito Alveolar:', colorActual);
+          switch (colorActual) {
+            case 'Clear':
+              imagenParaCarrito = '/assets/images/Productos/Policarbonato Alveolar/Alveolar_Clear.webp';
+              break;
+            case 'Bronce':
+              imagenParaCarrito = '/assets/images/Productos/Policarbonato Alveolar/Alveolar_bronce.webp';
+              break;
+            case 'Opal':
+              imagenParaCarrito = '/assets/images/Productos/Policarbonato Alveolar/Alveolar_Opal.webp';
+              break;
+            default:
+              imagenParaCarrito = '/assets/images/Productos/Policarbonato Alveolar/Alveolar_Clear.webp';
+          }
         } else if (nombreCompleto.includes('Compacto')) {
           imagenParaCarrito = '/assets/images/Productos/Policarbonato Compacto/policarbonato_compacto.webp';
         } else {
@@ -500,6 +515,22 @@ function ProductConfiguratorSimple({ productGroup, className = '' }: ProductConf
                 }
               }
               
+              // POLICARBONATO ALVEOLAR - Usar imágenes dinámicas específicas por color seleccionado
+              if (productGroup.nombre?.includes('Alveolar')) {
+                const currentColor = selectedColor;
+                console.log('🎨 Color seleccionado para imagen Alveolar:', currentColor, 'Producto:', productGroup.nombre);
+                switch (currentColor) {
+                  case 'Clear':
+                    return "/assets/images/Productos/Policarbonato Alveolar/Alveolar_Clear.webp";
+                  case 'Bronce':
+                    return "/assets/images/Productos/Policarbonato Alveolar/Alveolar_bronce.webp";
+                  case 'Opal':
+                    return "/assets/images/Productos/Policarbonato Alveolar/Alveolar_Opal.webp";
+                  default:
+                    return "/assets/images/Productos/Policarbonato Alveolar/Alveolar_Clear.webp";
+                }
+              }
+              
               // Otros productos - usar imagen de variante o fallback
               let imagenFinal = selectedVariant.imagen || selectedVariant.ruta_imagen;
               
@@ -520,7 +551,7 @@ function ProductConfiguratorSimple({ productGroup, className = '' }: ProductConf
                   }
                 } else if (productGroup.categoria === 'Policarbonato' || productGroup.nombre) {
                   if (productGroup.nombre?.includes('Alveolar')) {
-                    return "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp";
+                    return "/assets/images/Productos/Policarbonato Alveolar/Alveolar_Clear.webp";
                   } else if (productGroup.nombre?.includes('Compacto')) {
                     return "/assets/images/Productos/Policarbonato Compacto/policarbonato_compacto.webp";
                   } else {
@@ -608,6 +639,66 @@ function ProductConfiguratorSimple({ productGroup, className = '' }: ProductConf
             {productGroup.descripcion}
           </p>
         </div>
+
+        {/* Colores disponibles - Solo para policarbonatos */}
+        {(productGroup.nombre?.includes('Policarbonato') || productGroup.categoria === 'Policarbonato') && uniqueColors.length > 1 && (
+          <div className="mb-3">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-sm font-medium text-gray-700">Colores disponibles:</span>
+              <span className="text-xs text-gray-500">({uniqueColors.length} opciones)</span>
+            </div>
+            <div className="flex flex-wrap gap-1">
+              {uniqueColors.map((color) => {
+                // Obtener la imagen específica del color si existe
+                let imagenColor = '';
+                if (productGroup.nombre?.includes('Ondulado')) {
+                  switch (color) {
+                    case 'Clear': imagenColor = "/assets/images/Productos/Policarbonato Ondulado/ondulado_Clear.webp"; break;
+                    case 'Bronce': imagenColor = "/assets/images/Productos/Policarbonato Ondulado/ondulado_Bronce.webp"; break;
+                    case 'Opal': imagenColor = "/assets/images/Productos/Policarbonato Ondulado/ondulado_Opal.webp"; break;
+                  }
+                } else if (productGroup.nombre?.includes('Alveolar')) {
+                  switch (color) {
+                    case 'Clear': imagenColor = "/assets/images/Productos/Policarbonato Alveolar/Alveolar_Clear.webp"; break;
+                    case 'Bronce': imagenColor = "/assets/images/Productos/Policarbonato Alveolar/Alveolar_bronce.webp"; break;
+                    case 'Opal': imagenColor = "/assets/images/Productos/Policarbonato Alveolar/Alveolar_Opal.webp"; break;
+                  }
+                }
+
+                return (
+                  <button 
+                    key={color}
+                    onClick={() => handleColorChange(color)}
+                    className={`group relative flex items-center rounded-md px-2 py-1 transition-all cursor-pointer border ${
+                      selectedColor === color 
+                        ? 'bg-amber-50 border-amber-300 shadow-md' 
+                        : 'bg-gray-50 hover:bg-gray-100 border-transparent hover:border-gray-200'
+                    }`}
+                    title={`Cambiar a ${productGroup.nombre} - ${color}`}
+                  >
+                    {/* Círculo de color clickable */}
+                    <div 
+                      className={`w-5 h-5 rounded-full mr-2 border-2 shadow-sm transition-all ${
+                        selectedColor === color ? 'ring-2 ring-amber-400 ring-offset-1' : ''
+                      } ${
+                        color === 'Clear' ? 'bg-white border-gray-400' :
+                        color === 'Bronce' ? 'bg-amber-700 border-amber-800' :
+                        color === 'Opal' ? 'bg-blue-200 border-blue-300' :
+                        color === 'Solid' ? 'bg-gray-600 border-gray-700' :
+                        'bg-gray-400 border-gray-500'
+                      }`}
+                    ></div>
+                    <span className={`text-xs font-medium transition-colors ${
+                      selectedColor === color ? 'text-amber-800' : 'text-gray-700'
+                    }`}>
+                      {color}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
         
 
         {/* SKU sutilmente debajo de la descripción */}
@@ -775,9 +866,6 @@ function ProductConfiguratorSimple({ productGroup, className = '' }: ProductConf
         {/* Cantidad - Alineada en todas las tarjetas */}
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-600 mb-2 form-label-mobile">
-            <svg className="w-4 h-4 inline mr-1 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
-            </svg>
             Cantidad: 
             {!productGroup.nombre?.includes('Compacto') && (
               <span className="text-xs text-amber-600 bg-amber-100 px-2 py-1 rounded-full ml-2">
@@ -796,9 +884,7 @@ function ProductConfiguratorSimple({ productGroup, className = '' }: ProductConf
               className="flex items-center justify-center w-10 h-10 bg-white hover:bg-gray-100 rounded-lg transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed touch-target"
               disabled={quantity <= (productGroup.nombre?.includes('Compacto') || selectedVariant.codigo?.startsWith('517') ? 1 : 10)}
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4" />
-              </svg>
+              −
             </button>
             <div className="flex-1 text-center">
               <div className="text-lg font-bold text-gray-900">
@@ -828,9 +914,7 @@ function ProductConfiguratorSimple({ productGroup, className = '' }: ProductConf
                 return (quantity + increment) > stockDisponible;
               })()}
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
+              +
             </button>
           </div>
         </div>
@@ -851,9 +935,6 @@ function ProductConfiguratorSimple({ productGroup, className = '' }: ProductConf
               onClick={handleAddToCart}
               className="w-full bg-gray-900 hover:bg-black text-white font-bold py-3 px-4 rounded-lg transition-colors mb-3 flex items-center justify-center btn-mobile btn-touch touch-target"
             >
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5 6m0 0h9M16 21a2 2 0 100-4 2 2 0 000 4zM9 21a2 2 0 100-4 2 2 0 000 4z" />
-              </svg>
               Agregar al Carrito
             </button>
           ) : (
@@ -863,13 +944,7 @@ function ProductConfiguratorSimple({ productGroup, className = '' }: ProductConf
                 onClick={handleAddToCart}
                 className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center btn-mobile btn-touch touch-target"
               >
-                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                </svg>
-                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5 6m0 0h9M16 21a2 2 0 100-4 2 2 0 000 4zM9 21a2 2 0 100-4 2 2 0 000 4z" />
-                </svg>
-                <span className="hidden sm:inline">Más</span>
+                + Más
               </button>
               
               {/* Botón Quitar - Solo icono de basurero */}
@@ -880,9 +955,7 @@ function ProductConfiguratorSimple({ productGroup, className = '' }: ProductConf
                 className="bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-red-600 p-3 rounded-lg transition-all flex items-center justify-center btn-mobile btn-touch touch-target group"
                 title="Quitar producto del carrito"
               >
-                <svg className="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
+                Quitar
               </button>
             </div>
           )}
@@ -894,10 +967,6 @@ function ProductConfiguratorSimple({ productGroup, className = '' }: ProductConf
             onClick={handleViewDetails}
             className="flex-1 bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 hover:from-yellow-500 hover:via-yellow-600 hover:to-amber-500 text-black font-medium py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center btn-mobile-md btn-touch touch-target shadow-lg hover:shadow-xl transform hover:scale-105"
           >
-            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-            </svg>
             Ver Detalles
           </button>
           <button
@@ -905,9 +974,7 @@ function ProductConfiguratorSimple({ productGroup, className = '' }: ProductConf
             className="bg-amber-600 hover:bg-amber-700 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center min-w-[50px] btn-touch touch-target"
             title="Especificaciones técnicas"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
+            Specs
           </button>
         </div>
       </div>

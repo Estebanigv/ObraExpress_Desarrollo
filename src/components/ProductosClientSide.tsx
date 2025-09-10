@@ -36,23 +36,32 @@ export default function ProductosClientSide() {
     const policarbonatoAlveolar = todosPolicarbonatos.find(p => p.tipo === 'Alveolar');
     const policarbonatoCompacto = todosPolicarbonatos.find(p => p.tipo === 'Compacto');
     
-    // Agregar información de espesores disponibles a cada producto
+    // Agregar información de espesores y colores disponibles a cada producto
     if (policarbonatoOndulado) {
       const espesores = [...new Set(policarbonatoOndulado.variantes?.map(v => v.espesor).filter(Boolean))];
+      const colores = [...new Set(policarbonatoOndulado.variantes?.map(v => v.color).filter(Boolean))];
       policarbonatoOndulado.espesores = espesores;
+      policarbonatoOndulado.colores = colores;
       console.log('🔄 [CLIENT-PROC] Ondulado espesores:', espesores);
+      console.log('🔄 [CLIENT-PROC] Ondulado colores:', colores);
     }
     
     if (policarbonatoAlveolar) {
       const espesores = [...new Set(policarbonatoAlveolar.variantes?.map(v => v.espesor).filter(Boolean))];
+      const colores = [...new Set(policarbonatoAlveolar.variantes?.map(v => v.color).filter(Boolean))];
       policarbonatoAlveolar.espesores = espesores;
+      policarbonatoAlveolar.colores = colores;
       console.log('🔄 [CLIENT-PROC] Alveolar espesores:', espesores);
+      console.log('🔄 [CLIENT-PROC] Alveolar colores:', colores);
     }
     
     if (policarbonatoCompacto) {
       const espesores = [...new Set(policarbonatoCompacto.variantes?.map(v => v.espesor).filter(Boolean))];
+      const colores = [...new Set(policarbonatoCompacto.variantes?.map(v => v.color).filter(Boolean))];
       policarbonatoCompacto.espesores = espesores;
+      policarbonatoCompacto.colores = colores;
       console.log('🔄 [CLIENT-PROC] Compacto espesores:', espesores);
+      console.log('🔄 [CLIENT-PROC] Compacto colores:', colores);
     }
     
     console.log('🔄 [CLIENT-PROC] Tipos encontrados:', {
@@ -157,19 +166,8 @@ export default function ProductosClientSide() {
     loadData();
   }, []);
 
-  // No renderizar hasta que esté en el cliente
-  if (!isClient) {
-    return (
-      <ObraExpressLoader 
-        message="Inicializando aplicación"
-        showPercentage={false}
-        duration={1}
-      />
-    );
-  }
-
-  // Loading state
-  if (isLoadingProducts) {
+  // Loading state - solo mostrar un loader
+  if (!isClient || isLoadingProducts) {
     return (
       <ObraExpressLoader 
         message="Cargando catálogo de productos"

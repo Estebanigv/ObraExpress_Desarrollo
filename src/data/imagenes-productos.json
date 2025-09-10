@@ -10,11 +10,11 @@
     }
   },
   "policarbonato-alveolar": {
-    "imagen_principal": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp",
+    "imagen_principal": "/assets/images/Productos/Policarbonato Alveolar/Alveolar_Clear.webp",
     "imagenes_por_color": {
-      "Clear": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_clear.webp",
-      "Bronce": "/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar_bronce.webp",
-      "Cristal": "/assets/images/Productos/Policarbonato Alveolar/policarbonato Alveolar Clear.webp"
+      "Clear": "/assets/images/Productos/Policarbonato Alveolar/Alveolar_Clear.webp",
+      "Bronce": "/assets/images/Productos/Policarbonato Alveolar/Alveolar_bronce.webp",
+      "Opal": "/assets/images/Productos/Policarbonato Alveolar/Alveolar_Opal.webp"
     },
     "imagenes_por_espesor": {
       "4mm_cristal": "/assets/images/Productos/policarbonato_alveolar_4mm_cristal.webp",
