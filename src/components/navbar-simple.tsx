@@ -457,7 +457,11 @@ function Navbar({ className }: { className?: string }) {
                         console.error('Error obteniendo ubicación:', error);
                         setUserLocation(null);
                       },
-                      { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+                      {
+                        enableHighAccuracy: true,
+                        timeout: 15000, // Aumentar timeout para mejor precisión
+                        maximumAge: 300000 // 5 minutos de caché
+                      }
                     );
                   } else {
                     alert('Geolocalización no disponible en este navegador');

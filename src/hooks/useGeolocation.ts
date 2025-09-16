@@ -48,8 +48,8 @@ const getRegionFromCoordinates = (lat: number, lng: number): { region: string; c
     return { region: 'Región de Valparaíso', comuna: 'Seleccione su comuna' };
   }
   
-  // Región Metropolitana
-  if (lat >= -34.0 && lat <= -32.8 && lng >= -71.5 && lng <= -70.2) {
+  // Región Metropolitana (coordenadas más precisas)
+  if (lat >= -34.0 && lat <= -32.8 && lng >= -71.6 && lng <= -70.0) {
     return { region: 'Región Metropolitana', comuna: 'Seleccione su comuna' };
   }
   
@@ -155,16 +155,162 @@ export const useGeolocation = () => {
   // Función para guardar ubicación en localStorage
   const storeLocation = useCallback((location: LocationData) => {
     if (typeof window === 'undefined') return;
-    
+
     try {
       localStorage.setItem('polimax_user_location', JSON.stringify(location));
       localStorage.setItem('polimax_location_timestamp', Date.now().toString());
+
+      // Guardar también el nivel de precisión para evaluación futura
+      let accuracyLevel = 'baja';
+      if (location.accuracy && location.accuracy <= 10) accuracyLevel = 'excelente';
+      else if (location.accuracy && location.accuracy <= 50) accuracyLevel = 'buena';
+      else if (location.accuracy && location.accuracy <= 100) accuracyLevel = 'regular';
+
+      localStorage.setItem('polimax_location_accuracy_level', accuracyLevel);
     } catch (error) {
       console.error('Error al guardar ubicación:', error);
     }
   }, []);
 
-  // Función para solicitar geolocalización
+  // Función para verificar si necesitamos una ubicación más precisa
+  const needsHigherAccuracy = useCallback((): boolean => {
+    if (typeof window === 'undefined') return false;
+
+    try {
+      const accuracyLevel = localStorage.getItem('polimax_location_accuracy_level');
+      return accuracyLevel === 'baja' || accuracyLevel === 'regular';
+    } catch (error) {
+      return false;
+    }
+  }, []);
+
+  // Función para obtener ubicación de alta precisión (usar cuando se necesite máxima exactitud)
+  const requestHighAccuracyLocation = useCallback(async () => {
+    if (!navigator.geolocation) {
+      setState(prev => ({
+        ...prev,
+        loading: false,
+        error: 'Geolocalización no soportada por este navegador'
+      }));
+      return;
+    }
+
+    setState(prev => ({ ...prev, loading: true, error: null }));
+
+    // Configuración para máxima precisión - usa más batería pero es más exacto
+    const highAccuracyOptions: PositionOptions = {
+      enableHighAccuracy: true,
+      timeout: 30000, // 30 segundos para ubicaciones GPS precisas
+      maximumAge: 0 // No usar caché, siempre obtener nueva ubicación
+    };
+
+    let watchId: number | null = null;
+    let bestAccuracy = Infinity;
+    let bestPosition: GeolocationPosition | null = null;
+
+    // Usar watchPosition para obtener múltiples lecturas y quedarse con la más precisa
+    watchId = navigator.geolocation.watchPosition(
+      (position) => {
+        const { accuracy } = position.coords;
+
+        // Si esta lectura es más precisa que las anteriores
+        if (accuracy < bestAccuracy) {
+          bestAccuracy = accuracy;
+          bestPosition = position;
+
+          // Si obtenemos una precisión muy buena (menos de 10 metros), usar esa
+          if (accuracy <= 10) {
+            if (watchId) navigator.geolocation.clearWatch(watchId);
+
+            const { latitude, longitude } = position.coords;
+            const { region, comuna } = getRegionFromCoordinates(latitude, longitude);
+
+            const locationData: LocationData = {
+              latitude,
+              longitude,
+              region,
+              comuna,
+              accuracy
+            };
+
+            storeLocation(locationData);
+
+            setState({
+              location: locationData,
+              loading: false,
+              error: null
+            });
+
+            console.log('📍 Ubicación de alta precisión obtenida:', { region, comuna, accuracy: `${accuracy}m` });
+          }
+        }
+      },
+      (error) => {
+        if (watchId) navigator.geolocation.clearWatch(watchId);
+
+        let errorMessage = 'Error al obtener ubicación de alta precisión';
+
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            errorMessage = 'Permiso de ubicación denegado';
+            break;
+          case error.POSITION_UNAVAILABLE:
+            errorMessage = 'Ubicación no disponible';
+            break;
+          case error.TIMEOUT:
+            errorMessage = 'Tiempo de espera agotado para ubicación precisa';
+            break;
+        }
+
+        setState({
+          location: null,
+          loading: false,
+          error: errorMessage
+        });
+
+        console.warn('⚠️ Error de geolocalización de alta precisión:', errorMessage);
+      },
+      highAccuracyOptions
+    );
+
+    // Timeout manual después de 20 segundos
+    setTimeout(() => {
+      if (watchId) {
+        navigator.geolocation.clearWatch(watchId);
+
+        if (bestPosition) {
+          const { latitude, longitude, accuracy } = bestPosition.coords;
+          const { region, comuna } = getRegionFromCoordinates(latitude, longitude);
+
+          const locationData: LocationData = {
+            latitude,
+            longitude,
+            region,
+            comuna,
+            accuracy
+          };
+
+          storeLocation(locationData);
+
+          setState({
+            location: locationData,
+            loading: false,
+            error: null
+          });
+
+          console.log('📍 Mejor ubicación obtenida tras timeout:', { region, comuna, accuracy: `${accuracy}m` });
+        } else {
+          setState(prev => ({
+            ...prev,
+            loading: false,
+            error: 'No se pudo obtener una ubicación precisa'
+          }));
+        }
+      }
+    }, 20000);
+  }, [getStoredLocation, storeLocation]);
+
+  // Función para solicitar geolocalización estándar
   const requestLocation = useCallback(async () => {
     // Primero verificar si ya tenemos una ubicación guardada
     const storedLocation = getStoredLocation();
@@ -188,10 +334,11 @@ export const useGeolocation = () => {
 
     setState(prev => ({ ...prev, loading: true, error: null }));
 
+    // Configuración optimizada para máxima precisión
     const options: PositionOptions = {
-      enableHighAccuracy: true,
-      timeout: 10000,
-      maximumAge: 600000 // 10 minutos
+      enableHighAccuracy: true, // Usar GPS cuando esté disponible
+      timeout: 15000, // Aumentar timeout para mejor precisión
+      maximumAge: 300000 // 5 minutos (reducido para ubicaciones más frescas)
     };
 
     navigator.geolocation.getCurrentPosition(
@@ -216,7 +363,19 @@ export const useGeolocation = () => {
           error: null
         });
 
-        console.log('📍 Ubicación detectada:', { region, comuna, accuracy: `${accuracy}m` });
+        // Evaluar calidad de la precisión
+        let accuracyLevel = 'Baja';
+        if (accuracy <= 10) accuracyLevel = 'Excelente';
+        else if (accuracy <= 50) accuracyLevel = 'Buena';
+        else if (accuracy <= 100) accuracyLevel = 'Regular';
+
+        console.log('📍 Ubicación detectada:', {
+          region,
+          comuna,
+          accuracy: `${accuracy?.toFixed(1)}m`,
+          accuracyLevel,
+          coordinates: `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`
+        });
       },
       (error) => {
         let errorMessage = 'Error al obtener ubicación';
@@ -299,6 +458,8 @@ export const useGeolocation = () => {
     loading: state.loading,
     error: state.error,
     requestLocation,
+    requestHighAccuracyLocation,
+    needsHigherAccuracy,
     clearLocation,
     setManualLocation
   };
