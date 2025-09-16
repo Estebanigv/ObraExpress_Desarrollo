@@ -8,6 +8,7 @@ import { useCart } from '@/contexts/CartContext';
 import ProductConfiguratorSimple from '@/modules/products/components/product-configurator-simple';
 import proyectosData from '@/data/proyectos-realizados.json';
 import imagenesProductos from '@/data/imagenes-productos.json';
+import AlveolarProfileInfo from '@/components/AlveolarProfileInfo';
 
 interface ProductVariant {
   codigo: string;
@@ -533,7 +534,7 @@ export default function ProductDetailPage() {
                 
                 {/* Configurador de producto */}
                 <div className="mb-8">
-                  <ProductConfiguratorSimple 
+                  <ProductConfiguratorSimple
                     productGroup={{
                       ...producto,
                       espesores: opciones.espesores,
@@ -544,6 +545,13 @@ export default function ProductDetailPage() {
                     className="border-0 shadow-none bg-transparent"
                   />
                 </div>
+
+                {/* Información de perfiles para productos alveolares */}
+                {productId === 'policarbonato-alveolar' && (
+                  <div className="mb-8">
+                    <AlveolarProfileInfo />
+                  </div>
+                )}
 
                 {/* Información adicional profesional */}
                 <div className="mt-8 bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-6 border border-gray-200">
