@@ -123,7 +123,8 @@
         "id": "instalacion-perfil-u",
         "titulo": "Sistema de Cierre Profesional",
         "descripcion": "Instalación de perfiles U en proyecto de invernadero comercial",
-        "imagen_principal": "/images/perfil-u-placeholder.svg",
+        "imagen_principal": "/assets/images/Productos/Perfiles/perfil-u-policarbonato.webp",
+        "imagen_hover": "/assets/images/Productos/Perfiles/Perfil_U.webp",
         "caracteristicas": [
           "300 metros lineales instalados",
           "Compatibilidad: 4mm, 6mm, 8mm",
@@ -141,7 +142,8 @@
         "id": "union-modular",
         "titulo": "Sistema de Unión Modular",
         "descripcion": "Conexión de planchas en cubierta industrial de gran envergadura",
-        "imagen_principal": "/images/perfil-h-placeholder.svg",
+        "imagen_principal": "/assets/images/Productos/Perfiles/perfil-clip-policarbonato.webp",
+        "imagen_hover": "/assets/images/Trabajos/Perfiles/Perfil clip plano.webp",
         "caracteristicas": [
           "150 uniones realizadas",
           "Sistema base + tapa",
@@ -149,7 +151,26 @@
           "100% impermeable"
         ],
         "tipo": "Accesorio",
-        "material_usado": "Perfil H Aluminio"
+        "material_usado": "Perfil H para Policarbonato"
+      }
+    ]
+  },
+  "perfil-clip-plano": {
+    "proyectos": [
+      {
+        "id": "instalacion-clip-plano",
+        "titulo": "Sistema de Fijación sin Perforaciones",
+        "descripcion": "Instalación de perfiles clip plano en cubierta residencial moderna",
+        "imagen_principal": "/assets/images/Productos/Perfiles/perfil-clip-plano.webp",
+        "imagen_hover": "/assets/images/Trabajos/Perfiles/Perfil clip plano.webp",
+        "caracteristicas": [
+          "200 metros lineales instalados",
+          "Sistema de sujeción sin perforaciones",
+          "Permite dilatación térmica",
+          "Acabado profesional garantizado"
+        ],
+        "tipo": "Accesorio",
+        "material_usado": "Perfil Clip Plano 6mm Natural"
       }
     ]
   }
