@@ -241,43 +241,102 @@ export const BuscadorGlobal: React.FC<BuscadorGlobalProps> = ({
     return highlightedText;
   };
 
-  // Función de búsqueda mejorada
+  // Función de búsqueda mejorada con scoring
   const performSearch = (searchQuery: string) => {
     if (!searchQuery.trim()) {
       setResults([]);
       return;
     }
-    
+
     const query = searchQuery.toLowerCase().trim();
     const terms = query.split(' ').filter(Boolean);
-    
-    const filtered = searchIndex.filter(item => {
+
+    // Sistema de scoring para mejorar relevancia
+    const scoredResults = searchIndex.map(item => {
+      let score = 0;
       const searchableText = `${item.nombre} ${item.categoria} ${item.espesor} ${item.color} ${item.codigo}`.toLowerCase();
-      
-      // Búsqueda más flexible
-      return terms.some(term => {
-        // Coincidencia directa
-        if (searchableText.includes(term)) return true;
-        
-        // Búsquedas específicas para términos comunes
-        if (term === 'ondulado' || term === 'ondulados') {
-          return searchableText.includes('ondulado');
+
+      // Mapeo de sinónimos y términos relacionados
+      const synonyms: Record<string, string[]> = {
+        'ondulado': ['ondulado', 'ondulados', 'onda', 'ondas'],
+        'alveolar': ['alveolar', 'alveolares', 'panal', 'celdas'],
+        'compacto': ['compacto', 'compactos', 'solido', 'macizo'],
+        'perfil': ['perfil', 'perfiles', 'conector', 'union', 'clip'],
+        'transparente': ['transparente', 'cristal', 'clear', 'translucido'],
+        'bronce': ['bronce', 'marron', 'fumé'],
+        'opal': ['opal', 'blanco', 'lechoso', 'opaco'],
+        '4mm': ['4mm', '4 mm', 'cuatro'],
+        '6mm': ['6mm', '6 mm', 'seis'],
+        '8mm': ['8mm', '8 mm', 'ocho'],
+        '10mm': ['10mm', '10 mm', 'diez'],
+        'u': ['u', 'perfil u', 'perfil-u', 'cierre'],
+        'h': ['h', 'perfil h', 'perfil-h', 'union'],
+        'clip': ['clip', 'clip plano', 'fijacion']
+      };
+
+      // Búsqueda por cada término
+      terms.forEach(term => {
+        // Coincidencia exacta en nombre (mayor peso)
+        if (item.nombre.toLowerCase().includes(term)) {
+          score += 10;
         }
-        if (term === 'perfil' || term === 'perfiles') {
-          return searchableText.includes('perfil');
+
+        // Coincidencia exacta en código (muy alto peso)
+        if (item.codigo.toLowerCase().includes(term)) {
+          score += 15;
         }
-        if (term === 'alveolar') {
-          return searchableText.includes('alveolar');
+
+        // Coincidencia en categoría
+        if (item.categoria.toLowerCase().includes(term)) {
+          score += 7;
         }
-        if (term === 'compacto') {
-          return searchableText.includes('compacto');
+
+        // Coincidencia en espesor
+        if (item.espesor.toLowerCase().includes(term)) {
+          score += 5;
         }
-        
-        return false;
+
+        // Coincidencia en color
+        if (item.color.toLowerCase().includes(term)) {
+          score += 5;
+        }
+
+        // Búsqueda con sinónimos
+        Object.entries(synonyms).forEach(([key, values]) => {
+          if (values.includes(term) && searchableText.includes(key)) {
+            score += 4;
+          }
+        });
+
+        // Coincidencias parciales (menor peso)
+        const termLength = term.length;
+        if (termLength >= 3) { // Solo para términos de 3+ caracteres
+          const words = searchableText.split(/\s+/);
+          words.forEach(word => {
+            if (word.startsWith(term)) {
+              score += 2;
+            }
+          });
+        }
       });
+
+      // Bonus por coincidencia múltiple
+      const matchingTerms = terms.filter(term => searchableText.includes(term));
+      if (matchingTerms.length === terms.length) {
+        score += 5 * terms.length; // Todos los términos coinciden
+      }
+
+      return { item, score };
     });
-    
-    setResults(filtered.slice(0, 6)); // Máximo 6 resultados para mejor visualización
+
+    // Filtrar solo resultados con score > 0 y ordenar por relevancia
+    const filtered = scoredResults
+      .filter(result => result.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .map(result => result.item);
+
+    // Limitar a 10 resultados máximo para mejor performance
+    setResults(filtered.slice(0, 10));
   };
 
   // Efecto de búsqueda con debounce
@@ -689,16 +748,7 @@ export const BuscadorGlobal: React.FC<BuscadorGlobalProps> = ({
                 <p className="text-gray-700 font-semibold mb-2">No encontramos "{query}"</p>
                 <p className="text-gray-500 text-sm mb-3">Prueba con estos términos populares:</p>
                 <div className="flex flex-wrap gap-2 justify-center">
-                  <button 
-                    onClick={() => {
-                      setQuery('policarbonato');
-                      performSearch('policarbonato');
-                    }}
-                    className="px-3 py-1 bg-yellow-100 hover:bg-yellow-200 rounded-full text-xs text-gray-700 transition-colors font-medium"
-                  >
-                    Policarbonato
-                  </button>
-                  <button 
+                  <button
                     onClick={() => {
                       setQuery('alveolar');
                       performSearch('alveolar');
@@ -707,14 +757,50 @@ export const BuscadorGlobal: React.FC<BuscadorGlobalProps> = ({
                   >
                     Alveolar
                   </button>
-                  <button 
+                  <button
                     onClick={() => {
-                      setQuery('perfil');
-                      performSearch('perfil');
+                      setQuery('ondulado');
+                      performSearch('ondulado');
                     }}
                     className="px-3 py-1 bg-yellow-100 hover:bg-yellow-200 rounded-full text-xs text-gray-700 transition-colors font-medium"
                   >
-                    Perfiles
+                    Ondulado
+                  </button>
+                  <button
+                    onClick={() => {
+                      setQuery('compacto');
+                      performSearch('compacto');
+                    }}
+                    className="px-3 py-1 bg-yellow-100 hover:bg-yellow-200 rounded-full text-xs text-gray-700 transition-colors font-medium"
+                  >
+                    Compacto
+                  </button>
+                  <button
+                    onClick={() => {
+                      setQuery('perfil u');
+                      performSearch('perfil u');
+                    }}
+                    className="px-3 py-1 bg-yellow-100 hover:bg-yellow-200 rounded-full text-xs text-gray-700 transition-colors font-medium"
+                  >
+                    Perfil U
+                  </button>
+                  <button
+                    onClick={() => {
+                      setQuery('6mm');
+                      performSearch('6mm');
+                    }}
+                    className="px-3 py-1 bg-yellow-100 hover:bg-yellow-200 rounded-full text-xs text-gray-700 transition-colors font-medium"
+                  >
+                    6mm
+                  </button>
+                  <button
+                    onClick={() => {
+                      setQuery('bronce');
+                      performSearch('bronce');
+                    }}
+                    className="px-3 py-1 bg-yellow-100 hover:bg-yellow-200 rounded-full text-xs text-gray-700 transition-colors font-medium"
+                  >
+                    Bronce
                   </button>
                 </div>
               </div>
