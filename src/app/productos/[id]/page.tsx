@@ -240,7 +240,7 @@ export default function ProductDetailPage() {
                   <div className="mt-8">
                     <div className="flex items-center justify-between mb-4">
                       <div>
-                        <h3 className="text-lg font-bold text-gray-900">Casos de Éxito</h3>
+                        <h3 className="text-lg font-bold text-gray-900">Trabajos Realizados</h3>
                         <p className="text-gray-500 text-sm mt-1">
                           Proyectos reales con {producto.nombre}
                         </p>
