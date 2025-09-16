@@ -241,9 +241,13 @@ export default function ProductDetailPage() {
                   <div className="mt-8">
                     <div className="flex items-center justify-between mb-4">
                       <div>
-                        <h3 className="text-lg font-bold text-gray-900">Trabajos Realizados</h3>
+                        <h3 className="text-lg font-bold text-gray-900">
+                          {(productId.includes('perfil') || productId.includes('clip')) ? 'Casos de Uso' : 'Trabajos Realizados'}
+                        </h3>
                         <p className="text-gray-500 text-sm mt-1">
-                          Proyectos reales con {producto.nombre}
+                          {(productId.includes('perfil') || productId.includes('clip'))
+                            ? `Aplicaciones prácticas de ${producto.nombre}`
+                            : `Proyectos reales con ${producto.nombre}`}
                         </p>
                       </div>
                       <span className="text-xs text-gray-400 font-medium uppercase tracking-wider">

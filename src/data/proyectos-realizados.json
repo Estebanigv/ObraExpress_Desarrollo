@@ -124,7 +124,7 @@
         "titulo": "Sistema de Cierre Profesional",
         "descripcion": "Instalación de perfiles U en proyecto de invernadero comercial",
         "imagen_principal": "/assets/images/Productos/Perfiles/perfil-u-policarbonato.webp",
-        "imagen_hover": "/assets/images/Productos/Perfiles/Perfil_U.webp",
+        "imagen_hover": "/assets/images/Trabajos/Perfiles/Perfil U.webp",
         "caracteristicas": [
           "300 metros lineales instalados",
           "Compatibilidad: 4mm, 6mm, 8mm",
@@ -142,8 +142,8 @@
         "id": "union-modular",
         "titulo": "Sistema de Unión Modular",
         "descripcion": "Conexión de planchas en cubierta industrial de gran envergadura",
-        "imagen_principal": "/assets/images/Productos/Perfiles/perfil-clip-policarbonato.webp",
-        "imagen_hover": "/assets/images/Trabajos/Perfiles/Perfil clip plano.webp",
+        "imagen_principal": "/assets/images/Trabajos/Perfiles/Perfil clip plano.webp",
+        "imagen_hover": "/assets/images/Productos/Perfiles/perfil-clip-policarbonato.webp",
         "caracteristicas": [
           "150 uniones realizadas",
           "Sistema base + tapa",
@@ -161,8 +161,8 @@
         "id": "instalacion-clip-plano",
         "titulo": "Sistema de Fijación sin Perforaciones",
         "descripcion": "Instalación de perfiles clip plano en cubierta residencial moderna",
-        "imagen_principal": "/assets/images/Productos/Perfiles/perfil-clip-plano.webp",
-        "imagen_hover": "/assets/images/Trabajos/Perfiles/Perfil clip plano.webp",
+        "imagen_principal": "/assets/images/Trabajos/Perfiles/Perfil clip plano.webp",
+        "imagen_hover": "/assets/images/Productos/Perfiles/perfil-clip-plano.webp",
         "caracteristicas": [
           "200 metros lineales instalados",
           "Sistema de sujeción sin perforaciones",
