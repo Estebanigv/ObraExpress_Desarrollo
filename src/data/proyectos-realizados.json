@@ -123,8 +123,8 @@
         "id": "instalacion-perfil-u",
         "titulo": "Sistema de Cierre Profesional",
         "descripcion": "Instalación de perfiles U en proyecto de invernadero comercial",
-        "imagen_principal": "/assets/images/Productos/Perfiles/perfil-u-policarbonato.webp",
-        "imagen_hover": "/assets/images/Trabajos/Perfiles/Perfil U.webp",
+        "imagen_principal": "/assets/images/Trabajos/Perfiles/Perfil U.webp",
+        "imagen_hover": "/assets/images/Productos/Perfiles/perfil-u-policarbonato.webp",
         "caracteristicas": [
           "300 metros lineales instalados",
           "Compatibilidad: 4mm, 6mm, 8mm",
