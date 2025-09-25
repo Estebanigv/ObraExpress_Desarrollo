@@ -5,8 +5,8 @@
         "id": "pergola-bronce",
         "titulo": "Pérgola Residencial Premium",
         "descripcion": "Instalación de policarbonato ondulado bronce en pérgola residencial de 45m²",
-        "imagen_principal": "/assets/images/Trabajos/Ondulado/Bronce/Ondlado_bronce A.webp",
-        "imagen_hover": "/assets/images/Trabajos/Ondulado/Bronce/Ondlado_bronce B.webp",
+        "imagen_principal": "/assets/images/Trabajos/Policarbonatos/Ondulado/Bronce/Ondlado_bronce A.webp",
+        "imagen_hover": "/assets/images/Trabajos/Policarbonatos/Ondulado/Bronce/Ondlado_bronce B.webp",
         "caracteristicas": [
           "Área cubierta: 45m²",
           "Color: Bronce",
@@ -20,8 +20,8 @@
         "id": "invernadero-clear",
         "titulo": "Invernadero Comercial",
         "descripcion": "Construcción completa de invernadero con policarbonato ondulado transparente",
-        "imagen_principal": "/assets/images/Trabajos/Ondulado/Clear/Ondulado_ClearA.webp",
-        "imagen_hover": "/assets/images/Trabajos/Ondulado/Clear/Ondulado_ClearB.webp",
+        "imagen_principal": "/assets/images/Trabajos/Policarbonatos/Ondulado/Clear/Ondulado_ClearA.webp",
+        "imagen_hover": "/assets/images/Trabajos/Policarbonatos/Ondulado/Clear/Ondulado_ClearB.webp",
         "caracteristicas": [
           "Área total: 200m²",
           "Transmisión de luz: 85%",
@@ -35,8 +35,8 @@
         "id": "quincho-opal",
         "titulo": "Quincho Familiar Premium",
         "descripcion": "Instalación de policarbonato ondulado opal en quincho familiar para eventos",
-        "imagen_principal": "/assets/images/Trabajos/Ondulado/opal/quincho A.webp",
-        "imagen_hover": "/assets/images/Trabajos/Ondulado/opal/quincho D.webp",
+        "imagen_principal": "/assets/images/Trabajos/Policarbonatos/Ondulado/opal/quincho A.webp",
+        "imagen_hover": "/assets/images/Trabajos/Policarbonatos/Ondulado/opal/quincho D.webp",
         "caracteristicas": [
           "Área social: 60m²",
           "Filtrado de luz óptimo",
@@ -54,9 +54,9 @@
         "id": "cubierta-terraza",
         "titulo": "Cubierta de Terraza Moderna",
         "descripcion": "Instalación de policarbonato alveolar en terraza residencial con estructura de aluminio",
-        "imagen_principal": "/assets/images/Trabajos/Cubierta de terraza policarbonato alveolar_1.webp",
-        "imagen_hover": "/assets/images/Trabajos/Cubierta de terraza policarbonato alveolar_11.webp",
-        "imagen_secundaria": "/assets/images/Trabajos/Cubierta de terraza policarbonato alveolar_111.webp",
+        "imagen_principal": "/assets/images/Trabajos/Policarbonatos/Alveolar/Cubierta de terraza policarbonato alveolar_1.webp",
+        "imagen_hover": "/assets/images/Trabajos/Policarbonatos/Alveolar/Cubierta de terraza policarbonato alveolar_11.webp",
+        "imagen_secundaria": "/assets/images/Trabajos/Policarbonatos/Alveolar/Cubierta de terraza policarbonato alveolar_111.webp",
         "caracteristicas": [
           "Área cubierta: 35m²",
           "Espesor: 10mm",
@@ -70,8 +70,8 @@
         "id": "piscina-cubierta",
         "titulo": "Cubierta de Piscina Climatizada",
         "descripcion": "Cerramiento completo de piscina con policarbonato alveolar para uso durante todo el año",
-        "imagen_principal": "/assets/images/Trabajos/piscina cubierta con policarbonato alveolar_1.webp",
-        "imagen_hover": "/assets/images/Trabajos/piscina cubierta con policarbonato alveolar_11.webp",
+        "imagen_principal": "/assets/images/Trabajos/Policarbonatos/Alveolar/piscina cubierta con policarbonato alveolar_1.webp",
+        "imagen_hover": "/assets/images/Trabajos/Policarbonatos/Alveolar/piscina cubierta con policarbonato alveolar_11.webp",
         "caracteristicas": [
           "Superficie total: 120m²",
           "Espesor: 16mm",
@@ -89,8 +89,8 @@
         "id": "edificio-corporativo",
         "titulo": "Fachada de Edificio Corporativo",
         "descripcion": "Revestimiento de fachada con policarbonato compacto para edificio de oficinas",
-        "imagen_principal": "/assets/images/Trabajos/Policarbonato compacto en edificio_1.webp",
-        "imagen_hover": "/assets/images/Trabajos/Policarbonato compacto en edificio_1.webp",
+        "imagen_principal": "/assets/images/Trabajos/Policarbonatos/Compacto/Policarbonato compacto en edificio_1.webp",
+        "imagen_hover": "/assets/images/Trabajos/Policarbonatos/Compacto/Policarbonato compacto en edificio_1.webp",
         "caracteristicas": [
           "Área instalada: 450m²",
           "Espesor: 6mm",
@@ -104,8 +104,8 @@
         "id": "tunel-peatonal",
         "titulo": "Túnel Peatonal Iluminado",
         "descripcion": "Construcción de túnel peatonal con policarbonato compacto transparente",
-        "imagen_principal": "/assets/images/Trabajos/Policarbonato compacto tunel_1.webp",
-        "imagen_hover": "/assets/images/Trabajos/Policarbonato compacto tunel_1.webp",
+        "imagen_principal": "/assets/images/Trabajos/Policarbonatos/Compacto/Policarbonato compacto tunel_1.webp",
+        "imagen_hover": "/assets/images/Trabajos/Policarbonatos/Compacto/Policarbonato compacto tunel_1.webp",
         "caracteristicas": [
           "Longitud: 25m",
           "Transmisión de luz: 90%",
@@ -123,7 +123,8 @@
         "id": "instalacion-perfil-u",
         "titulo": "Sistema de Cierre Profesional",
         "descripcion": "Instalación de perfiles U en proyecto de invernadero comercial",
-        "imagen_principal": "/images/perfil-u-placeholder.svg",
+        "imagen_principal": "/assets/images/Trabajos/Perfiles/Perfil U.webp",
+        "imagen_hover": "/assets/images/Productos/Perfiles/perfil-u-policarbonato.webp",
         "caracteristicas": [
           "300 metros lineales instalados",
           "Compatibilidad: 4mm, 6mm, 8mm",
@@ -141,7 +142,8 @@
         "id": "union-modular",
         "titulo": "Sistema de Unión Modular",
         "descripcion": "Conexión de planchas en cubierta industrial de gran envergadura",
-        "imagen_principal": "/images/perfil-h-placeholder.svg",
+        "imagen_principal": "/assets/images/Trabajos/Perfiles/Perfil clip plano.webp",
+        "imagen_hover": "/assets/images/Productos/Perfiles/perfil-clip-policarbonato.webp",
         "caracteristicas": [
           "150 uniones realizadas",
           "Sistema base + tapa",
@@ -149,7 +151,26 @@
           "100% impermeable"
         ],
         "tipo": "Accesorio",
-        "material_usado": "Perfil H Aluminio"
+        "material_usado": "Perfil H para Policarbonato"
+      }
+    ]
+  },
+  "perfil-clip-plano": {
+    "proyectos": [
+      {
+        "id": "instalacion-clip-plano",
+        "titulo": "Sistema de Fijación sin Perforaciones",
+        "descripcion": "Instalación de perfiles clip plano en cubierta residencial moderna",
+        "imagen_principal": "/assets/images/Trabajos/Perfiles/Perfil clip plano.webp",
+        "imagen_hover": "/assets/images/Productos/Perfiles/perfil-clip-plano.webp",
+        "caracteristicas": [
+          "200 metros lineales instalados",
+          "Sistema de sujeción sin perforaciones",
+          "Permite dilatación térmica",
+          "Acabado profesional garantizado"
+        ],
+        "tipo": "Accesorio",
+        "material_usado": "Perfil Clip Plano 6mm Natural"
       }
     ]
   }

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import { safeDocument } from '@/lib/client-utils';
-import { getNextDispatchDate, formatDispatchDate, getDispatchRuleForProduct, getDispatchDescription } from '@/utils/dispatch-dates';
+import { getNextDispatchDate, formatDispatchDate, getDispatchRuleForProduct, getDispatchDescription, isChileanHoliday, getHolidayName } from '@/utils/dispatch-dates';
 import { DateRoller } from './date-roller';
 
 interface DispatchCalendarModalProps {
@@ -100,9 +100,30 @@ function DispatchCalendarModal({ isOpen, onClose, onDateSelect, productType = "P
     const dayOfWeek = date.getDay();
     const isPast = checkDate < today;
     const isToday = checkDate.getTime() === today.getTime();
+    const isHoliday = isChileanHoliday(date);
+    
+    // Si es feriado, retornar 'holiday'
+    if (isHoliday) {
+      return 'holiday';
+    }
     
     // Usar las reglas de despacho configuradas
     const rule = getDispatchRuleForProduct(currentProductType);
+    
+    // Para policarbonato, aplicar regla especial de miércoles
+    if (currentProductType.toLowerCase().includes('policarbonato')) {
+      const todayDayOfWeek = today.getDay();
+      
+      // Si HOY es miércoles y estamos viendo el jueves de esta semana
+      if (todayDayOfWeek === 3 && dayOfWeek === 4) {
+        // Calcular si esta fecha es el jueves más próximo
+        const diffDays = Math.ceil((checkDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+        if (diffDays === 1) {
+          // Es el jueves inmediato después del miércoles actual - BLOQUEADO
+          return 'blocked-wednesday-rule';
+        }
+      }
+    }
     
     if (isToday && rule.availableDays.includes(dayOfWeek)) {
       // Si es hoy y es un día disponible, verificar si aún no pasó la hora límite
@@ -437,7 +458,9 @@ function DispatchCalendarModal({ isOpen, onClose, onDateSelect, productType = "P
             
             if (!isCurrentMonth) {
               // Para fechas de otros meses, verificar si son jueves disponibles
-              if (status === 'available') {
+              if (status === 'holiday') {
+                buttonClass += 'bg-red-100 text-red-600 font-bold cursor-not-allowed border border-red-300';
+              } else if (status === 'available') {
                 if (isSelected) {
                   buttonClass += 'bg-emerald-600 text-white font-bold ring-2 ring-emerald-300 shadow-lg transform scale-110 hover:scale-150 hover:shadow-2xl cursor-pointer transition-all duration-300';
                 } else {
@@ -446,6 +469,10 @@ function DispatchCalendarModal({ isOpen, onClose, onDateSelect, productType = "P
               } else {
                 buttonClass += 'text-gray-300 cursor-default';
               }
+            } else if (status === 'holiday') {
+              buttonClass += 'bg-red-100 text-red-600 font-bold cursor-not-allowed border border-red-300';
+            } else if (status === 'blocked-wednesday-rule') {
+              buttonClass += 'bg-orange-100 text-orange-600 font-bold cursor-not-allowed border border-orange-300';
             } else if (status === 'today') {
               buttonClass += 'border-2 border-blue-500 text-blue-600 font-bold bg-white';
             } else if (status === 'available') {
@@ -467,6 +494,8 @@ function DispatchCalendarModal({ isOpen, onClose, onDateSelect, productType = "P
                 disabled={status !== 'available'}
                 className={buttonClass}
                 title={
+                  status === 'holiday' ? `${date.getDate()} - FERIADO: ${getHolidayName(date)}` :
+                  status === 'blocked-wednesday-rule' ? `${date.getDate()} - Bloqueado (regla de miércoles)` :
                   status === 'today' ? `Hoy - ${date.getDate()}` :
                   status === 'available' ? 
                     `Despacho disponible - ${date.getDate()}${!isCurrentMonth ? ` (${date.toLocaleDateString('es-CL', { month: 'short' })})` : ''}` :
@@ -542,7 +571,7 @@ function DispatchCalendarModal({ isOpen, onClose, onDateSelect, productType = "P
 
         {/* Leyenda */}
         <div className="bg-gray-50 p-4 border-t">
-          <div className="flex items-center justify-center space-x-3 text-xs">
+          <div className="flex items-center justify-center space-x-3 text-xs flex-wrap">
             <div className="flex items-center space-x-1">
               <div className="w-3 h-3 border-2 border-blue-500 rounded bg-white"></div>
               <span className="text-gray-600">Hoy</span>
@@ -556,6 +585,10 @@ function DispatchCalendarModal({ isOpen, onClose, onDateSelect, productType = "P
               <span className="text-gray-600 font-medium">Seleccionada</span>
             </div>
             <div className="flex items-center space-x-1">
+              <div className="w-3 h-3 bg-red-100 rounded border border-red-300"></div>
+              <span className="text-gray-600">Feriado</span>
+            </div>
+            <div className="flex items-center space-x-1">
               <div className="w-3 h-3 bg-gray-300 rounded"></div>
               <span className="text-gray-600">No disponible</span>
             </div>
@@ -563,6 +596,11 @@ function DispatchCalendarModal({ isOpen, onClose, onDateSelect, productType = "P
           <p className="text-center text-xs text-gray-500 mt-2">
             {getDispatchDescription(currentProductType)}
           </p>
+          {today.getDay() === 3 && currentProductType.toLowerCase().includes('policarbonato') && (
+            <p className="text-center text-xs text-orange-600 font-medium mt-1">
+              ⚠️ Hoy es miércoles: El jueves más próximo está bloqueado
+            </p>
+          )}
         </div>
         </div>
       </div>

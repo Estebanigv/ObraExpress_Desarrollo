@@ -59,15 +59,16 @@ export function calculateAlveolarRecommendationsAdvanced(alveolarProducts: Alveo
   // 1. Perfiles U: 2 por plancha, según ancho y espesor
   perfilUGroups.forEach((group, key) => {
     const widthText = group.width === 1.05 ? '1.05m' : '2.10m';
-    const thicknessText = group.thickness <= 6 ? '4-6mm' : `${group.thickness}mm`;
-    
+    // Corregir especificación: perfil U 4-6mm para espesores 4mm y 6mm, perfil U 8-10mm para 8mm y 10mm
+    const thicknessText = group.thickness <= 6 ? '4-6mm' : '8-10mm';
+
     recommendations.push({
-      productId: `perfil-u-${group.width}-${group.thickness}`,
-      productName: `Perfil U ${thicknessText} x ${widthText}`,
+      productId: `perfil-u-${group.thickness <= 6 ? '4-6' : '8-10'}mm`,
+      productName: `Perfil U ${thicknessText} x ${widthText} - Color Clear`,
       quantity: group.quantity,
-      description: `${group.quantity} perfiles U de ${widthText} para espesor ${thicknessText}`,
-      reason: `Sellado en extremos superior e inferior de planchas ${widthText}`,
-      specifications: `Ancho: ${widthText} | Espesor compatible: ${thicknessText}`
+      description: `${group.quantity} perfiles U de ${widthText} para planchas de ${thicknessText}`,
+      reason: `Cierra las celdas en extremos superior e inferior para evitar polvo, agua e insectos`,
+      specifications: `🔹 Largo: ${widthText} (coincide con ancho plancha) | 🔹 Compatible: planchas ${thicknessText} | 🔹 Color: Clear universal`
     });
   });
 
@@ -85,12 +86,12 @@ export function calculateAlveolarRecommendationsAdvanced(alveolarProducts: Alveo
     clipLengthGroups.forEach((quantity, length) => {
       if (quantity > 0) {
         recommendations.push({
-          productId: `perfil-clip-${length}`,
-          productName: `Perfil Clip Plano ${length}m`,
+          productId: `perfil-clip-plano-${length}m`,
+          productName: `Perfil Clip Plano ${length}m - Color Clear`,
           quantity: quantity,
-          description: `${quantity} perfiles clip de ${length}m para unión entre planchas`,
-          reason: `Unión lateral entre planchas de ${length}m de largo`,
-          specifications: `Largo: ${length}m | Compatible: todos los espesores alveolares`
+          description: `${quantity} perfiles clip de ${length}m para unir planchas en el largo`,
+          reason: `Une planchas de policarbonato alveolar en el largo (${quantity} menos que cantidad de planchas)`,
+          specifications: `🔹 Largo: ${length}m (debe coincidir con largo de plancha) | 🔹 Compatible: todos los espesores (4,6,8,10mm) | 🔹 Color: Clear universal`
         });
       }
     });
@@ -111,19 +112,32 @@ export function calculateAlveolarRecommendationsAdvanced(alveolarProducts: Alveo
   const totalPerfilUQuantity = Array.from(perfilUGroups.values()).reduce((sum, group) => sum + group.quantity, 0);
   const totalPerfilClipQuantity = Array.from(perfilUGroups.values()).length > 1 ? totalQuantity - 1 : 0;
 
-  // Nota de instalación profesional
+  // Nota de instalación profesional actualizada
   const installationNote = `
-    📋 GUÍA DE INSTALACIÓN PROFESIONAL:
-    
+    📋 FUNCIONAMIENTO DE LOS PERFILES EN POLICARBONATO ALVEOLAR
+
     ✅ Para ${totalQuantity} plancha${totalQuantity > 1 ? 's' : ''} de policarbonato alveolar necesitas:
-    • ${totalPerfilUQuantity} Perfiles U (sellado en extremos)
-    • ${totalPerfilClipQuantity > 0 ? totalPerfilClipQuantity + ' Perfiles Clip Plano (unión entre planchas)' : 'Sin perfiles clip (plancha única)'}
-    
-    🔧 INSTALACIÓN:
-    1. Instalar perfiles U en extremos superior e inferior
-    2. ${totalPerfilClipQuantity > 0 ? 'Unir planchas con perfiles clip plano' : 'Plancha única sin uniones'}
-    3. Fijar con tornillos autorroscantes (no incluidos en esta cotización)
-    
+
+    🔹 PERFIL U: ${totalPerfilUQuantity} unidades
+    • Se instala en los BORDES de las planchas (superior e inferior)
+    • Función: CERRAR LAS CELDAS para evitar polvo, agua e insectos
+    • Recomendación: 2 perfiles U por cada plancha
+    • Los largos (1.05m y 2.10m) coinciden con el ancho de las planchas
+    • Color: Clear universal (sirve para todos los colores de plancha)
+
+    🔹 PERFIL CLIP PLANO: ${totalPerfilClipQuantity} unidades
+    ${totalPerfilClipQuantity > 0 ?
+      `• Se utiliza para UNIR PLANCHAS EN EL LARGO
+    • Compatible con todos los espesores (4, 6, 8, 10mm) y colores
+    • El largo del perfil debe coincidir con el largo de la plancha
+    • Recomendación: 1 perfil menos que la cantidad de planchas
+    • Color: Clear universal (sirve para todos los colores de plancha)` :
+      `• No se requieren (plancha única sin uniones)`}
+
+    🔧 RESUMEN DE INSTALACIÓN:
+    • Perfil U = sella bordes superior e inferior (2 por plancha)
+    • Perfil Clip = une planchas en el largo (N-1 perfiles)
+
     ⚠️ IMPORTANTE: Los perfiles garantizan sellado hermético y durabilidad de 10+ años
   `;
 
