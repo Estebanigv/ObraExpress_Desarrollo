@@ -1,0 +1,271 @@
+/* ===== OPTIMIZACIONES ADICIONALES RESPONSIVE 2024-2025 ===== */
+
+/* iPhone 15 Series (393x852 - 430x932) */
+@media (min-width: 393px) and (max-width: 430px) and (min-height: 850px) {
+  .iphone-15-optimized {
+    padding: 0.75rem !important;
+    font-size: 0.95rem !important;
+  }
+
+  .hero-section {
+    padding-top: 2rem !important;
+    padding-bottom: 1.5rem !important;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.75rem !important;
+  }
+}
+
+/* Samsung Galaxy S24 Series (384x832) */
+@media (min-width: 384px) and (max-width: 390px) and (min-height: 830px) {
+  .galaxy-s24-optimized {
+    padding: 0.625rem !important;
+  }
+
+  .navbar-container {
+    height: 3.5rem !important;
+  }
+
+  .mobile-menu-item {
+    padding: 0.875rem 1rem !important;
+  }
+}
+
+/* Google Pixel 8 Pro (412x915) */
+@media (min-width: 410px) and (max-width: 415px) and (min-height: 910px) {
+  .pixel-8-optimized {
+    line-height: 1.5 !important;
+  }
+
+  .form-input {
+    min-height: 2.75rem !important;
+  }
+
+  .button-touch-target {
+    min-height: 44px !important;
+    min-width: 44px !important;
+  }
+}
+
+/* MacBook Air M3 13" (1440x900 @ 110% scale = 1309x818) */
+@media (min-width: 1300px) and (max-width: 1350px) and (max-height: 850px) {
+  .macbook-air-m3 {
+    font-size: 0.95rem !important;
+  }
+
+  .container {
+    max-width: 1200px !important;
+  }
+
+  .section-padding {
+    padding-top: 2.5rem !important;
+    padding-bottom: 2.5rem !important;
+  }
+}
+
+/* MacBook Pro M3 14" (1512x982 @ 120% scale = 1260x818) */
+@media (min-width: 1250px) and (max-width: 1300px) and (max-height: 850px) {
+  .macbook-pro-14 {
+    font-size: 0.975rem !important;
+  }
+
+  .modal-container {
+    max-width: 85vw !important;
+    max-height: 80vh !important;
+  }
+}
+
+/* Surface Pro 9/10 (1368x912) */
+@media (min-width: 1360px) and (max-width: 1380px) and (max-height: 920px) {
+  .surface-pro-optimized {
+    touch-action: manipulation !important;
+  }
+
+  .touch-friendly {
+    padding: 0.75rem !important;
+    min-height: 48px !important;
+  }
+
+  .scrollable-area {
+    -webkit-overflow-scrolling: touch !important;
+    scroll-behavior: smooth !important;
+  }
+}
+
+/* Samsung Galaxy Tab S9 (800x1280) */
+@media (min-width: 800px) and (max-width: 850px) and (orientation: portrait) {
+  .galaxy-tab-portrait {
+    column-count: 2 !important;
+    column-gap: 1.5rem !important;
+  }
+
+  .product-card {
+    break-inside: avoid !important;
+  }
+}
+
+/* iPad Pro 11" M4 (834x1194) */
+@media (min-width: 834px) and (max-width: 840px) and (min-height: 1190px) {
+  .ipad-pro-11-m4 {
+    padding: 1rem 1.5rem !important;
+  }
+
+  .grid-auto-fit {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+  }
+}
+
+/* iPad Pro 13" M4 (1024x1366) */
+@media (min-width: 1024px) and (max-width: 1030px) and (min-height: 1360px) {
+  .ipad-pro-13-m4 {
+    font-size: 1.1rem !important;
+    line-height: 1.6 !important;
+  }
+
+  .desktop-like-layout {
+    display: grid !important;
+    grid-template-columns: 250px 1fr !important;
+  }
+}
+
+/* Foldable Phones - Inner Screen */
+/* Samsung Galaxy Z Fold 5 Inner (1812x2176) */
+@media (min-width: 1800px) and (orientation: portrait) and (max-device-width: 1850px) {
+  .foldable-inner-screen {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 2rem !important;
+  }
+
+  .dual-pane-layout {
+    padding: 1.5rem 2rem !important;
+  }
+}
+
+/* Gaming Handhelds - Steam Deck (1280x800) */
+@media (min-width: 1280px) and (max-width: 1280px) and (max-height: 800px) {
+  .gaming-handheld {
+    user-select: none !important;
+    -webkit-user-select: none !important;
+  }
+
+  .touch-controls {
+    display: flex !important;
+    justify-content: space-between !important;
+    position: fixed !important;
+    bottom: 1rem !important;
+    left: 1rem !important;
+    right: 1rem !important;
+  }
+}
+
+/* Ultra-wide Monitors (21:9) */
+@media (min-width: 2560px) and (min-aspect-ratio: 21/9) {
+  .ultrawide-layout {
+    max-width: 1800px !important;
+    margin: 0 auto !important;
+  }
+
+  .content-columns {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1fr !important;
+    gap: 3rem !important;
+  }
+}
+
+/* 4K Displays (3840x2160) */
+@media (min-width: 3840px) and (min-height: 2160px) {
+  .uhd-4k-optimized {
+    font-size: 1.25rem !important;
+    line-height: 1.75 !important;
+  }
+
+  .container {
+    max-width: 2400px !important;
+  }
+
+  .section-padding {
+    padding-top: 6rem !important;
+    padding-bottom: 6rem !important;
+  }
+}
+
+/* Apple Vision Pro (3660x1830 per eye) */
+@media (min-width: 3600px) and (max-width: 3700px) and (min-height: 1800px) {
+  .vision-pro-spatial {
+    perspective: 1000px !important;
+  }
+
+  .depth-layer {
+    transform: translateZ(10px) !important;
+  }
+
+  .floating-ui {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+    backdrop-filter: blur(8px) !important;
+  }
+}
+
+/* Accessibility Improvements */
+@media (prefers-reduced-data: reduce) {
+  .reduced-data * {
+    background-image: none !important;
+  }
+
+  .data-saver-friendly {
+    font-family: system-ui, -apple-system, sans-serif !important;
+  }
+}
+
+/* High Refresh Rate Displays (120Hz+) */
+@media (min-resolution: 2dppx) {
+  .high-refresh-optimized {
+    will-change: transform, opacity !important;
+    transform: translateZ(0) !important;
+  }
+
+  .smooth-animation {
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+}
+
+/* Landscape Phone Optimization */
+@media (max-height: 500px) and (orientation: landscape) {
+  .landscape-phone {
+    padding: 0.5rem !important;
+  }
+
+  .navbar-container {
+    height: 2.5rem !important;
+  }
+
+  .hero-section {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+
+  .modal-landscape {
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+  }
+}
+
+/* TV/Large Screen Optimization */
+@media (min-width: 1920px) and (min-height: 1080px) {
+  .tv-friendly {
+    font-size: 1.5rem !important;
+    line-height: 2 !important;
+  }
+
+  .large-touch-targets {
+    min-height: 60px !important;
+    min-width: 60px !important;
+  }
+
+  .tv-navigation {
+    outline: 3px solid #007acc !important;
+    outline-offset: 2px !important;
+  }
+}
