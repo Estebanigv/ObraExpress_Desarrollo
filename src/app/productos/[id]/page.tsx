@@ -620,7 +620,7 @@ export default function ProductDetailPage() {
               <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 group">
                 <div className="aspect-[4/3] bg-gray-100 overflow-hidden relative">
                   <ProductImage
-                    src="/assets/images/Productos/Policarbonato Alveolar/policarbonato_alveolar.webp"
+                    src="/assets/images/Productos/Policarbonato Alveolar/Alveolar_Clear.webp"
                     alt="Policarbonato Alveolar"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
@@ -704,10 +704,10 @@ export default function ProductDetailPage() {
                     <div className="text-lg font-bold text-gray-900">$850</div>
                   </div>
                   <button 
-                    onClick={() => router.push('/productos')}
+                    onClick={() => router.push('/perfiles')}
                     className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-medium py-3 rounded-xl transition-all duration-200"
                   >
-                    Ver Producto
+                    Ver Perfiles
                   </button>
                 </div>
               </div>

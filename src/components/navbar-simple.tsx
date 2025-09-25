@@ -170,11 +170,11 @@ function Navbar({ className }: { className?: string }) {
   };
 
   const handleMouseLeaveMenu = () => {
-    // Agregar un pequeño delay antes de cerrar para evitar cierres accidentales
+    // Agregar delay más largo antes de cerrar para evitar cierres accidentales
     const timeout = setTimeout(() => {
       setActiveDropdown(null);
       setSubMenuActive(null);
-    }, 200); // 200ms de delay
+    }, 1000); // Delay mucho más largo
     setCloseTimeout(timeout);
   };
 
@@ -184,14 +184,18 @@ function Navbar({ className }: { className?: string }) {
       clearTimeout(closeTimeout);
       setCloseTimeout(null);
     }
+    if (subMenuTimeout) {
+      clearTimeout(subMenuTimeout);
+      setSubMenuTimeout(null);
+    }
     setSubMenuActive(submenu);
   };
 
   const handleMouseLeaveSubMenu = () => {
-    // Cerrar el submenú con un pequeño delay
+    // Cerrar el submenú con un delay más largo para dar tiempo de navegación
     const timeout = setTimeout(() => {
       setSubMenuActive(null);
-    }, 150); // 150ms de delay para el submenú
+    }, 500); // Delay moderado
     setSubMenuTimeout(timeout);
   };
 
@@ -793,7 +797,14 @@ function Navbar({ className }: { className?: string }) {
                     handleMouseEnterMenu("Productos");
                     handleMenuItemHover('Productos');
                   }}
-                  onMouseLeave={handleMouseLeaveMenu}
+                  onMouseLeave={() => {
+                    // Solo cerrar si realmente salimos de toda el área (incluidos submenús)
+                    const timeout = setTimeout(() => {
+                      setActiveDropdown(null);
+                      setSubMenuActive(null);
+                    }, 1500); // Delay aún más largo
+                    setCloseTimeout(timeout);
+                  }}
                 >
                   <div className="relative flex items-center">
                     <Link 
@@ -832,47 +843,80 @@ function Navbar({ className }: { className?: string }) {
                   
                   {/* Productos Dropdown */}
                   {activeDropdown === "Productos" && (
-                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-6 w-48 bg-white rounded-lg shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] border-2 border-gray-400 p-2 z-[99999]">
+                    <div 
+                      className="absolute top-full left-1/2 transform -translate-x-1/2 mt-6 w-48 bg-white rounded-lg shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] border-2 border-gray-400 p-2 z-[99999]"
+                      onMouseEnter={() => {
+                        if (closeTimeout) {
+                          clearTimeout(closeTimeout);
+                          setCloseTimeout(null);
+                        }
+                        if (subMenuTimeout) {
+                          clearTimeout(subMenuTimeout);
+                          setSubMenuTimeout(null);
+                        }
+                      }}
+                      onMouseLeave={() => {
+                        // Cerrar con delay generoso
+                        const timeout = setTimeout(() => {
+                          setActiveDropdown(null);
+                          setSubMenuActive(null);
+                        }, 1000);
+                        setCloseTimeout(timeout);
+                      }}
+                    >
                       
                       {/* Policarbonatos */}
-                      <div 
+                      <HoveredLink 
+                        href="/policarbonatos"
                         className="relative px-3 py-2 hover:bg-amber-50 rounded transition-colors cursor-pointer flex items-center justify-between"
                         onMouseEnter={() => handleMouseEnterSubMenu("Policarbonatos")}
-                        onMouseLeave={handleMouseLeaveSubMenu}
                       >
                         <span className="text-sm text-gray-800 font-medium hover:text-amber-600">Policarbonatos</span>
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
                         
-                        {/* Extra hover area to the right for easier navigation - AMPLIADA */}
-                        <div className="absolute right-0 top-0 w-16 h-full bg-transparent z-[140]"></div>
-                      </div>
+                        {/* Extra hover area to the right for easier navigation - SUPER AMPLIADA */}
+                        <div 
+                          className="absolute right-0 top-0 w-32 h-full bg-transparent z-[140]"
+                          onMouseEnter={() => handleMouseEnterSubMenu("Policarbonatos")}
+                        ></div>
+                      </HoveredLink>
 
                       {/* Perfiles Alveolares */}
-                      <div 
+                      <HoveredLink 
+                        href="/perfiles"
                         className="relative px-3 py-2 hover:bg-amber-50 rounded transition-colors cursor-pointer flex items-center justify-between"
                         onMouseEnter={() => handleMouseEnterSubMenu("Perfiles")}
-                        onMouseLeave={handleMouseLeaveSubMenu}
                       >
                         <span className="text-sm text-gray-800 font-medium hover:text-amber-600">Perfiles Alveolares</span>
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
                         
-                        {/* Extra hover area to the right for easier navigation - AMPLIADA */}
-                        <div className="absolute right-0 top-0 w-16 h-full bg-transparent z-[140]"></div>
-                      </div>
+                        {/* Extra hover area to the right for easier navigation - SUPER AMPLIADA */}
+                        <div 
+                          className="absolute right-0 top-0 w-32 h-full bg-transparent z-[140]"
+                          onMouseEnter={() => handleMouseEnterSubMenu("Perfiles")}
+                        ></div>
+                      </HoveredLink>
                       
                       {/* Policarbonatos Side Submenu */}
                       {subMenuActive === "Policarbonatos" && (
                           <>
-                            {/* Invisible bridge to prevent gap issues - AMPLIADO */}
-                            <div className="absolute left-full top-0 w-8 h-full bg-transparent z-[140]"></div>
+                            {/* Invisible bridge to prevent gap issues - SUPER AMPLIADO */}
+                            <div 
+                              className="absolute left-full top-0 w-20 h-full bg-transparent z-[140]"
+                              onMouseEnter={() => handleMouseEnterSubMenu("Policarbonatos")}
+                            ></div>
+                            {/* Área de hover adicional que cubre todo el espacio hacia el submenu */}
+                            <div 
+                              className="absolute left-full top-[-20px] w-80 h-[120%] bg-transparent z-[139]"
+                              onMouseEnter={() => handleMouseEnterSubMenu("Policarbonatos")}
+                            ></div>
                             <div 
                               className="absolute left-full top-[-10px] ml-2 w-72 bg-white rounded-lg shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] border-2 border-gray-400 p-4 z-[99999]"
                               onMouseEnter={() => handleMouseEnterSubMenu("Policarbonatos")}
-                              onMouseLeave={handleMouseLeaveSubMenu}
                             >
                               <div className="text-sm font-semibold text-gray-800 mb-3 border-b border-yellow-200 pb-2 flex justify-between items-center">
                                 <span>Policarbonatos</span>
@@ -884,13 +928,13 @@ function Navbar({ className }: { className?: string }) {
                                 </button>
                               </div>
                             <div className="space-y-1">
-                              <HoveredLink href="/productos?categoria=Policarbonato&tipo=Ondulado" className="block px-3 py-2 text-sm text-gray-700 hover:bg-amber-50 rounded transition-colors hover:text-amber-600 cursor-pointer">
+                              <HoveredLink href="/productos/policarbonato-ondulado" className="block px-3 py-2 text-sm text-gray-700 hover:bg-amber-50 rounded transition-colors hover:text-amber-600 cursor-pointer">
                                 Ondulado
                               </HoveredLink>
-                              <HoveredLink href="/productos?categoria=Policarbonato&tipo=Alveolar" className="block px-3 py-2 text-sm text-gray-700 hover:bg-amber-50 rounded transition-colors hover:text-amber-600 cursor-pointer">
+                              <HoveredLink href="/productos/policarbonato-alveolar" className="block px-3 py-2 text-sm text-gray-700 hover:bg-amber-50 rounded transition-colors hover:text-amber-600 cursor-pointer">
                                 Alveolar
                               </HoveredLink>
-                              <HoveredLink href="/productos?categoria=Policarbonato&tipo=Compacto" className="block px-3 py-2 text-sm text-gray-700 hover:bg-amber-50 rounded transition-colors hover:text-amber-600 cursor-pointer">
+                              <HoveredLink href="/productos/policarbonato-compacto" className="block px-3 py-2 text-sm text-gray-700 hover:bg-amber-50 rounded transition-colors hover:text-amber-600 cursor-pointer">
                                 Compacto
                               </HoveredLink>
                             </div>
@@ -901,12 +945,19 @@ function Navbar({ className }: { className?: string }) {
                         {/* Perfiles Side Submenu */}
                         {subMenuActive === "Perfiles" && (
                           <>
-                            {/* Invisible bridge to prevent gap issues - AMPLIADO */}
-                            <div className="absolute left-full top-0 w-8 h-full bg-transparent z-[140]"></div>
+                            {/* Invisible bridge to prevent gap issues - SUPER AMPLIADO */}
+                            <div 
+                              className="absolute left-full top-0 w-20 h-full bg-transparent z-[140]"
+                              onMouseEnter={() => handleMouseEnterSubMenu("Perfiles")}
+                            ></div>
+                            {/* Área de hover adicional que cubre todo el espacio hacia el submenu */}
+                            <div 
+                              className="absolute left-full top-[-20px] w-80 h-[120%] bg-transparent z-[139]"
+                              onMouseEnter={() => handleMouseEnterSubMenu("Perfiles")}
+                            ></div>
                             <div 
                               className="absolute left-full top-[-10px] ml-2 w-72 bg-white rounded-lg shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] border-2 border-gray-400 p-4 z-[99999]"
                               onMouseEnter={() => handleMouseEnterSubMenu("Perfiles")}
-                              onMouseLeave={handleMouseLeaveSubMenu}
                             >
                               <div className="text-sm font-semibold text-gray-800 mb-3 border-b border-yellow-200 pb-2 flex justify-between items-center">
                                 <span>Perfiles Alveolares</span>
@@ -918,10 +969,10 @@ function Navbar({ className }: { className?: string }) {
                                 </button>
                               </div>
                               <div className="space-y-1">
-                                <HoveredLink href="/productos?categoria=Perfiles Alveolar&tipo=Perfil U" className="block px-3 py-2 text-sm text-gray-700 hover:bg-amber-50 rounded transition-colors hover:text-amber-600 cursor-pointer">
+                                <HoveredLink href="/productos/perfil-u" className="block px-3 py-2 text-sm text-gray-700 hover:bg-amber-50 rounded transition-colors hover:text-amber-600 cursor-pointer">
                                   Perfil U
                                 </HoveredLink>
-                                <HoveredLink href="/productos?categoria=Perfiles Alveolar&tipo=Perfil Clip" className="block px-3 py-2 text-sm text-gray-700 hover:bg-amber-50 rounded transition-colors hover:text-amber-600 cursor-pointer">
+                                <HoveredLink href="/productos/perfil-clip-plano" className="block px-3 py-2 text-sm text-gray-700 hover:bg-amber-50 rounded transition-colors hover:text-amber-600 cursor-pointer">
                                   Perfil Clip
                                 </HoveredLink>
                               </div>
@@ -1098,21 +1149,21 @@ function Navbar({ className }: { className?: string }) {
                         </div>
                         <div className="grid grid-cols-2 gap-2">
                           <HoveredLink 
-                            href="/productos?categoria=Policarbonato&tipo=Alveolar" 
+                            href="/productos/policarbonato-alveolar" 
                             className="text-gray-700 hover:text-amber-600 hover:bg-white transition-all duration-300 py-2 px-3 rounded-lg text-sm font-medium touch-target"
                             onClick={() => setIsMobileMenuOpen(false)}
                           >
                             Alveolar
                           </HoveredLink>
                           <HoveredLink 
-                            href="/productos?categoria=Policarbonato&tipo=Ondulado" 
+                            href="/productos/policarbonato-ondulado" 
                             className="text-gray-700 hover:text-amber-600 hover:bg-white transition-all duration-300 py-2 px-3 rounded-lg text-sm font-medium touch-target"
                             onClick={() => setIsMobileMenuOpen(false)}
                           >
                             Ondulado
                           </HoveredLink>
                           <HoveredLink 
-                            href="/productos?categoria=Policarbonato&tipo=Compacto" 
+                            href="/productos/policarbonato-compacto" 
                             className="text-gray-700 hover:text-amber-600 hover:bg-white transition-all duration-300 py-2 px-3 rounded-lg text-sm font-medium touch-target"
                             onClick={() => setIsMobileMenuOpen(false)}
                           >
@@ -1128,14 +1179,14 @@ function Navbar({ className }: { className?: string }) {
                         </div>
                         <div className="grid grid-cols-2 gap-2">
                           <HoveredLink 
-                            href="/productos?categoria=Perfiles Alveolar&tipo=Perfil U" 
+                            href="/productos/perfil-u" 
                             className="text-gray-700 hover:text-amber-600 hover:bg-white transition-all duration-300 py-2 px-3 rounded-lg text-sm font-medium touch-target"
                             onClick={() => setIsMobileMenuOpen(false)}
                           >
                             Perfil U
                           </HoveredLink>
                           <HoveredLink 
-                            href="/productos?categoria=Perfiles Alveolar&tipo=Perfil Clip" 
+                            href="/productos/perfil-clip-plano" 
                             className="text-gray-700 hover:text-amber-600 hover:bg-white transition-all duration-300 py-2 px-3 rounded-lg text-sm font-medium touch-target"
                             onClick={() => setIsMobileMenuOpen(false)}
                           >

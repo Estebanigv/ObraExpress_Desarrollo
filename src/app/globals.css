@@ -241,6 +241,103 @@ button[title*="Instalar"] {
   animation: none !important;
 }
 
+/* Animaciones personalizadas para el loader ObraExpress */
+@keyframes progress {
+  0% {
+    width: 0%;
+  }
+  50% {
+    width: 70%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+.animate-progress {
+  animation: progress 2s ease-in-out infinite;
+}
+
+.animation-delay-200 {
+  animation-delay: 200ms;
+}
+
+.animation-delay-300 {
+  animation-delay: 300ms;
+}
+
+.animation-delay-400 {
+  animation-delay: 400ms;
+}
+
+.animation-delay-600 {
+  animation-delay: 600ms;
+}
+
+/* Animación profesional del loader - círculo que se dibuja */
+@keyframes loader-draw {
+  0% {
+    stroke-dashoffset: 301.59;
+  }
+  50% {
+    stroke-dashoffset: 75.4;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-loader-draw {
+  animation: loader-draw 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Rotación suave y continua */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 2s linear infinite;
+}
+
+/* Tamaños personalizados */
+.w-38 {
+  width: 9.5rem;
+}
+
+.h-38 {
+  height: 9.5rem;
+}
+
+/* Prevenir scroll cuando el loader está activo */
+body.loading {
+  overflow: hidden;
+}
+
+/* Transiciones suaves para el loader */
+.loader-fade-enter {
+  opacity: 0;
+}
+
+.loader-fade-enter-active {
+  opacity: 1;
+  transition: opacity 300ms ease-in-out;
+}
+
+.loader-fade-exit {
+  opacity: 1;
+}
+
+.loader-fade-exit-active {
+  opacity: 0;
+  transition: opacity 300ms ease-in-out;
+}
+
 /* Animaciones para el asistente IA */
 @keyframes slideIn {
   from {

@@ -59,13 +59,27 @@ const nextConfig: NextConfig = {
     },
   },
   
-  // SOLUCIÓN MINIMALISTA: Solo configuraciones esenciales para Jest worker
-  webpack: (config, { dev }) => {
-    // SOLO las configuraciones absolutamente necesarias
+  // SOLUCIÓN MEJORADA: Prevenir Jest worker errors
+  webpack: (config, { dev, isServer }) => {
     if (dev) {
-      // Prevenir Jest worker error con configuración mínima
+      // Desactivar cache y workers para prevenir errores
       config.cache = false;
       config.parallelism = 1;
+      
+      // Configuración adicional para imágenes
+      config.module.rules.push({
+        test: /\.(png|jpg|jpeg|gif|webp|avif|ico|bmp|svg)$/i,
+        type: 'asset/resource',
+      });
+    }
+    
+    // Desactivar workers problemáticos
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+      };
     }
     
     return config;

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_OPTIONS=\"--max-old-space-size=8192\" next dev --port 3000",
+    "dev": "cross-env NODE_OPTIONS=\"--max-old-space-size=8192\" next dev --port 4000",
     "dev:normal": "next dev",
     "dev:chrome": "start dev-chrome.bat",
     "build": "next build",
