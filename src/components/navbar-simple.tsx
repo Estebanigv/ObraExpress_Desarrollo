@@ -525,9 +525,9 @@ function Navbar({ className }: { className?: string }) {
         {/* Top Sales Bar - Barra Amarilla Original */}
         <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 py-2 sm:py-3 top-sales-bar">
           <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between text-sm">
+          <div className="flex items-center justify-between text-sm yellow-bar-content yellow-bar-main-container">
             {/* Left: Mensaje de Venta Rápida */}
-            <div className="flex items-center space-x-2 sm:space-x-4 lg:space-x-6 overflow-hidden">
+            <div className="flex items-center space-x-2 sm:space-x-4 lg:space-x-6 overflow-hidden yellow-bar-left yellow-bar-left-section">
               {/* Mensaje de venta - Sin logo duplicado */}
               <div className="flex items-center space-x-2">
                 <div className="p-1 bg-white/20 rounded-full">
@@ -535,20 +535,20 @@ function Navbar({ className }: { className?: string }) {
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.293l-3-3a1 1 0 00-1.414 1.414L10.586 9.5H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clipRule="evenodd" />
                   </svg>
                 </div>
-                <Link href="/" className="flex flex-col obraexpress-logo critical-navbar-element">
-                  <span className="text-gray-900 font-black text-base leading-none drop-shadow-sm logo-text-main" style={{letterSpacing: '0.25em'}}>OBRAEXPRESS</span>
-                  <span className="text-gray-900 text-xs font-semibold leading-none drop-shadow-sm logo-text-subtitle" style={{letterSpacing: '0.25em'}}>Materiales de construcción</span>
+                <Link href="/" className="flex flex-col obraexpress-logo critical-navbar-element yellow-bar-priority-1 yellow-bar-fixed-size">
+                  <span className="text-gray-900 font-black text-base leading-none drop-shadow-sm logo-text-main yellow-bar-logo yellow-bar-compact-text" style={{letterSpacing: '0.25em'}}>OBRAEXPRESS</span>
+                  <span className="text-gray-900 text-xs font-semibold leading-none drop-shadow-sm logo-text-subtitle yellow-bar-logo-subtitle" style={{letterSpacing: '0.25em'}}>Materiales de construcción</span>
                 </Link>
               </div>
               
               {/* Calendario de Despacho - Info principal */}
-              <div className="flex items-center space-x-2 text-gray-900 dispatch-calendar critical-navbar-element">
+              <div className="flex items-center space-x-2 text-gray-900 dispatch-calendar critical-navbar-element yellow-bar-priority-2 yellow-bar-flexible yellow-bar-no-overlap">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
                 <div className="flex flex-col">
-                  <span className="text-sm font-bold leading-none">Próximo Despacho</span>
-                  <span className="text-xs font-medium leading-none">{dispatchMessage}</span>
+                  <span className="text-sm font-bold leading-none yellow-bar-calendar-text yellow-bar-compact-text">Próximo Despacho</span>
+                  <span className="text-xs font-medium leading-none yellow-bar-calendar-subtext yellow-bar-truncate">{dispatchMessage}</span>
                 </div>
                 <button
                   ref={setCalendarButtonRef}
@@ -559,7 +559,7 @@ function Navbar({ className }: { className?: string }) {
                       setIsCalendarButtonClicked(false);
                     }, 100);
                   }}
-                  className={`ml-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-bold transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl border border-green-500 flex items-center gap-2 ${
+                  className={`ml-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-bold transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl border border-green-500 flex items-center gap-2 yellow-bar-calendar-btn yellow-bar-compact-btn yellow-bar-smooth ${
                     isCalendarButtonClicked ? 'scale-105 shadow-xl' : ''
                   }`}
                 >
@@ -597,20 +597,20 @@ function Navbar({ className }: { className?: string }) {
 
 
             {/* Right: Acciones de Venta Rápida */}
-            <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-3 min-w-0 flex-1 justify-end">
+            <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-3 min-w-0 flex-1 justify-end yellow-bar-right yellow-bar-right-section yellow-bar-scroll-x">
               {/* Botón Cotización Rápida - Solo icono en responsive */}
               <button
                 onClick={() => {
                   window.location.href = '/cotizador-detallado';
                 }}
-                className="bg-white/20 hover:bg-white/30 text-white p-1.5 lg:px-3 lg:py-1.5 rounded-full lg:rounded-lg font-semibold transition-all duration-300 hover:scale-105 flex items-center cursor-pointer border border-white/30"
+                className="bg-white/20 hover:bg-white/30 text-white p-1.5 lg:px-3 lg:py-1.5 rounded-full lg:rounded-lg font-semibold transition-all duration-300 hover:scale-105 flex items-center cursor-pointer border border-white/30 yellow-bar-action-btn yellow-bar-priority-3 yellow-bar-no-overlap"
                 title="Cotización Inmediata con IA"
                 type="button"
               >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
-                <span className="hidden lg:inline lg:ml-1 text-xs">Cotizar IA</span>
+                <span className="hidden lg:inline lg:ml-1 text-xs yellow-bar-button-text">Cotizar IA</span>
               </button>
               
               
@@ -621,29 +621,29 @@ function Navbar({ className }: { className?: string }) {
                 onClick={() => {
                   window.location.href = '/login';
                 }}
-                className="bg-white/20 hover:bg-white/30 text-white p-1.5 lg:px-3 lg:py-1.5 rounded-full lg:rounded-lg font-semibold transition-all duration-300 hover:scale-105 flex items-center cursor-pointer border border-white/30"
+                className="bg-white/20 hover:bg-white/30 text-white p-1.5 lg:px-3 lg:py-1.5 rounded-full lg:rounded-lg font-semibold transition-all duration-300 hover:scale-105 flex items-center cursor-pointer border border-white/30 yellow-bar-action-btn yellow-bar-priority-3 yellow-bar-no-overlap"
                 title="Ingresar para compras rápidas y seguimiento"
                 type="button"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
-                <span className="hidden lg:inline lg:ml-1 text-xs">Ingresar</span>
+                <span className="hidden lg:inline lg:ml-1 text-xs yellow-bar-button-text">Ingresar</span>
               </button>
               
               <div className="h-4 sm:h-6 w-px bg-gray-700 hidden lg:block"></div>
               
               {/* Redes Sociales primero, luego Buscador Global */}
-              <div className="hidden lg:flex items-center space-x-3">
+              <div className="hidden lg:flex items-center space-x-3 yellow-bar-hide-small">
                 {/* Social Media - Ahora van primero */}
-                <div className="flex items-center space-x-2 flex-shrink-0">
+                <div className="flex items-center space-x-2 flex-shrink-0 yellow-bar-social yellow-bar-priority-2">
                   {/* Facebook */}
                   <a 
                     href="#" 
-                    className="group relative p-1.5 hover:bg-white/30 rounded-full transition-all duration-300 hover:scale-105"
+                    className="group relative p-1.5 hover:bg-white/30 rounded-full transition-all duration-300 hover:scale-105 yellow-bar-social-icon yellow-bar-spacing"
                     title="Facebook"
                   >
-                    <svg className="w-4 h-4 text-gray-800 hover:text-black transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 text-gray-800 hover:text-black transition-colors duration-300 yellow-bar-icon" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                     </svg>
                   </a>
@@ -651,10 +651,10 @@ function Navbar({ className }: { className?: string }) {
                   {/* Instagram */}
                   <a 
                     href="#" 
-                    className="group relative p-1.5 hover:bg-white/30 rounded-full transition-all duration-300 hover:scale-105"
+                    className="group relative p-1.5 hover:bg-white/30 rounded-full transition-all duration-300 hover:scale-105 yellow-bar-social-icon yellow-bar-spacing"
                     title="Instagram"
                   >
-                    <svg className="w-4 h-4 text-gray-800 hover:text-black transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 text-gray-800 hover:text-black transition-colors duration-300 yellow-bar-icon" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987 6.62 0 11.987-5.367 11.987-11.987C24.014 5.367 18.637.001 12.017.001zM8.23 20.304c-2.987-.266-5.517-2.796-5.783-5.783-.266-2.987.523-7.251.523-7.251s4.264-.789 7.251-.523c2.987.266 5.517 2.796 5.783 5.783.266 2.987-.523 7.251-.523 7.251s-4.264.789-7.251.523z"/>
                       <path d="M12.017 7.075a4.912 4.912 0 100 9.825 4.912 4.912 0 000-9.825zm0 8.109a3.197 3.197 0 110-6.394 3.197 3.197 0 010 6.394z"/>
                       <circle cx="16.929" cy="7.071" r="1.142"/>
@@ -664,10 +664,10 @@ function Navbar({ className }: { className?: string }) {
                   {/* YouTube */}
                   <a 
                     href="#" 
-                    className="group relative p-1.5 hover:bg-white/30 rounded-full transition-all duration-300 hover:scale-105"
+                    className="group relative p-1.5 hover:bg-white/30 rounded-full transition-all duration-300 hover:scale-105 yellow-bar-social-icon yellow-bar-spacing"
                     title="YouTube"
                   >
-                    <svg className="w-4 h-4 text-gray-800 hover:text-black transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 text-gray-800 hover:text-black transition-colors duration-300 yellow-bar-icon" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
                     </svg>
                   </a>
@@ -675,10 +675,10 @@ function Navbar({ className }: { className?: string }) {
                   {/* LinkedIn */}
                   <a 
                     href="#" 
-                    className="group relative p-1.5 hover:bg-white/30 rounded-full transition-all duration-300 hover:scale-105"
+                    className="group relative p-1.5 hover:bg-white/30 rounded-full transition-all duration-300 hover:scale-105 yellow-bar-social-icon yellow-bar-spacing"
                     title="LinkedIn"
                   >
-                    <svg className="w-4 h-4 text-gray-800 hover:text-black transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 text-gray-800 hover:text-black transition-colors duration-300 yellow-bar-icon" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                     </svg>
                   </a>
@@ -686,10 +686,10 @@ function Navbar({ className }: { className?: string }) {
                   {/* TikTok */}
                   <a 
                     href="#" 
-                    className="group relative p-1.5 hover:bg-white/30 rounded-full transition-all duration-300 hover:scale-105"
+                    className="group relative p-1.5 hover:bg-white/30 rounded-full transition-all duration-300 hover:scale-105 yellow-bar-social-icon yellow-bar-spacing"
                     title="TikTok"
                   >
-                    <svg className="w-4 h-4 text-gray-800 hover:text-black transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 text-gray-800 hover:text-black transition-colors duration-300 yellow-bar-icon" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.10-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
                     </svg>
                   </a>

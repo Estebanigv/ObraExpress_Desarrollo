@@ -1,0 +1,274 @@
+/* ===== CORRECCIONES ESPECÍFICAS PARA BARRA AMARILLA SUPERIOR ===== */
+
+/* Corrección general para MacBook Pro 13" y resoluciones similares */
+@media (max-width: 1440px) {
+  .top-sales-bar {
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+  }
+
+  .top-sales-bar .container {
+    max-width: none !important;
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+
+  /* Contenedor principal con wrap y gap reducido */
+  .yellow-bar-content {
+    flex-wrap: nowrap !important;
+    gap: 0.25rem !important;
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
+  .yellow-bar-content::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  /* Sección izquierda más compacta */
+  .yellow-bar-left {
+    gap: 0.5rem !important;
+    flex-shrink: 0 !important;
+    min-width: fit-content !important;
+  }
+
+  /* Sección derecha más compacta */
+  .yellow-bar-right {
+    gap: 0.25rem !important;
+    flex-shrink: 1 !important;
+    min-width: fit-content !important;
+  }
+}
+
+/* Específico para MacBook Pro 13" (1280px aprox) */
+@media (max-width: 1300px) {
+  /* Logo más compacto */
+  .yellow-bar-logo {
+    font-size: 0.75rem !important;
+    line-height: 1 !important;
+  }
+
+  .yellow-bar-logo-subtitle {
+    font-size: 0.625rem !important;
+    display: none !important; /* Ocultar subtítulo en espacios reducidos */
+  }
+
+  /* Calendario más compacto */
+  .yellow-bar-calendar-text {
+    font-size: 0.75rem !important;
+  }
+
+  .yellow-bar-calendar-subtext {
+    font-size: 0.625rem !important;
+  }
+
+  /* Botón Ver Calendario más pequeño */
+  .yellow-bar-calendar-btn {
+    padding: 0.375rem 0.75rem !important;
+    font-size: 0.75rem !important;
+    gap: 0.25rem !important;
+  }
+
+  .yellow-bar-calendar-btn span {
+    display: none !important; /* Solo mostrar icono */
+  }
+
+  /* Botones de acción más pequeños */
+  .yellow-bar-action-btn {
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.625rem !important;
+  }
+
+  .yellow-bar-action-btn span {
+    display: none !important; /* Solo mostrar iconos */
+  }
+
+  /* Iconos más pequeños */
+  .yellow-bar-icon {
+    width: 0.875rem !important;
+    height: 0.875rem !important;
+  }
+
+  /* Redes sociales solo iconos */
+  .yellow-bar-social {
+    gap: 0.125rem !important;
+  }
+
+  .yellow-bar-social-icon {
+    width: 0.75rem !important;
+    height: 0.75rem !important;
+    padding: 0.25rem !important;
+  }
+}
+
+/* Para pantallas muy pequeñas (1024px y menos) */
+@media (max-width: 1024px) {
+  .top-sales-bar {
+    padding-top: 0.375rem !important;
+    padding-bottom: 0.375rem !important;
+  }
+
+  /* Ocultar elementos menos importantes */
+  .yellow-bar-hide-small {
+    display: none !important;
+  }
+
+  /* Solo mostrar elementos críticos */
+  .yellow-bar-critical-only {
+    display: flex !important;
+    gap: 0.5rem !important;
+  }
+
+  /* Logo solo texto principal */
+  .yellow-bar-logo-subtitle {
+    display: none !important;
+  }
+
+  /* Calendario solo texto esencial */
+  .yellow-bar-calendar-subtext {
+    display: none !important;
+  }
+
+  /* Solo botón sin texto */
+  .yellow-bar-calendar-btn span {
+    display: none !important;
+  }
+
+  /* Solo iconos esenciales */
+  .yellow-bar-essential-icons {
+    display: flex !important;
+    gap: 0.25rem !important;
+  }
+
+  /* Ocultar texto de botones */
+  .yellow-bar-button-text {
+    display: none !important;
+  }
+}
+
+/* Responsive para elementos específicos que se superponen */
+@media (min-width: 1024px) and (max-width: 1366px) {
+  /* Prevenir superposición */
+  .yellow-bar-no-overlap {
+    position: relative !important;
+    z-index: 10 !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-radius: 0.375rem !important;
+    padding: 0.125rem 0.375rem !important;
+    margin: 0.125rem !important;
+  }
+
+  /* Espaciado entre elementos */
+  .yellow-bar-spacing {
+    margin-left: 0.25rem !important;
+    margin-right: 0.25rem !important;
+  }
+
+  /* Texto más pequeño para evitar overflow */
+  .yellow-bar-compact-text {
+    font-size: 0.75rem !important;
+    line-height: 1.2 !important;
+  }
+
+  /* Botones más compactos */
+  .yellow-bar-compact-btn {
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.625rem !important;
+    min-width: auto !important;
+    white-space: nowrap !important;
+  }
+}
+
+/* Corrección específica para resoluciones donde se ve la superposición */
+@media (min-width: 1200px) and (max-width: 1400px) {
+  /* Contenedor principal con mejor distribución */
+  .yellow-bar-main-container {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* Sección izquierda con límite de ancho */
+  .yellow-bar-left-section {
+    flex: 0 1 60% !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+
+  /* Sección derecha con límite de ancho */
+  .yellow-bar-right-section {
+    flex: 0 1 40% !important;
+    min-width: 0 !important;
+    justify-content: flex-end !important;
+    overflow: hidden !important;
+  }
+
+  /* Elementos que pueden truncarse */
+  .yellow-bar-truncate {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    max-width: 200px !important;
+  }
+}
+
+/* Prioridades de elementos para espacios reducidos */
+.yellow-bar-priority-1 {
+  order: 1 !important;
+  flex-shrink: 0 !important;
+}
+
+.yellow-bar-priority-2 {
+  order: 2 !important;
+  flex-shrink: 1 !important;
+}
+
+.yellow-bar-priority-3 {
+  order: 3 !important;
+  flex-shrink: 2 !important;
+}
+
+@media (max-width: 1200px) {
+  .yellow-bar-priority-3 {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1000px) {
+  .yellow-bar-priority-2 {
+    display: none !important;
+  }
+}
+
+/* Animación suave para cambios responsive */
+.yellow-bar-smooth {
+  transition: all 0.3s ease !important;
+}
+
+/* Overflow horizontal con scroll invisible */
+.yellow-bar-scroll-x {
+  overflow-x: auto !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+.yellow-bar-scroll-x::-webkit-scrollbar {
+  height: 0 !important;
+  display: none !important;
+}
+
+/* Elementos flexibles que se adaptan */
+.yellow-bar-flexible {
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+  overflow: hidden !important;
+}
+
+/* Elementos que mantienen su tamaño mínimo */
+.yellow-bar-fixed-size {
+  flex-shrink: 0 !important;
+  min-width: fit-content !important;
+}
