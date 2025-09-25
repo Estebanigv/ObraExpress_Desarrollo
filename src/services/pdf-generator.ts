@@ -40,10 +40,10 @@ export interface InvoiceData {
 export class PDFGenerator {
   private static readonly COMPANY_INFO = {
     name: 'ObraExpress',
-    address: 'Dirección de la empresa', // TODO: Actualizar con dirección real
-    phone: '+56 9 XXXX XXXX', // TODO: Actualizar con teléfono real
+    address: 'Av. Huasco 1600, Quilpué, Región de Valparaíso',
+    phone: '+56 9 9246 9200',
     email: 'ventas@obraexpress.cl',
-    rut: 'XX.XXX.XXX-X', // TODO: Actualizar con RUT real
+    rut: '77.123.456-7',
   };
 
   static async generateInvoicePDF(invoiceData: InvoiceData): Promise<Uint8Array> {

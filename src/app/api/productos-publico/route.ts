@@ -163,7 +163,7 @@ function formatDimensionClient(dimension: string, campo?: string, categoria?: st
 }
 
 export async function GET(request: NextRequest) {
-  console.log('🔄 API productos-publico iniciado');
+  // console.log('🔄 API productos-publico iniciado');
   
   try {
     // Importar configuración de categorías visibles con timeout
@@ -175,9 +175,9 @@ export async function GET(request: NextRequest) {
         new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 1000))
       ]);
       categoriasVisibles = (categoriesModule as any).getVisibleCategories?.() || ['Policarbonato'];
-      console.log('📊 Categorías visibles cargadas:', categoriasVisibles);
+      // console.log('📊 Categorías visibles cargadas:', categoriasVisibles);
     } catch (categoriesError) {
-      console.warn('⚠️ Error cargando categorías, usando fallback:', categoriesError);
+      // console.warn('⚠️ Error cargando categorías, usando fallback:', categoriesError);
     }
     
     let productos = null;
@@ -186,7 +186,7 @@ export async function GET(request: NextRequest) {
     // Solo intentar Supabase si está configurado y tenemos categorías
     if (supabase && typeof window === 'undefined' && categoriasVisibles.length > 0) {
       try {
-        console.log('📊 Consultando Supabase con timeout...');
+        // console.log('📊 Consultando Supabase con timeout...');
         
         // Consulta con timeout para evitar cuelgues
         const queryPromise = supabase
@@ -230,8 +230,8 @@ export async function GET(request: NextRequest) {
         productos = (result as any).data;
         error = (result as any).error;
         
-        console.log('✅ Supabase respondió:', productos?.length || 0, 'productos');
-        if (error) console.log('❌ Error Supabase:', error.message);
+        // console.log('✅ Supabase respondió:', productos?.length || 0, 'productos');
+        // if (error) console.log('❌ Error Supabase:', error.message);
         if (productos && productos.length > 0) {
           console.log('📊 Primer producto:', {
             codigo: productos[0].codigo,
@@ -242,29 +242,29 @@ export async function GET(request: NextRequest) {
           });
           // Debug: Buscar perfiles específicamente
           const perfilesEncontrados = productos.filter(p => p.categoria === 'Perfiles Alveolar');
-          console.log('🔍 Perfiles encontrados:', perfilesEncontrados.length, perfilesEncontrados.map(p => ({codigo: p.codigo, nombre: p.nombre, disponible_en_web: p.disponible_en_web})));
+          // console.log('🔍 Perfiles encontrados:', perfilesEncontrados.length, perfilesEncontrados.map(p => ({codigo: p.codigo, nombre: p.nombre, disponible_en_web: p.disponible_en_web})));
         }
       } catch (supabaseError) {
-        console.warn('⚠️ Error/timeout con Supabase, usando fallback JSON:', supabaseError);
+        // console.warn('⚠️ Error/timeout con Supabase, usando fallback JSON:', supabaseError);
         error = supabaseError;
       }
     } else {
-      console.log('⚠️ Supabase no disponible o sin categorías, usando fallback directo a JSON');
+      // console.log('⚠️ Supabase no disponible o sin categorías, usando fallback directo a JSON');
       error = new Error('Supabase not configured or no categories');
     }
 
     if (error || !productos || productos.length === 0) {
-      console.error('Error obteniendo productos públicos desde Supabase, usando JSON fallback:', error?.message);
+      if (process.env.NODE_ENV === 'development') console.error('Error obteniendo productos públicos desde Supabase, usando JSON fallback:', error?.message);
       
       // Fallback a JSON si Supabase falla
       try {
-        console.log('📄 Intentando fallback JSON...');
+        // console.log('📄 Intentando fallback JSON...');
         const filePath = path.join(process.cwd(), 'src', 'data', 'productos-policarbonato.json');
         
         if (fs.existsSync(filePath)) {
           const fileContent = fs.readFileSync(filePath, 'utf8');
           const fallbackData = JSON.parse(fileContent);
-          console.log('📄 JSON cargado, procesando categorías visibles:', categoriasVisibles);
+          // console.log('📄 JSON cargado, procesando categorías visibles:', categoriasVisibles);
           
           // Filtrar solo por categorías visibles desde el admin
           const productosPublicos = {};
@@ -490,7 +490,7 @@ export async function GET(request: NextRequest) {
           });
           
           const totalProductos = Object.values(productosPublicos).flat().reduce((sum, p: any) => sum + p.variantes.length, 0);
-          console.log('✅ Fallback JSON procesado:', totalProductos, 'productos de categorías visibles');
+          // console.log('✅ Fallback JSON procesado:', totalProductos, 'productos de categorías visibles');
           
           return NextResponse.json({
             success: true,
@@ -500,10 +500,10 @@ export async function GET(request: NextRequest) {
             total: totalProductos
           });
         } else {
-          console.warn('📄 Archivo JSON de productos no encontrado');
+          // console.warn('📄 Archivo JSON de productos no encontrado');
         }
       } catch (fallbackError) {
-        console.error('Error en fallback JSON:', fallbackError);
+        if (process.env.NODE_ENV === 'development') console.error('Error en fallback JSON:', fallbackError);
       }
       
       return NextResponse.json(
@@ -788,7 +788,7 @@ export async function GET(request: NextRequest) {
     return response;
 
   } catch (error) {
-    console.error('Error en API productos público:', error);
+    if (process.env.NODE_ENV === 'development') console.error('Error en API productos público:', error);
     return NextResponse.json(
       { success: false, error: 'Error interno del servidor' },
       { status: 500 }
