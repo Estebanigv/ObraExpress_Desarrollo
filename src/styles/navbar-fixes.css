@@ -1,0 +1,295 @@
+/* ===== CORRECCIONES ESPECÍFICAS DEL NAVBAR RESPONSIVE ===== */
+
+/* Corrección para el navbar principal cortado */
+@media (min-width: 1024px) {
+  /* Asegurar que el navbar no se corte en laptops */
+  .navbar-container {
+    min-height: 120px !important;
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+  }
+
+  /* Barra amarilla con altura adecuada */
+  .top-sales-bar {
+    min-height: 48px !important;
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+  }
+
+  /* Navbar principal con altura correcta */
+  .main-navbar {
+    min-height: 72px !important;
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+}
+
+/* Correcciones específicas para resoluciones problemáticas */
+@media (min-width: 1280px) and (max-width: 1366px) {
+  /* Laptops 13"-14" donde se ve cortado */
+  .navbar-container {
+    min-height: 110px !important;
+  }
+
+  .top-sales-bar {
+    padding-top: 0.625rem !important;
+    padding-bottom: 0.625rem !important;
+    min-height: 44px !important;
+  }
+
+  .main-navbar {
+    padding-top: 0.875rem !important;
+    padding-bottom: 0.875rem !important;
+    min-height: 66px !important;
+  }
+
+  /* Elementos internos con espaciado correcto */
+  .navbar-content {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+
+  /* Logo y texto con altura mínima */
+  .navbar-logo {
+    min-height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  /* Botones del navbar con altura mínima */
+  .navbar-button {
+    min-height: 36px !important;
+    padding: 0.5rem 0.75rem !important;
+  }
+}
+
+/* Resolución específica donde más se corta (1366x768) */
+@media (min-width: 1366px) and (max-width: 1400px) and (max-height: 800px) {
+  .navbar-container {
+    min-height: 100px !important;
+    max-height: 12vh !important;
+  }
+
+  .top-sales-bar {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+    min-height: 40px !important;
+  }
+
+  .main-navbar {
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+    min-height: 60px !important;
+  }
+
+  /* Texto más compacto */
+  .navbar-text {
+    font-size: 0.875rem !important;
+    line-height: 1.2 !important;
+  }
+
+  /* Botones más compactos */
+  .navbar-button {
+    padding: 0.375rem 0.625rem !important;
+    font-size: 0.75rem !important;
+  }
+
+  /* Iconos ligeramente más pequeños */
+  .navbar-icon {
+    width: 1rem !important;
+    height: 1rem !important;
+  }
+}
+
+/* Corrección para MacBook Air y similares */
+@media (min-width: 1280px) and (max-width: 1440px) and (max-height: 900px) {
+  .navbar-container {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 50 !important;
+    min-height: 105px !important;
+    background: white !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  /* Espacio para compensar el navbar fijo */
+  .navbar-spacer {
+    height: 105px !important;
+    display: block !important;
+  }
+
+  /* Asegurar que no haya overflow */
+  .navbar-overflow-hidden {
+    overflow: hidden !important;
+  }
+
+  /* Flex container con altura correcta */
+  .navbar-flex-container {
+    min-height: inherit !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+}
+
+/* Correcciones para elementos específicos */
+@media (min-width: 1024px) {
+  /* Logo principal siempre visible */
+  .obraexpress-logo {
+    white-space: nowrap !important;
+    overflow: visible !important;
+    min-width: fit-content !important;
+  }
+
+  /* Calendario de despacho siempre visible */
+  .dispatch-calendar {
+    display: flex !important;
+    align-items: center !important;
+    min-width: fit-content !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Botones de acción con altura mínima */
+  .action-buttons {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    min-height: 40px !important;
+  }
+
+  /* Redes sociales con tamaño correcto */
+  .social-icons {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.375rem !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Buscador con altura correcta */
+  .search-container {
+    min-height: 36px !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  /* Carrito siempre visible */
+  .cart-button-container {
+    min-height: 36px !important;
+    display: flex !important;
+    align-items: center !important;
+    flex-shrink: 0 !important;
+  }
+}
+
+/* Corrección para contenido cortado verticalmente */
+@media (min-width: 1024px) and (max-height: 800px) {
+  /* Navbar más compacto verticalmente */
+  .navbar-container {
+    min-height: 90px !important;
+  }
+
+  .top-sales-bar {
+    padding-top: 0.375rem !important;
+    padding-bottom: 0.375rem !important;
+    min-height: 36px !important;
+  }
+
+  .main-navbar {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+    min-height: 54px !important;
+  }
+
+  /* Texto del logo más pequeño */
+  .logo-text-main {
+    font-size: 0.875rem !important;
+    line-height: 1 !important;
+  }
+
+  .logo-text-subtitle {
+    font-size: 0.625rem !important;
+    line-height: 1 !important;
+  }
+}
+
+/* Corrección para overflow horizontal */
+@media (min-width: 1024px) {
+  .navbar-horizontal-scroll {
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+  }
+
+  .navbar-no-wrap {
+    flex-wrap: nowrap !important;
+  }
+
+  /* Asegurar que todos los elementos importantes se vean */
+  .navbar-priority-high {
+    order: -1 !important;
+    flex-shrink: 0 !important;
+  }
+
+  .navbar-priority-medium {
+    flex-shrink: 1 !important;
+  }
+
+  .navbar-priority-low {
+    display: none !important;
+  }
+}
+
+/* Media query específica para la resolución de la imagen (parece 1366x768) */
+@media (min-width: 1360px) and (max-width: 1370px) and (min-height: 760px) and (max-height: 770px) {
+  .navbar-container {
+    min-height: 96px !important;
+    max-height: 96px !important;
+    overflow: visible !important;
+  }
+
+  .top-sales-bar {
+    min-height: 38px !important;
+    max-height: 38px !important;
+    padding: 0.375rem 0 !important;
+  }
+
+  .main-navbar {
+    min-height: 58px !important;
+    max-height: 58px !important;
+    padding: 0.5rem 0 !important;
+  }
+
+  /* Elementos críticos siempre visibles */
+  .critical-navbar-element {
+    flex-shrink: 0 !important;
+    min-width: fit-content !important;
+    overflow: visible !important;
+  }
+
+  /* Espaciado más ajustado */
+  .navbar-tight-spacing {
+    gap: 0.25rem !important;
+    margin: 0.125rem !important;
+    padding: 0.25rem !important;
+  }
+}
+
+/* Corrección general para evitar cortes */
+.navbar-no-clip {
+  clip: unset !important;
+  overflow: visible !important;
+  -webkit-clip-path: none !important;
+  clip-path: none !important;
+}
+
+.navbar-full-width {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: none !important;
+}
+
+.navbar-full-height {
+  height: auto !important;
+  min-height: fit-content !important;
+  max-height: none !important;
+}

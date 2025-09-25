@@ -518,12 +518,12 @@ function Navbar({ className }: { className?: string }) {
       </motion.div>
 
       <div className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 navbar-container navbar-no-clip navbar-full-width",
         isVisible ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0",
         className
       )}>
         {/* Top Sales Bar - Barra Amarilla Original */}
-        <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 py-2 sm:py-3">
+        <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 py-2 sm:py-3 top-sales-bar">
           <div className="container mx-auto px-4">
           <div className="flex items-center justify-between text-sm">
             {/* Left: Mensaje de Venta Rápida */}
@@ -535,14 +535,14 @@ function Navbar({ className }: { className?: string }) {
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.293l-3-3a1 1 0 00-1.414 1.414L10.586 9.5H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clipRule="evenodd" />
                   </svg>
                 </div>
-                <Link href="/" className="flex flex-col">
-                  <span className="text-gray-900 font-black text-base leading-none drop-shadow-sm" style={{letterSpacing: '0.25em'}}>OBRAEXPRESS</span>
-                  <span className="text-gray-900 text-xs font-semibold leading-none drop-shadow-sm" style={{letterSpacing: '0.25em'}}>Materiales de construcción</span>
+                <Link href="/" className="flex flex-col obraexpress-logo critical-navbar-element">
+                  <span className="text-gray-900 font-black text-base leading-none drop-shadow-sm logo-text-main" style={{letterSpacing: '0.25em'}}>OBRAEXPRESS</span>
+                  <span className="text-gray-900 text-xs font-semibold leading-none drop-shadow-sm logo-text-subtitle" style={{letterSpacing: '0.25em'}}>Materiales de construcción</span>
                 </Link>
               </div>
               
               {/* Calendario de Despacho - Info principal */}
-              <div className="flex items-center space-x-2 text-gray-900">
+              <div className="flex items-center space-x-2 text-gray-900 dispatch-calendar critical-navbar-element">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
@@ -709,10 +709,10 @@ function Navbar({ className }: { className?: string }) {
       </div>
 
       {/* Main Navigation */}
-      <div className={`relative transition-all duration-300 ${activeDropdown ? 'z-10' : 'z-40'}`}>
+      <div className={`relative transition-all duration-300 main-navbar navbar-full-height ${activeDropdown ? 'z-10' : 'z-40'}`}>
         {/* Desktop Navigation */}
-        <div 
-          className="hidden lg:flex justify-center pt-8 pb-8"
+        <div
+          className="hidden lg:flex justify-center pt-8 pb-8 navbar-content"
         >
           <div className="relative">
             {/* Navigation Container - Aumentado el tamaño */}
